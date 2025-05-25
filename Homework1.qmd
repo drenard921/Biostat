@@ -58,7 +58,7 @@ max_visits <- max(cardio_data$Visits)
 mode_category <- cardio_data$Duration[which(cardio_data$Visits == max_visits)]
 
 # Print the mode
-cat("The mode (most frequent duration) is:", mode_category, "minutes\n")
+print("The mode (most frequent duration) is:", mode_category, "minutes\n")
 
 # Create a bar chart
 library(ggplot2)
@@ -82,6 +82,31 @@ In Massachusetts, eight individuals experienced an unexplained episode of vitami
 ![Table denoting calcium level mmol/l across different Albumin levels](image-1.png)
 
 #### (a) Find the mean, median, standard deviation, and range of the recorded calcium levels,  
+```{r question3, echo=TRUE, message=FALSE,warning=FALSE}
+# Calcium levels 
+calcium <- c(2.92, 3.84, 2.37, 2.99, 2.67, 3.17, 3.74, 3.44)
+
+# Mean
+mean_calcium <- mean(calcium)
+
+# Median
+median_calcium <- median(calcium)
+
+# Standard deviation
+sd_calcium <- sd(calcium)
+
+# Range
+range_calcium <- range(calcium)
+range_value <- diff(range_calcium) # Max - min
+
+# outputing results
+print(paste0("Mean Calcium: ", round(mean_calcium, 2), " mmol/L"))
+print(paste0("Median Calcium: ", round(median_calcium, 2), " mmol/L"))
+print(paste0("Standard Deviation Calcium: ", round(sd_calcium, 2), " mmol/L"))
+print(paste0("Range Calcium: ", round(range_value, 2), " mmol/L (", 
+             round(range_calcium[1], 2), "-", round(range_calcium[2], 2), ")"))
+
+```
 
 
 #### (b) Compute the mean, median, standard deviation, and range of the given albumin levels. 
