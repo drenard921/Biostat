@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Homework 1 - Biostatistics</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Homework1_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Homework1_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="Homework1_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="Homework1_files/libs/quarto-html/popper.min.js"></script>
+<script src="Homework1_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Homework1_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Homework1_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Homework1_files/libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Homework1_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Homework1_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Homework1_files/libs/bootstrap/bootstrap-81267100e462c21b3d6c0d5bf76a3417.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Homework 1 - Biostatistics</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="dylan-renard" class="level4">
+<h4 class="anchored" data-anchor-id="dylan-renard">Dylan Renard</h4>
+</section>
+<section id="professor-proschan-professor-nason" class="level4">
+<h4 class="anchored" data-anchor-id="professor-proschan-professor-nason">Professor Proschan &amp; Professor Nason</h4>
+</section>
+<section id="jhu-biostatistics" class="level4">
+<h4 class="anchored" data-anchor-id="jhu-biostatistics">JHU Biostatistics</h4>
+</section>
+<section id="may-25th-2025" class="level4">
+<h4 class="anchored" data-anchor-id="may-25th-2025">May 25th 2025</h4>
+</section>
+<section id="homework-1" class="level1">
+<h1>Homework 1</h1>
+<p>This file contains my responses for the takehome homework for unit 1 of the JHU Biostatistics course summer 2025 term. The file includes several written responses as well as box-plots. This includes answers to textbook problemns in Part 1 and statiscial plots made in R in Part 2.</p>
+<p>For my first submission I will turn in a pdf of this file in addition to the Rmarkdown file. In future assignments, let me know if the PDF is sufficient.</p>
+<section id="part-1-textbook-problems" class="level2">
+<h2 class="anchored" data-anchor-id="part-1-textbook-problems">Part 1 (Textbook Problems)</h2>
+<section id="q1-continuous-vs-discrete-data-types" class="level3">
+<h3 class="anchored" data-anchor-id="q1-continuous-vs-discrete-data-types">Q1 Continuous vs Discrete data types:</h3>
+<p>State whether each of the following observations is an example of discrete or continuous data.</p>
+<section id="a.-the-number-of-suicides-in-the-united-states-in-a-specific-year." class="level4">
+<h4 class="anchored" data-anchor-id="a.-the-number-of-suicides-in-the-united-states-in-a-specific-year.">a. The number of suicides in the United States in a specific year.</h4>
+<p>Discrete because this figure represents a coutable whole number, no fractions.</p>
+</section>
+<section id="b.-the-concentration-of-lead-in-a-sample-of-water." class="level4">
+<h4 class="anchored" data-anchor-id="b.-the-concentration-of-lead-in-a-sample-of-water.">b. The concentration of lead in a sample of water.</h4>
+<p>Continuous because this is measured on a contiuous scale with decimals.</p>
+</section>
+<section id="c.-the-length-of-time-that-a-cancer-patient-survives-after-diagnosis." class="level4">
+<h4 class="anchored" data-anchor-id="c.-the-length-of-time-that-a-cancer-patient-survives-after-diagnosis.">c.&nbsp;The length of time that a cancer patient survives after diagnosis.</h4>
+<p>Continuous because the figure is measured in time units which can be fractional.</p>
+</section>
+<section id="d.-the-number-of-previous-miscarriages-an-expectant-mother-has-had." class="level4">
+<h4 class="anchored" data-anchor-id="d.-the-number-of-previous-miscarriages-an-expectant-mother-has-had.">d.&nbsp;The number of previous miscarriages an expectant mother has had.</h4>
+<p>Discrete because its coutable to whole numbers without fractions.</p>
+</section>
+</section>
+<section id="q2-cardiovascular-visit-durations" class="level3">
+<h3 class="anchored" data-anchor-id="q2-cardiovascular-visit-durations">Q2 Cardiovascular Visit durations:</h3>
+<p>The table below categorizes 10,614,000 office visits to cardiovascular disease specialists in the United States by the duration of each visit. A duration of 0 minutes implies that the patient did not have face-to-face contact with the specialist.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="image.png" class="img-fluid figure-img"></p>
+<figcaption>Table denoting visit qty across different visit duration categories in the US</figcaption>
+</figure>
+</div>
+<section id="the-statement-is-made-that-office-visits-to-cardiovascular-disease-specialists-are-most-often-between-16-and-30-minutes.-do-you-agree-with-this-statement-why-or-why-not" class="level4">
+<h4 class="anchored" data-anchor-id="the-statement-is-made-that-office-visits-to-cardiovascular-disease-specialists-are-most-often-between-16-and-30-minutes.-do-you-agree-with-this-statement-why-or-why-not">The statement is made that office visits to cardiovascular disease specialists are most often between 16 and 30 minutes. Do you agree with this statement? Why or why not?</h4>
+<p>The statement that most office visits to cardiovascular disease specialists are between 16-30 mins is true. According to the provided data, this category has the highest number of visits-4,431 thousand, which is larger than any other category. Therefore, the mode of the distribution falls within the 16-30 minute range, making this statement accurate.</p>
+</section>
+<section id="code-calculationvalidation" class="level4">
+<h4 class="anchored" data-anchor-id="code-calculationvalidation">Code Calculation/Validation</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load the data into a dataframe</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>duration <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"0"</span>, <span class="st">"1-5"</span>, <span class="st">"6-10"</span>, <span class="st">"11-15"</span>, <span class="st">"16-30"</span>, <span class="st">"31-60"</span>, <span class="st">"61+"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>visits <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">390</span>, <span class="dv">227</span>, <span class="dv">1023</span>, <span class="dv">3390</span>, <span class="dv">4431</span>, <span class="dv">968</span>, <span class="dv">185</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>cardio_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Duration =</span> duration, <span class="at">Visits =</span> visits)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcuate the mode (category with the max number of visits)</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>max_visits <span class="ot">&lt;-</span> <span class="fu">max</span>(cardio_data<span class="sc">$</span>Visits)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>mode_category <span class="ot">&lt;-</span> cardio_data<span class="sc">$</span>Duration[<span class="fu">which</span>(cardio_data<span class="sc">$</span>Visits <span class="sc">==</span> max_visits)]</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the mode</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"The mode (most frequent duration) is:"</span>, mode_category, <span class="st">"minutes</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The mode (most frequent duration) is: 16-30 minutes</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a bar chart</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cardio_data, <span class="fu">aes</span>(<span class="at">x =</span> Duration, <span class="at">y =</span> Visits)) <span class="sc">+</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"skyblue"</span>) <span class="sc">+</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Number of Office Visits by Duration"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Visit Duration (minutes)"</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Number of Visits (thousands)"</span>) <span class="sc">+</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Homework1_files/figure-html/question2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the summary Table</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(cardio_data, <span class="at">caption =</span> <span class="st">"Summary of Office Visits by Duration"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Summary of Office Visits by Duration</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Duration</th>
+<th style="text-align: right;">Visits</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">390</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1-5</td>
+<td style="text-align: right;">227</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6-10</td>
+<td style="text-align: right;">1023</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">11-15</td>
+<td style="text-align: right;">3390</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">16-30</td>
+<td style="text-align: right;">4431</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">31-60</td>
+<td style="text-align: right;">968</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">61+</td>
+<td style="text-align: right;">185</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</section>
+<section id="q3-vitamin-d-intoxication-across-subgroups" class="level3">
+<h3 class="anchored" data-anchor-id="q3-vitamin-d-intoxication-across-subgroups">Q3 Vitamin D intoxication across subgroups</h3>
+<p>In Massachusetts, eight individuals experienced an unexplained episode of vitamin D intoxication that required hospitalization; it was thought that these unusual occurrences might be the result of excessive supplementation of dairy milk. Blood levels of calcium and albumin–a type of protein–for each subject at the time of hospital admission are provided below.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="image-1.png" class="img-fluid figure-img"></p>
+<figcaption>Table denoting calcium level mmol/l across different Albumin levels</figcaption>
+</figure>
+</div>
+<section id="a-find-the-mean-median-standard-deviation-and-range-of-the-recorded-calcium-levels" class="level4">
+<h4 class="anchored" data-anchor-id="a-find-the-mean-median-standard-deviation-and-range-of-the-recorded-calcium-levels">(a) Find the mean, median, standard deviation, and range of the recorded calcium levels,</h4>
+</section>
+<section id="b-compute-the-mean-median-standard-deviation-and-range-of-the-given-albumin-levels." class="level4">
+<h4 class="anchored" data-anchor-id="b-compute-the-mean-median-standard-deviation-and-range-of-the-given-albumin-levels.">(b) Compute the mean, median, standard deviation, and range of the given albumin levels.</h4>
+</section>
+</section>
+</section>
+<section id="part-2-r-plotting" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-r-plotting">Part 2 R-Plotting</h2>
+<section id="q4-low-birth-weight-box-plot." class="level3">
+<h3 class="anchored" data-anchor-id="q4-low-birth-weight-box-plot.">Q4 Low birth weight box plot.</h3>
+<p>The percentages of low birth weight infants in various countries around the world are contained in the data set unicef on the webpage (or the textbook CD). The measurements themselves are saved under the Variable lowbwt.</p>
+<section id="a-construct-a-boxplot-for-the-percentages-of-low-birth-weight-infants." class="level4">
+<h4 class="anchored" data-anchor-id="a-construct-a-boxplot-for-the-percentages-of-low-birth-weight-infants.">(a) Construct a boxplot for the percentages of low birth weight infants.</h4>
+</section>
+<section id="b-do-the-data-appear-to-be-skewed-if-so-are-they-skewed-to-the-right-or-to-the-left" class="level4">
+<h4 class="anchored" data-anchor-id="b-do-the-data-appear-to-be-skewed-if-so-are-they-skewed-to-the-right-or-to-the-left">(b) Do the data appear to be skewed? If so, are they skewed to the right or to the left?</h4>
+</section>
+<section id="c-do-the-data-contain-any-outlying-observations" class="level4">
+<h4 class="anchored" data-anchor-id="c-do-the-data-contain-any-outlying-observations">(c) Do the data contain any outlying observations?</h4>
+</section>
+</section>
+<section id="q5-fitness-dataset-histogram-and-boxplots." class="level3">
+<h3 class="anchored" data-anchor-id="q5-fitness-dataset-histogram-and-boxplots.">Q5 Fitness dataset Histogram and Boxplots.</h3>
+<p>.Using the “Fitness” data set (available on the class webpage), create:</p>
+<p>A histogram and boxplot of Resting Pulse (RstPulse) for everyone in the sample</p>
+<p>Separate histograms of Resting Pulse for men and women.</p>
+<p>One plot with boxplots for men and women side by side</p>
+<p>A scatterplot of Oxygen uptake (Oxy) and Weight.</p>
+<section id="a-what-is-the-median-resting-pulse-overall" class="level4">
+<h4 class="anchored" data-anchor-id="a-what-is-the-median-resting-pulse-overall">(a) What is the median Resting Pulse overall?</h4>
+</section>
+<section id="b-for-women" class="level4">
+<h4 class="anchored" data-anchor-id="b-for-women">(b) For Women?</h4>
+</section>
+<section id="c-for-men" class="level4">
+<h4 class="anchored" data-anchor-id="c-for-men">(c) For Men?</h4>
+</section>
+<section id="d-is-the-overall-mena-resting-pulse-bigger-or-smaller-than-the-overall-median-resting-pulse" class="level4">
+<h4 class="anchored" data-anchor-id="d-is-the-overall-mena-resting-pulse-bigger-or-smaller-than-the-overall-median-resting-pulse">(d) Is the Overall mena Resting Pulse bigger or smaller than the Overall median Resting Pulse?</h4>
+</section>
+<section id="e-what-does-this-suggest-about-the-shape-of-the-distribution" class="level4">
+<h4 class="anchored" data-anchor-id="e-what-does-this-suggest-about-the-shape-of-the-distribution">(e) What does this suggest about the shape of the distribution?</h4>
+</section>
+<section id="f-which-gender-has-a-larger-inter-quartile-range-iqr-for-resting-pulse" class="level4">
+<h4 class="anchored" data-anchor-id="f-which-gender-has-a-larger-inter-quartile-range-iqr-for-resting-pulse">(f) Which gender has a larger inter-quartile Range (IQR) for Resting Pulse?</h4>
+</section>
+<section id="g-does-there-seem-to-be-a-relationship-between-weight-and-oxygen-uptake-briefly-explain-your-answer." class="level4">
+<h4 class="anchored" data-anchor-id="g-does-there-seem-to-be-a-relationship-between-weight-and-oxygen-uptake-briefly-explain-your-answer.">(g) Does there seem to be a relationship between Weight and Oxygen uptake? Briefly explain your answer.</h4>
+</section>
+</section>
+</section>
+<section id="sources" class="level2">
+<h2 class="anchored" data-anchor-id="sources">Sources:</h2>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,3 +1,9 @@
+---
+title: "Homework 1 - Biostatistics"
+Author: "Dylan Renard"
+output: pdf_document
+---
+
 #### Dylan Renard
 #### Professor Proschan & Professor Nason
 #### JHU Biostatistics
@@ -38,7 +44,36 @@ The table below categorizes 10,614,000 office visits to cardiovascular disease s
 
 #### The statement is made that office visits to cardiovascular disease specialists are most often between 16 and 30 minutes. Do you agree with this statement? Why or why not? 
 
-Lorem40
+The statement that most office visits to cardiovascular disease specialists are between 16-30 mins is true. According to the provided data, this category has the highest number of visits-4,431 thousand, which is larger than any other category. Therefore, the mode of the distribution falls within the 16-30 minute range, making this statement accurate. 
+
+#### Code Calculation/Validation
+```{r question2, echo=TRUE, message=FALSE,warning=FALSE}
+# load the data into a dataframe
+duration <- c("0", "1-5", "6-10", "11-15", "16-30", "31-60", "61+")
+visits <- c(390, 227, 1023, 3390, 4431, 968, 185)
+cardio_data <- data.frame(Duration = duration, Visits = visits)
+
+# Calcuate the mode (category with the max number of visits)
+max_visits <- max(cardio_data$Visits)
+mode_category <- cardio_data$Duration[which(cardio_data$Visits == max_visits)]
+
+# Print the mode
+cat("The mode (most frequent duration) is:", mode_category, "minutes\n")
+
+# Create a bar chart
+library(ggplot2)
+ggplot(cardio_data, aes(x = Duration, y = Visits)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(title = "Number of Office Visits by Duration",
+       x = "Visit Duration (minutes)",
+       y = "Number of Visits (thousands)") +
+  theme_minimal()
+
+# Show the summary Table
+knitr::kable(cardio_data, caption = "Summary of Office Visits by Duration")
+```
+
+
 
 
 ### Q3 Vitamin D intoxication across subgroups
