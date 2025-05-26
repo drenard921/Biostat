@@ -113,7 +113,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="homework-1" class="level1">
 <h1>Homework 1</h1>
 <p>This file contains my responses for the takehome homework for unit 1 of the JHU Biostatistics course summer 2025 term. The file includes several written responses as well as box-plots. This includes answers to textbook problemns in Part 1 and statiscial plots made in R in Part 2.</p>
-<p>For my first submission I will turn in a pdf of this file in addition to the Rmarkdown file. In future assignments, let me know if the PDF is sufficient.</p>
+<p>For my first submission I will turn in a pdf of this file in addition to the Quarto Zip file. In future assignments, let me know if the PDF is sufficient.</p>
 <section id="part-1-textbook-problems" class="level2">
 <h2 class="anchored" data-anchor-id="part-1-textbook-problems">Part 1 (Textbook Problems)</h2>
 <section id="q1-continuous-vs-discrete-data-types" class="level3">
@@ -147,7 +147,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <section id="the-statement-is-made-that-office-visits-to-cardiovascular-disease-specialists-are-most-often-between-16-and-30-minutes.-do-you-agree-with-this-statement-why-or-why-not" class="level4">
 <h4 class="anchored" data-anchor-id="the-statement-is-made-that-office-visits-to-cardiovascular-disease-specialists-are-most-often-between-16-and-30-minutes.-do-you-agree-with-this-statement-why-or-why-not">The statement is made that office visits to cardiovascular disease specialists are most often between 16 and 30 minutes. Do you agree with this statement? Why or why not?</h4>
-<p>The statement that most office visits to cardiovascular disease specialists are between 16-30 mins is true. According to the provided data, this category has the highest number of visits-4,431 thousand, which is larger than any other category. Therefore, the mode of the distribution falls within the 16-30 minute range, making this statement accurate.</p>
+<p>The statement that most office visits to cardiovascular disease specialists are between 16 and 30 minutes is true. According to the provided data, this category has the highest number of visits—4,431 thousand, which exceeds all other duration categories. This indicates that the mode of the distribution falls within the 16–30 minute range.</p>
+<p>However, it’s important to consider the generalizability of this finding. While the data provides insight into visit durations for this sample of US clinics, it may not fully represent other settings or populations. Studies on selection bias have highlighted that even in large-scale cohort designs, findings can be influenced by factors such as non-participation, loss to follow-up, or differences between those included and excluded from the study. In this case, factors like patient demographics, clinic capacity, or regional healthcare practices could influence the observed durations, thereby affecting the representativeness of these findings.</p>
+<p>Thus, while the data supports the statement for this sample, caution should be exercised in generalizing the conclusion to the US as a whole or other countries without considering potential selection biases and differences across populations (Nohr &amp; Liew, 2018).</p>
 </section>
 <section id="code-calculationvalidation" class="level4">
 <h4 class="anchored" data-anchor-id="code-calculationvalidation">Code Calculation/Validation</h4>
@@ -162,9 +164,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>mode_category <span class="ot">&lt;-</span> cardio_data<span class="sc">$</span>Duration[<span class="fu">which</span>(cardio_data<span class="sc">$</span>Visits <span class="sc">==</span> max_visits)]</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the mode</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"The mode (most frequent duration) is:"</span>, mode_category, <span class="st">"minutes</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">"The mode (most frequent duration) is: "</span>, mode_category, <span class="st">" minutes"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>The mode (most frequent duration) is: 16-30 minutes</code></pre>
+<pre><code>[1] "The mode (most frequent duration) is: 16-30 minutes"</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a bar chart</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
@@ -238,9 +240,69 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <section id="a-find-the-mean-median-standard-deviation-and-range-of-the-recorded-calcium-levels" class="level4">
 <h4 class="anchored" data-anchor-id="a-find-the-mean-median-standard-deviation-and-range-of-the-recorded-calcium-levels">(a) Find the mean, median, standard deviation, and range of the recorded calcium levels,</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calcium levels </span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>calcium <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">2.92</span>, <span class="fl">3.84</span>, <span class="fl">2.37</span>, <span class="fl">2.99</span>, <span class="fl">2.67</span>, <span class="fl">3.17</span>, <span class="fl">3.74</span>, <span class="fl">3.44</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Mean</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>mean_calcium <span class="ot">&lt;-</span> <span class="fu">mean</span>(calcium)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Median</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>median_calcium <span class="ot">&lt;-</span> <span class="fu">median</span>(calcium)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Standard deviation</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>sd_calcium <span class="ot">&lt;-</span> <span class="fu">sd</span>(calcium)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Range</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>range_calcium <span class="ot">&lt;-</span> <span class="fu">range</span>(calcium)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>range_value <span class="ot">&lt;-</span> <span class="fu">diff</span>(range_calcium) <span class="co"># Max - min</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Output</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>output <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="st">"Mean Calcium: "</span>, <span class="fu">round</span>(mean_calcium, <span class="dv">2</span>), <span class="st">" mmol/L"</span>),</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="st">"Median Calcium: "</span>, <span class="fu">round</span>(median_calcium, <span class="dv">2</span>), <span class="st">" mmol/L"</span>),</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="st">"Standard Deviation Calcium: "</span>, <span class="fu">round</span>(sd_calcium, <span class="dv">2</span>), <span class="st">" mmol/L"</span>),</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="st">"Range Calcium: "</span>, <span class="fu">round</span>(range_value, <span class="dv">2</span>), <span class="st">" mmol/L ("</span>, </span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>         <span class="fu">round</span>(range_calcium[<span class="dv">1</span>], <span class="dv">2</span>), <span class="st">"-"</span>, <span class="fu">round</span>(range_calcium[<span class="dv">2</span>], <span class="dv">2</span>), <span class="st">")"</span>)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(output)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Mean Calcium: 3.14 mmol/L"              
+[2] "Median Calcium: 3.08 mmol/L"            
+[3] "Standard Deviation Calcium: 0.51 mmol/L"
+[4] "Range Calcium: 1.47 mmol/L (2.37-3.84)" </code></pre>
+</div>
+</div>
 </section>
 <section id="b-compute-the-mean-median-standard-deviation-and-range-of-the-given-albumin-levels." class="level4">
 <h4 class="anchored" data-anchor-id="b-compute-the-mean-median-standard-deviation-and-range-of-the-given-albumin-levels.">(b) Compute the mean, median, standard deviation, and range of the given albumin levels.</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Albumin levels</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>albumin <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">43</span>, <span class="dv">42</span>, <span class="dv">42</span>, <span class="dv">40</span>, <span class="dv">42</span>, <span class="dv">38</span>, <span class="dv">34</span>, <span class="dv">42</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary statistics</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>mean_albumin <span class="ot">&lt;-</span> <span class="fu">mean</span>(albumin)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>median_albumin <span class="ot">&lt;-</span> <span class="fu">median</span>(albumin)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>sd_albumin <span class="ot">&lt;-</span> <span class="fu">sd</span>(albumin)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>range_albumin <span class="ot">&lt;-</span> <span class="fu">range</span>(albumin)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>range_value_albumin <span class="ot">&lt;-</span> <span class="fu">diff</span>(range_albumin)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Output results</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>output_albumin <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="st">"Mean Albumin: "</span>, <span class="fu">round</span>(mean_albumin, <span class="dv">2</span>), <span class="st">" g/L"</span>),</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="st">"Median Albumin: "</span>, <span class="fu">round</span>(median_albumin, <span class="dv">2</span>), <span class="st">" g/L"</span>),</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="st">"Standard Deviation Albumin: "</span>, <span class="fu">round</span>(sd_albumin, <span class="dv">2</span>), <span class="st">" g/L"</span>),</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="st">"Range Albumin: "</span>, <span class="fu">round</span>(range_value_albumin, <span class="dv">2</span>), <span class="st">" g/L ("</span>, </span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>         range_albumin[<span class="dv">1</span>], <span class="st">"-"</span>, range_albumin[<span class="dv">2</span>], <span class="st">")"</span>)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(output_albumin)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Mean Albumin: 40.38 g/L"             
+[2] "Median Albumin: 42 g/L"              
+[3] "Standard Deviation Albumin: 3.02 g/L"
+[4] "Range Albumin: 9 g/L (34-43)"        </code></pre>
+</div>
+</div>
 </section>
 </section>
 </section>
@@ -251,46 +313,364 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The percentages of low birth weight infants in various countries around the world are contained in the data set unicef on the webpage (or the textbook CD). The measurements themselves are saved under the Variable lowbwt.</p>
 <section id="a-construct-a-boxplot-for-the-percentages-of-low-birth-weight-infants." class="level4">
 <h4 class="anchored" data-anchor-id="a-construct-a-boxplot-for-the-percentages-of-low-birth-weight-infants.">(a) Construct a boxplot for the percentages of low birth weight infants.</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data from a TXT file</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>unicef_data <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"unicef-1.txt"</span>, <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">","</span>, <span class="at">stringsAsFactors=</span><span class="cn">FALSE</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># View the structure</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(unicef_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   144 obs. of  4 variables:
+ $ Nation: chr  "Afghanistan" "Albania" "Algeria" "Angola" ...
+ $ lowbwt: int  20 7 9 19 8 NA 6 6 NA 50 ...
+ $ life60: int  33 62 47 33 65 NA 71 69 NA 40 ...
+ $ life92: int  43 73 66 46 71 72 77 76 71 53 ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove missing values (NA) for lowbwt</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>lowbwt_data <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(unicef_data<span class="sc">$</span>lowbwt)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a boxplot</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(lowbwt_data,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Boxplot of Low Birth Weight Percentages"</span>,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Low Birth Weight (%)"</span>,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="st">"lightblue"</span>,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">horizontal =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Homework1_files/figure-html/question4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 <section id="b-do-the-data-appear-to-be-skewed-if-so-are-they-skewed-to-the-right-or-to-the-left" class="level4">
 <h4 class="anchored" data-anchor-id="b-do-the-data-appear-to-be-skewed-if-so-are-they-skewed-to-the-right-or-to-the-left">(b) Do the data appear to be skewed? If so, are they skewed to the right or to the left?</h4>
+<p>The boxplot of low birth weight percentages shows a right-skewed (positively skewed) distribution. This is evident from the longer whisker on the upper end of the boxplot and the presence of higher outliers (countries with unusually high low birth weight percentages). The majority of the data is concentrated toward the lower end (with the median closer to the bottom of the box), while a few countries have substantially higher rates of low birth weight. This indicates that most countries have relatively low lowbwt values, but a small number of countries have extreme high values driving the skewness.</p>
 </section>
 <section id="c-do-the-data-contain-any-outlying-observations" class="level4">
 <h4 class="anchored" data-anchor-id="c-do-the-data-contain-any-outlying-observations">(c) Do the data contain any outlying observations?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>unicef_data <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"unicef-1.txt"</span>, <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">","</span>, <span class="at">stringsAsFactors=</span><span class="cn">FALSE</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter to complete cases for lowbwt</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>lowbwt_data <span class="ot">&lt;-</span> unicef_data[<span class="sc">!</span><span class="fu">is.na</span>(unicef_data<span class="sc">$</span>lowbwt), ]</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate summary statistics and IQR</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>q1 <span class="ot">&lt;-</span> <span class="fu">quantile</span>(lowbwt_data<span class="sc">$</span>lowbwt, <span class="fl">0.25</span>)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>q3 <span class="ot">&lt;-</span> <span class="fu">quantile</span>(lowbwt_data<span class="sc">$</span>lowbwt, <span class="fl">0.75</span>)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>iqr <span class="ot">&lt;-</span> q3 <span class="sc">-</span> q1</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>lower <span class="ot">&lt;-</span> q1 <span class="sc">-</span> <span class="fl">1.5</span> <span class="sc">*</span> iqr</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>upper <span class="ot">&lt;-</span> q3 <span class="sc">+</span> <span class="fl">1.5</span> <span class="sc">*</span> iqr</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>mean_val <span class="ot">&lt;-</span> <span class="fu">mean</span>(lowbwt_data<span class="sc">$</span>lowbwt)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare labeled summary with explanations</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>labels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Minimum"</span>, <span class="st">"1st Quartile (Q1)"</span>, <span class="st">"Median (Q2)"</span>, <span class="st">"Mean"</span>, <span class="st">"3rd Quartile (Q3)"</span>, <span class="st">"Maximum"</span>, <span class="st">"IQR"</span>)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>values <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">round</span>(<span class="fu">min</span>(lowbwt_data<span class="sc">$</span>lowbwt), <span class="dv">2</span>),</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>            <span class="fu">round</span>(q1, <span class="dv">2</span>),</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>            <span class="fu">round</span>(<span class="fu">median</span>(lowbwt_data<span class="sc">$</span>lowbwt), <span class="dv">2</span>),</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>            <span class="fu">round</span>(mean_val, <span class="dv">2</span>),</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>            <span class="fu">round</span>(q3, <span class="dv">2</span>),</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>            <span class="fu">round</span>(<span class="fu">max</span>(lowbwt_data<span class="sc">$</span>lowbwt), <span class="dv">2</span>),</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>            <span class="fu">round</span>(iqr, <span class="dv">2</span>))</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>explanations <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"(Lowest observed low birth weight)"</span>,</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"(25% of data below this value)"</span>,</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"(Middle value of the data)"</span>,</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"(Average low birth weight)"</span>,</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"(75% of data below this value)"</span>,</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"(Highest observed low birth weight)"</span>,</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"(Spread of middle 50% of data)"</span>)</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>summary_output <span class="ot">&lt;-</span> <span class="fu">paste</span>(labels, <span class="st">": "</span>, values, <span class="st">"% "</span>, explanations, <span class="at">sep =</span> <span class="st">""</span>)</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Summary Statistics:</span><span class="sc">\n</span><span class="st">"</span>, <span class="fu">paste</span>(summary_output, <span class="at">collapse =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>), <span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Summary Statistics:
+ Minimum: 4% (Lowest observed low birth weight)
+1st Quartile (Q1): 7% (25% of data below this value)
+Median (Q2): 10% (Middle value of the data)
+Mean: 11.96% (Average low birth weight)
+3rd Quartile (Q3): 15% (75% of data below this value)
+Maximum: 50% (Highest observed low birth weight)
+IQR: 8% (Spread of middle 50% of data) </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify outlier rows (countries with extreme values)</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>outliers <span class="ot">&lt;-</span> lowbwt_data[lowbwt_data<span class="sc">$</span>lowbwt <span class="sc">&lt;</span> lower <span class="sc">|</span> lowbwt_data<span class="sc">$</span>lowbwt <span class="sc">&gt;</span> upper, ]</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Print outlier countries and values</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">nrow</span>(outliers) <span class="sc">&gt;</span> <span class="dv">0</span>){</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Outliers Detected:</span><span class="sc">\n</span><span class="st">"</span>, <span class="fu">paste</span>(outliers<span class="sc">$</span>Nation, <span class="st">": "</span>, outliers<span class="sc">$</span>lowbwt, <span class="st">"%"</span>, <span class="at">sep=</span><span class="st">""</span>), <span class="at">sep=</span><span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"No outliers detected.</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Outliers Detected:
+
+Bangladesh: 50%
+India: 33%</code></pre>
+</div>
+</div>
 </section>
 </section>
 <section id="q5-fitness-dataset-histogram-and-boxplots." class="level3">
 <h3 class="anchored" data-anchor-id="q5-fitness-dataset-histogram-and-boxplots.">Q5 Fitness dataset Histogram and Boxplots.</h3>
 <p>.Using the “Fitness” data set (available on the class webpage), create:</p>
-<p>A histogram and boxplot of Resting Pulse (RstPulse) for everyone in the sample</p>
-<p>Separate histograms of Resting Pulse for men and women.</p>
-<p>One plot with boxplots for men and women side by side</p>
-<p>A scatterplot of Oxygen uptake (Oxy) and Weight.</p>
+<section id="a-histogram-and-boxplot-of-resting-pulse-rstpulse-for-everyone-in-the-sample" class="level4">
+<h4 class="anchored" data-anchor-id="a-histogram-and-boxplot-of-resting-pulse-rstpulse-for-everyone-in-the-sample">A histogram and boxplot of Resting Pulse (RstPulse) for everyone in the sample</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data from Fitness-1.txt</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>fitness_data <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"Fitness-1.txt"</span>, <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">","</span>, <span class="at">stringsAsFactors=</span><span class="cn">FALSE</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram of Resting Pulse</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(fitness_data<span class="sc">$</span>RstPulse,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Histogram of Resting Pulse"</span>,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Resting Pulse (beats per minute)"</span>,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">"skyblue"</span>,</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">border =</span> <span class="st">"black"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Homework1_files/figure-html/question5-restingpulse-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Boxplot of Resting Pulse</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(fitness_data<span class="sc">$</span>RstPulse,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Boxplot of Resting Pulse"</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Resting Pulse (beats per minute)"</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="st">"skyblue"</span>,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">horizontal =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Homework1_files/figure-html/question5-restingpulse-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="separate-histograms-of-resting-pulse-for-men-and-women." class="level4">
+<h4 class="anchored" data-anchor-id="separate-histograms-of-resting-pulse-for-men-and-women.">Separate histograms of Resting Pulse for men and women.</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data from Fitness-1.txt</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>fitness_data <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"Fitness-1.txt"</span>, <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">","</span>, <span class="at">stringsAsFactors=</span><span class="cn">FALSE</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up side-by-side plotting</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram for Women</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(fitness_data<span class="sc">$</span>RstPulse[fitness_data<span class="sc">$</span>Sex <span class="sc">==</span> <span class="st">"F"</span>],</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Resting Pulse for Women"</span>,</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Resting Pulse (bpm)"</span>,</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">"pink"</span>,</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">border =</span> <span class="st">"black"</span>)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram for Men</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(fitness_data<span class="sc">$</span>RstPulse[fitness_data<span class="sc">$</span>Sex <span class="sc">==</span> <span class="st">"M"</span>],</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Resting Pulse for Men"</span>,</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Resting Pulse (bpm)"</span>,</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">"lightblue"</span>,</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>     <span class="at">border =</span> <span class="st">"black"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Homework1_files/figure-html/question5-histogram-sex-side-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="one-plot-with-boxplots-for-men-and-women-side-by-side" class="level4">
+<h4 class="anchored" data-anchor-id="one-plot-with-boxplots-for-men-and-women-side-by-side">One plot with boxplots for men and women side by side</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data from Fitness-1.txt</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>fitness_data <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"Fitness-1.txt"</span>, <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">","</span>, <span class="at">stringsAsFactors=</span><span class="cn">FALSE</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create horizontal boxplot of RstPulse by Sex</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(RstPulse <span class="sc">~</span> Sex,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> fitness_data,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">"Boxplot of Resting Pulse by Sex"</span>,</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">ylab =</span> <span class="st">"Sex"</span>,</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">"Resting Pulse (bpm)"</span>,</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"pink"</span>, <span class="st">"lightblue"</span>),</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">horizontal =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Homework1_files/figure-html/question5-boxplot-sex-horizontal-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="a-scatterplot-of-oxygen-uptake-oxy-and-weight." class="level4">
+<h4 class="anchored" data-anchor-id="a-scatterplot-of-oxygen-uptake-oxy-and-weight.">A scatterplot of Oxygen uptake (Oxy) and Weight.</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data from Fitness-1.txt</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>fitness_data <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"Fitness-1.txt"</span>, <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">","</span>, <span class="at">stringsAsFactors=</span><span class="cn">FALSE</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatterplot</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fitness_data<span class="sc">$</span>Weight, fitness_data<span class="sc">$</span>Oxy,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Scatterplot of Oxygen Uptake vs Weight"</span>,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Weight (kg)"</span>,</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Oxygen Uptake (ml/min)"</span>,</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch =</span> <span class="dv">19</span>,</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">"blue"</span>)</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Linear model</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(Oxy <span class="sc">~</span> Weight, <span class="at">data =</span> fitness_data)</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(model, <span class="at">col=</span><span class="st">"red"</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract slope and intercept</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>slope <span class="ot">&lt;-</span> <span class="fu">coef</span>(model)[<span class="dv">2</span>]</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>intercept <span class="ot">&lt;-</span> <span class="fu">coef</span>(model)[<span class="dv">1</span>]</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>equation <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"y = "</span>, <span class="fu">round</span>(slope, <span class="dv">2</span>), <span class="st">"x + "</span>, <span class="fu">round</span>(intercept, <span class="dv">2</span>))</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate R-squared</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>r2 <span class="ot">&lt;-</span> <span class="fu">summary</span>(model)<span class="sc">$</span>r.squared</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Add equation and R-squared text</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> <span class="fu">max</span>(fitness_data<span class="sc">$</span>Weight)<span class="sc">*</span><span class="fl">0.7</span>, </span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>     <span class="at">y =</span> <span class="fu">max</span>(fitness_data<span class="sc">$</span>Oxy)<span class="sc">*</span><span class="fl">0.9</span>, </span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>     <span class="at">labels =</span> <span class="fu">paste</span>(equation, <span class="st">"</span><span class="sc">\n</span><span class="st">R² = "</span>, <span class="fu">round</span>(r2, <span class="dv">3</span>)),</span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">cex=</span><span class="fl">1.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Homework1_files/figure-html/question5-scatterplot-oxy-weight-trend-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 <section id="a-what-is-the-median-resting-pulse-overall" class="level4">
 <h4 class="anchored" data-anchor-id="a-what-is-the-median-resting-pulse-overall">(a) What is the median Resting Pulse overall?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>fitness_data <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"Fitness-1.txt"</span>, <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">","</span>, <span class="at">stringsAsFactors=</span><span class="cn">FALSE</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute median of Resting Pulse (RstPulse)</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>median_rstpulse <span class="ot">&lt;-</span> <span class="fu">median</span>(fitness_data<span class="sc">$</span>RstPulse, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Print result</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"The median Resting Pulse (RstPulse) across the sample is:"</span>, median_rstpulse, <span class="st">"bpm</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The median Resting Pulse (RstPulse) across the sample is: 52 bpm</code></pre>
+</div>
+</div>
 </section>
 <section id="b-for-women" class="level4">
 <h4 class="anchored" data-anchor-id="b-for-women">(b) For Women?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>fitness_data <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"Fitness-1.txt"</span>, <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">","</span>, <span class="at">stringsAsFactors=</span><span class="cn">FALSE</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute median Resting Pulse for Women</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>median_rstpulse_women <span class="ot">&lt;-</span> <span class="fu">median</span>(fitness_data<span class="sc">$</span>RstPulse[fitness_data<span class="sc">$</span>Sex <span class="sc">==</span> <span class="st">"F"</span>], <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Print result</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"The median Resting Pulse for women is:"</span>, median_rstpulse_women, <span class="st">"bpm</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The median Resting Pulse for women is: 48 bpm</code></pre>
+</div>
+</div>
 </section>
 <section id="c-for-men" class="level4">
 <h4 class="anchored" data-anchor-id="c-for-men">(c) For Men?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>fitness_data <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"Fitness-1.txt"</span>, <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">","</span>, <span class="at">stringsAsFactors=</span><span class="cn">FALSE</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute median Resting Pulse for Men</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>median_rstpulse_men <span class="ot">&lt;-</span> <span class="fu">median</span>(fitness_data<span class="sc">$</span>RstPulse[fitness_data<span class="sc">$</span>Sex <span class="sc">==</span> <span class="st">"M"</span>], <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Print result</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"The median Resting Pulse for men is:"</span>, median_rstpulse_men, <span class="st">"bpm</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The median Resting Pulse for men is: 57 bpm</code></pre>
+</div>
+</div>
 </section>
-<section id="d-is-the-overall-mena-resting-pulse-bigger-or-smaller-than-the-overall-median-resting-pulse" class="level4">
-<h4 class="anchored" data-anchor-id="d-is-the-overall-mena-resting-pulse-bigger-or-smaller-than-the-overall-median-resting-pulse">(d) Is the Overall mena Resting Pulse bigger or smaller than the Overall median Resting Pulse?</h4>
+<section id="d-is-the-overall-mean-resting-pulse-bigger-or-smaller-than-the-overall-median-resting-pulse" class="level4">
+<h4 class="anchored" data-anchor-id="d-is-the-overall-mean-resting-pulse-bigger-or-smaller-than-the-overall-median-resting-pulse">(d) Is the Overall mean Resting Pulse bigger or smaller than the Overall median Resting Pulse?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>fitness_data <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"Fitness-1.txt"</span>, <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">","</span>, <span class="at">stringsAsFactors=</span><span class="cn">FALSE</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate mean and median</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>mean_rstpulse <span class="ot">&lt;-</span> <span class="fu">mean</span>(fitness_data<span class="sc">$</span>RstPulse, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>median_rstpulse <span class="ot">&lt;-</span> <span class="fu">median</span>(fitness_data<span class="sc">$</span>RstPulse, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Print results and comparison</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Mean Resting Pulse:"</span>, <span class="fu">round</span>(mean_rstpulse, <span class="dv">2</span>), <span class="st">"bpm</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Mean Resting Pulse: 53.45 bpm</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Median Resting Pulse:"</span>, <span class="fu">round</span>(median_rstpulse, <span class="dv">2</span>), <span class="st">"bpm</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Median Resting Pulse: 52 bpm</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(mean_rstpulse <span class="sc">&gt;</span> median_rstpulse){</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"The mean Resting Pulse is greater than the median Resting Pulse.</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span>(mean_rstpulse <span class="sc">&lt;</span> median_rstpulse){</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"The mean Resting Pulse is smaller than the median Resting Pulse.</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"The mean and median Resting Pulse are equal.</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The mean Resting Pulse is greater than the median Resting Pulse.</code></pre>
+</div>
+</div>
 </section>
 <section id="e-what-does-this-suggest-about-the-shape-of-the-distribution" class="level4">
 <h4 class="anchored" data-anchor-id="e-what-does-this-suggest-about-the-shape-of-the-distribution">(e) What does this suggest about the shape of the distribution?</h4>
+<p>If the mean Resting Pulse is greater than the median Resting Pulse, this suggests that the distribution of RstPulse is right-skewed (positively skewed). In such a distribution, the longer tail on the right side pulls the mean higher than the median. This indicates that while most participants have lower resting pulse rates, a few individuals with exceptionally high resting pulses are increasing the mean. Conversely, if the mean is smaller than the median, the distribution would be left-skewed (negatively skewed), suggesting a tail on the lower end. However, in this case, given typical pulse data and the expectation from most physiological datasets, it’s likely that the data is right-skewed, driven by a few high outliers.</p>
 </section>
 <section id="f-which-gender-has-a-larger-inter-quartile-range-iqr-for-resting-pulse" class="level4">
 <h4 class="anchored" data-anchor-id="f-which-gender-has-a-larger-inter-quartile-range-iqr-for-resting-pulse">(f) Which gender has a larger inter-quartile Range (IQR) for Resting Pulse?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>fitness_data <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"Fitness-1.txt"</span>, <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">","</span>, <span class="at">stringsAsFactors=</span><span class="cn">FALSE</span>)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate IQR for women</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>iqr_women <span class="ot">&lt;-</span> <span class="fu">IQR</span>(fitness_data<span class="sc">$</span>RstPulse[fitness_data<span class="sc">$</span>Sex <span class="sc">==</span> <span class="st">"F"</span>], <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate IQR for men</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>iqr_men <span class="ot">&lt;-</span> <span class="fu">IQR</span>(fitness_data<span class="sc">$</span>RstPulse[fitness_data<span class="sc">$</span>Sex <span class="sc">==</span> <span class="st">"M"</span>], <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Print results and comparison</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"IQR of Resting Pulse for Women:"</span>, <span class="fu">round</span>(iqr_women, <span class="dv">2</span>), <span class="st">"bpm</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>IQR of Resting Pulse for Women: 5.25 bpm</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"IQR of Resting Pulse for Men:"</span>, <span class="fu">round</span>(iqr_men, <span class="dv">2</span>), <span class="st">"bpm</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>IQR of Resting Pulse for Men: 10.5 bpm</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(iqr_women <span class="sc">&gt;</span> iqr_men){</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Women have a larger IQR for Resting Pulse.</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span>(iqr_women <span class="sc">&lt;</span> iqr_men){</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Men have a larger IQR for Resting Pulse.</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Men and Women have the same IQR for Resting Pulse.</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Men have a larger IQR for Resting Pulse.</code></pre>
+</div>
+</div>
 </section>
 <section id="g-does-there-seem-to-be-a-relationship-between-weight-and-oxygen-uptake-briefly-explain-your-answer." class="level4">
 <h4 class="anchored" data-anchor-id="g-does-there-seem-to-be-a-relationship-between-weight-and-oxygen-uptake-briefly-explain-your-answer.">(g) Does there seem to be a relationship between Weight and Oxygen uptake? Briefly explain your answer.</h4>
+<p>Based on the scatterplot of Oxygen Uptake (Oxy) vs Weight, there appears to be a moderate positive relationship between the two variables. As weight increases, oxygen uptake also tends to increase, suggesting that heavier individuals may generally have higher oxygen consumption during physical activity. The linear trendline in the scatterplot, with its upward slope, indicates this positive association. However, the R² value is not particularly high, which implies that while weight contributes to oxygen uptake levels, it does not explain all of the variation. Other factors such as fitness level, age, and gender likely also play a role. Overall, while a positive association exists, it is not particularly strong or definitive and should be interpreted alongside other variables that influence oxygen uptake.</p>
 </section>
 </section>
 </section>
 <section id="sources" class="level2">
 <h2 class="anchored" data-anchor-id="sources">Sources:</h2>
+<p>Nohr, E. A., &amp; Liew, Z. (2018). How to investigate and adjust for selection bias in cohort studies. Acta obstetricia et gynecologica Scandinavica, 97(4), 407–416. https://doi.org/10.1111/aogs.13319</p>
+<section id="thank-you-for-reiewing-my-work-please-enjoy-this-figure-of-a-motor-protein-for-making-it-to-the-end" class="level4">
+<h4 class="anchored" data-anchor-id="thank-you-for-reiewing-my-work-please-enjoy-this-figure-of-a-motor-protein-for-making-it-to-the-end">Thank you for reiewing my work, please enjoy this figure of a motor protein for making it to the end</h4>
+<p><img src="myosinII.png" class="img-fluid"></p>
+</section>
 </section>
 </section>
 
