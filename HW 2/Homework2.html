@@ -73,14 +73,92 @@ ul.task-list li input[type="checkbox"] {
 <h4 class="anchored" data-anchor-id="jhu-biostatistics">JHU Biostatistics</h4>
 </section>
 <section id="june-1st-2025" class="level4">
-<h4 class="anchored" data-anchor-id="june-1st-2025">June 1st 2025</h4>
+<h4 class="anchored" data-anchor-id="june-1st-2025">June 1st, 2025</h4>
 </section>
 <section id="homework-2" class="level1">
 <h1>Homework 2</h1>
 <p>This file contains code exploring the Coronary Artery Surgery Study (CASS), exploring sensitivity, specificity as well as other proportions present in the dataset. Additionally problems 8 and 10 are tackled from chapter 6 of the textbook using R code to show work wherever possible. All internet resources are cited in APA format at the end of this PDF document.</p>
-<section id="cass-problem-context" class="level2">
-<h2 class="anchored" data-anchor-id="cass-problem-context">CASS Problem Context</h2>
-<p>lmao∏</p>
+<section id="part-1-cass-dataset-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="part-1-cass-dataset-analysis">Part 1: CASS Dataset Analysis</h2>
+<p>This data is a subset of the Coronary Artery Surgery Study (CASS) . looking at the use of an Exercise Stress Test (y1; 1=positive) and history of Chest Pain (y2; 1=yes) as predictors of coronary artery disease (d; 1=yes), as diagnosed by the gold standard of arteriography. The men in this sample were all undergoing coronary arteriography for suspected disease. The data is taken from “The Statistical Evaluation if Medical Tests for Classification and Prediction” by Margaret Pepe.</p>
+<p>Assume this data is a random sample from the population of men who would undergo arteriography for suspected coronary artery disease.</p>
+<p>From this data, compute :</p>
+<section id="a-proportion-of-men-in-this-sample-who-have-disease" class="level4">
+<h4 class="anchored" data-anchor-id="a-proportion-of-men-in-this-sample-who-have-disease">a) Proportion of men in this sample who have disease</h4>
+</section>
+<section id="b-proportion-of-men-in-this-sample-who-score-positive-on-the-exercise-stress-test-y11" class="level4">
+<h4 class="anchored" data-anchor-id="b-proportion-of-men-in-this-sample-who-score-positive-on-the-exercise-stress-test-y11">b) Proportion of men in this sample who score “Positive” on the Exercise Stress Test (y1=1)</h4>
+</section>
+<section id="c-proportion-of-men-in-this-sample-who-score-positive-on-the-exercise-stress-test-and-have-disease-y11-d1" class="level4">
+<h4 class="anchored" data-anchor-id="c-proportion-of-men-in-this-sample-who-score-positive-on-the-exercise-stress-test-and-have-disease-y11-d1">c) Proportion of men in this sample who score “Positive” on the Exercise Stress Test and have disease (y1=1 &amp; d=1)</h4>
+</section>
+<section id="thought-q1" class="level4">
+<h4 class="anchored" data-anchor-id="thought-q1">Thought Q1:</h4>
+<p>From a-c, do you think Disease status and result from EST are independent? Why or Why not?</p>
+</section>
+<section id="d-sensitivity-specificity-and-predictive-value-positive-of-est-y1" class="level4">
+<h4 class="anchored" data-anchor-id="d-sensitivity-specificity-and-predictive-value-positive-of-est-y1">d) Sensitivity, Specificity, and Predictive Value Positive of EST (y1)</h4>
+</section>
+<section id="e-sensitivity-specificity-and-predictive-value-positive-of-history-of-chest-pain-y2" class="level4">
+<h4 class="anchored" data-anchor-id="e-sensitivity-specificity-and-predictive-value-positive-of-history-of-chest-pain-y2">e) Sensitivity, Specificity, and Predictive Value Positive of History of Chest Pain (y2)</h4>
+</section>
+<section id="thought-q2" class="level4">
+<h4 class="anchored" data-anchor-id="thought-q2">Thought Q2:</h4>
+<p>If you were choosing one of the two as a screening marker, and the most important thing was not to miss cases, which might you prefer?</p>
+</section>
+<section id="thought-q3" class="level4">
+<h4 class="anchored" data-anchor-id="thought-q3">Thought Q3:</h4>
+<p>If you were a patient with a positive on one of the two markers, which would give you a better shot of not having disease?</p>
+</section>
+</section>
+<section id="part-2-textbook-problems-from-chapter-6" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-textbook-problems-from-chapter-6">Part 2: Textbook Problems from Chapter 6</h2>
+<section id="question-8-gestational-age-probability" class="level3">
+<h3 class="anchored" data-anchor-id="question-8-gestational-age-probability">Question 8: Gestational age probability</h3>
+<section id="a" class="level4">
+<h4 class="anchored" data-anchor-id="a">a)</h4>
+</section>
+<section id="b" class="level4">
+<h4 class="anchored" data-anchor-id="b">b)</h4>
+</section>
+<section id="c" class="level4">
+<h4 class="anchored" data-anchor-id="c">c)</h4>
+</section>
+<section id="d" class="level4">
+<h4 class="anchored" data-anchor-id="d">d)</h4>
+</section>
+</section>
+<section id="question-10-principal-sources-of-payment-probability" class="level3">
+<h3 class="anchored" data-anchor-id="question-10-principal-sources-of-payment-probability">Question 10: Principal sources of payment probability</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Q10%20table.png" class="img-fluid figure-img"></p>
+<figcaption>Table denoting payment source and probability</figcaption>
+</figure>
+</div>
+<section id="a-what-is-the-probability-that-the-principal-source-of-payment-for-a-given-hospital-discharge-is-the-patients-private-insurance" class="level4">
+<h4 class="anchored" data-anchor-id="a-what-is-the-probability-that-the-principal-source-of-payment-for-a-given-hospital-discharge-is-the-patients-private-insurance">a) What is the probability that the principal source of payment for a given hospital discharge is the patient’s private insurance?</h4>
+</section>
+<section id="b-what-is-the-probability-that-the-principal-source-of-payment-is-a-government-program-including-medicare-medicaid-and-other" class="level4">
+<h4 class="anchored" data-anchor-id="b-what-is-the-probability-that-the-principal-source-of-payment-is-a-government-program-including-medicare-medicaid-and-other">b) What is the probability that the principal source of payment is a government program (including Medicare, Medicaid, and Other)?</h4>
+</section>
+<section id="c-given-that-the-primary-source-of-payment-is-a-government-program-what-is-the-probability-that-it-is-medicare" class="level4">
+<h4 class="anchored" data-anchor-id="c-given-that-the-primary-source-of-payment-is-a-government-program-what-is-the-probability-that-it-is-medicare">c) Given that the primary source of payment is a government program, what is the probability that it is Medicare?</h4>
+</section>
+</section>
+</section>
+<section id="sources" class="level2">
+<h2 class="anchored" data-anchor-id="sources">Sources:</h2>
+<section id="thank-you-for-reviewing-and-making-it-to-the-end-of-my-work-in-this-assignments-signature-end-off-id-like-to-share-a-technology-im-learning-about-in-my-freetime-called-sequencing-by-expansion.-below-is-a-youtube-video-explaining-roches-technology" class="level4">
+<h4 class="anchored" data-anchor-id="thank-you-for-reviewing-and-making-it-to-the-end-of-my-work-in-this-assignments-signature-end-off-id-like-to-share-a-technology-im-learning-about-in-my-freetime-called-sequencing-by-expansion.-below-is-a-youtube-video-explaining-roches-technology">Thank you for reviewing and making it to the end of my work, in this assignment’s signature end off I’d like to share a technology I’m learning about in my freetime called sequencing by expansion. Below is a youtube video explaining Roche’s technology!</h4>
+<p><a href="https://www.youtube.com/watch?v=G8ECt04qPos">Watch on YouTube</a></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="xpandomer.png" class="img-fluid figure-img"></p>
+<figcaption>X-NTPs modified nucleotides containing reporter tether and translocation control element, sequenced using nanopore tech</figcaption>
+</figure>
+</div>
+</section>
 </section>
 </section>
 

@@ -7,11 +7,77 @@ output: pdf_document
 #### Dylan Renard
 #### Professor Proschan & Professor Nason
 #### JHU Biostatistics
-#### June 1st 2025
+#### June 1st, 2025
 
 # Homework 2
 This file contains code exploring the Coronary Artery Surgery Study (CASS), exploring sensitivity, specificity as well as other proportions present in the dataset. Additionally problems 8 and 10 are tackled from chapter 6 of the textbook using R code to show work wherever possible. All internet resources are cited in APA format at the end of this PDF document.
 
 
-## CASS Problem Context
-lmao
+## Part 1: CASS Dataset Analysis
+This data is a subset of the Coronary Artery Surgery Study (CASS) . looking at the use of an Exercise Stress Test (y1; 1=positive) and history of Chest Pain (y2; 1=yes) as predictors of coronary artery disease (d; 1=yes), as diagnosed by the gold standard of arteriography. The men in this sample were all undergoing coronary arteriography for suspected disease. The data is taken from “The Statistical Evaluation if Medical Tests for Classification and Prediction” by Margaret Pepe. 
+
+Assume this data is a random sample from the population of men who would undergo arteriography for suspected coronary artery disease. 
+
+From this data, compute : 
+
+#### a) Proportion of men in this sample who have disease 
+
+
+#### b) Proportion of men in this sample who score “Positive” on the Exercise Stress Test (y1=1) 
+
+
+
+#### c) Proportion of men in this sample who score “Positive” on the Exercise Stress Test and have disease (y1=1 & d=1)    
+
+
+
+#### Thought Q1:
+ From a-c, do you think Disease status and result from EST are independent? Why or Why not?  
+
+
+#### d) Sensitivity, Specificity, and Predictive Value Positive of EST (y1) 
+
+
+
+#### e) Sensitivity, Specificity, and Predictive Value Positive of History of Chest Pain (y2) 
+
+
+#### Thought Q2:
+ If you were choosing one of the two as a screening marker, and the most important thing was not to miss cases, which might you prefer? 
+
+#### Thought Q3: 
+If you were a patient with a positive on one of the two markers, which would give you a better shot of not having disease? 
+
+
+## Part 2: Textbook Problems from Chapter 6
+
+### Question 8: Gestational age probability
+
+#### a)
+
+#### b)
+
+#### c)
+
+#### d)
+
+### Question 10: Principal sources of payment probability
+
+![Table denoting payment source and probability](Q10%20table.png)
+
+#### a) What is the probability that the principal source of payment for a given hospital discharge is the patient’s private insurance? 
+
+#### b) What is the probability that the principal source of payment is a government program (including Medicare, Medicaid, and Other)? 
+
+#### c) Given that the primary source of payment is a government program, what is the probability that it is Medicare? 
+
+
+
+## Sources: 
+
+
+
+#### Thank you for reviewing and making it to the end of my work, in this assignment's signature end off I'd like to share a technology I'm learning about in my freetime called sequencing by expansion. Below is a youtube video explaining Roche's technology!
+[Watch on YouTube](https://www.youtube.com/watch?v=G8ECt04qPos)
+
+![X-NTPs modified nucleotides containing reporter tether and translocation control element, sequenced using nanopore tech](xpandomer.png)
