@@ -1,0 +1,13 @@
+---
+title: "Homework 1 - Biostatistics"
+Author: "Dylan Renard"
+output: pdf_document
+---
+
+#### Dylan Renard
+#### Professor Proschan & Professor Nason
+#### JHU Biostatistics
+#### May 25th 2025
+
+# Homework 2
+This file contains code exploring the Coronary Artery Surgery Study (CASS), exploring sensitivity, specificity as well as other proportions present in the dataset. Additional problems are tackled
