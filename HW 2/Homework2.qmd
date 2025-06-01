@@ -271,29 +271,132 @@ If I were a patient who tested positive on one of the two markers, I would prefe
 ## Part 2: Textbook Problems from Chapter 6
 
 ### Question 8: Gestational age probability
+For Mexican American infants born in Arizona in 1986 and 1987, the probability that a child’s gestational age is less than 37 weeks is 0.142 and the probability that his or her birth weight is less than 2500 grams is 0.051. Furthermore, the probability that the two events occur simultaneously is 0.031 
+
 
 #### a)
+Let A be the event that an infant’s gestational age is less than 37 weeks, and B be the event that his or her birth weight is less than 2500 grams. Make a Venn diagram. (this can be sketched by hand, or use shapes in Word; doesn't have to be done on R, though it should be roughly to scale)
+```{r}
+# Load VennDiagram package (assumes it's already installed)
+if (!requireNamespace("VennDiagram", quietly = TRUE)) {
+  install.packages("VennDiagram", repos = "https://cran.r-project.org")
+}
+library(VennDiagram)
 
-#### b)
+# Set probabilities
+P_A <- 0.142
+P_B <- 0.051
+P_A_and_B <- 0.031
 
-#### c)
+# Calculate only A, only B, and neither
+only_A <- P_A - P_A_and_B
+only_B <- P_B - P_A_and_B
+neither <- 1 - (P_A + P_B - P_A_and_B)
 
-#### d)
+# Create Venn diagram with improved labels
+grid.newpage()
+draw.pairwise.venn(
+  area1 = P_A,
+  area2 = P_B,
+  cross.area = P_A_and_B,
+  category = c("Gestational Age < 37 wks", "Birth Weight < 2500g"),
+  fill = c("skyblue", "pink"),
+  alpha = c(0.5, 0.5),
+  label.col = "black", # Text color in the Venn
+  cat.col = c("blue4", "red4"), # Category label color
+  cex = 1.5, # Increase size of intersection/region text
+  cat.cex = 1.5, # Increase category label size
+  cat.fontface = "bold", # Make category labels bold
+  cat.pos = c(-20, 20), # Adjust position angles for clarity
+  cat.dist = c(0.05, 0.05) # Bring labels closer to circles
+)
+```
+
+#### b) Are A and B independent? 
+Two events, A and B are independent if: P(A∩B)=P(A)×P(B).
+
+If we use our context from the problem:
+P(A) = 0.142
+P(B) = 0.051
+P(A∩B) = 0.031
+
+Computing P(A) x P(B):
+
+(0.142) * (0.051) = 0.007242
+
+Compared to the experimental P(A∩B) from the problem of 0.031.
+
+Since P(A∩B) is much larger than P(A) x P(B), this tells us that the A and B are not independent. 
+The probability of both events occuring together is higher than expected if they were independent,
+suggesting an association between gestational age and birth weight. 
+
+Thusly the gestational age being less than 37 weeks and the birth weight being less than 2500 grams are not independent.
+The observerved probability of both occuring (0.031) is siginficantly greater than the product of individual probabilities (0.007), indicating a relationship between the two factors.
+
+
+#### c) For a randomly selected Mexican American newborn, what is the probability that A or B or both occur? 
+```{r}
+# Calculate the probability that A or B or both occur (P(A ∪ B))
+
+# Given probabilities
+P_A <- 0.142
+P_B <- 0.051
+P_A_and_B <- 0.031
+
+# Calculate union
+P_A_or_B <- P_A + P_B - P_A_and_B
+
+# Display the result
+cat("The probability that A or B or both occur (P(A ∪ B)) is: ", round(P_A_or_B, 3), "\n")
+```
+
+#### d) What is the probability that event A occurs if event B occurs? 
+```{r}
+# Calculate the conditional probability P(A|B)
+
+# Given probabilities
+P_A_and_B <- 0.031
+P_B <- 0.051
+
+# Calculate conditional probability
+P_A_given_B <- P_A_and_B / P_B
+
+# Display the result
+cat("The probability that A occurs given B (P(A|B)) is: ", round(P_A_given_B, 3), "\n")
+```
 
 ### Question 10: Principal sources of payment probability
+The probabilities associated with the expected principal source of payment for hospital discharges in the United States in 1990 are listed below: 
 
 ![Table denoting payment source and probability](Q10%20table.png)
 
 #### a) What is the probability that the principal source of payment for a given hospital discharge is the patient’s private insurance? 
+The probability that the principal source of payment for a given hospital discharge is 0.387.
 
 #### b) What is the probability that the principal source of payment is a government program (including Medicare, Medicaid, and Other)? 
+The probability that the principal source of payment is a government program can be calculated as:
+0.345 + 0.116 + 0.033 = 0.494
+
+Thus, the probability is 0.494.
+
 
 #### c) Given that the primary source of payment is a government program, what is the probability that it is Medicare? 
 
+P(Medicare∣Government Program) = P(Medicare) / P(Government Program)
+
+P(Medicare) = 0.345 and P(Government Program) = 0.494
+
+Given that the primary source of payment is a government program, the probability that it is Medicare is calculated as:
+0.345/0.494 = 0.698, which means the conditional probability is around 0.698.
 
 
 ## Sources: 
 
+Holtz, Y. (2025). Venn diagram. Venn Diagram. https://r-graph-gallery.com/14-venn-diagramm 
+
+Iannone, R., Cheng, J., Schloerke, B., Hughes, E., Lauer, A., Seo, J., Brevoort, K., & Roy, O. (2025). Easily create presentation-ready display tables. Easily Create Presentation-Ready Display Tables • gt. https://gt.rstudio.com/ 
+
+Pagano, M., & Gauvreau, K. (1993). Principles of biostatistics / Marcello Pagano, Kimberlee Gauvreau. Duxbury Press.
 
 
 #### Thank you for reviewing and making it to the end of my work, in this assignment's signature end off I'd like to share a technology I'm learning about in my freetime called sequencing by expansion. Below is a youtube video explaining Roche's technology!
