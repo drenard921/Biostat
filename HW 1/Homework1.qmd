@@ -13,9 +13,6 @@ output: pdf_document
 This file contains my responses for the takehome homework for unit 1 of the JHU Biostatistics course summer 2025 term. The file includes several written responses as well as box-plots. This includes answers to textbook problemns in Part 1 and statiscial plots made in R in Part 2.
 
 
-For my first submission I will turn in a pdf of this file in addition to the Quarto Zip file. In future assignments, let me know if the PDF is sufficient. 
-
-
 ## Part 1 (Textbook Problems)
 ### Q1 Continuous vs Discrete data types:
 
