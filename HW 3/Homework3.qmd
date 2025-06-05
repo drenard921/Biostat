@@ -1,0 +1,10 @@
+---
+title: "Homework 3 - Biostatistics"
+Author: "Dylan Renard"
+output: pdf_document
+---
+
+#### Dylan Renard
+#### Professor Proschan & Professor Nason
+#### JHU Biostatistics
+#### June 4th, 2025
