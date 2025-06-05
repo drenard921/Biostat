@@ -8,3 +8,71 @@ output: pdf_document
 #### Professor Proschan & Professor Nason
 #### JHU Biostatistics
 #### June 4th, 2025
+
+# Homework 3
+This file explores creating stacked normal distribution plots, calculating probabilities in normal distributions, covid simulation of events simulating a binomial distribution as well as problems from the Textbook. All internet resources are cited in APA format at the end of this PDF document.
+
+## Part 1: Cholesterol Dataset (Normal Distribution)
+
+#### Q1: Probability Histogram
+Make a histogram of the total cholesterol readings in this dataset, with the y-axis equal to the probability of being in each bar (not the frequency). Estimate the mean and standard deviation of this normal distribution. Give the estimates of these parameters, super-impose a normal distribution with that mean and SD on the histogram.
+
+#### Q2: Stacked Histogram
+Create a new variable that is a standardized version of total cholesterol by subtracting off the mean and dividing by the standard deviation. Make another histogram, this time of the standardized data. Superimpose a standard normal curve (“standard normal”: mean=0, SD=1)
+
+#### Q3: P(x >=240)
+The American Heart Association (previously) defined “High (Total) Cholesterol” as 240 or above. What proportion of the people in this dataset have total cholesterol of 240 or above?
+
+#### Q4: Imagine you wanted to compare the population from which this sample is drawn to a different population, in which it is well-documented that 10% of people have total cholesterol of 240 or above.
+
+#### a) Thought question about True Population Metrics and conditional probability P(x =P(hight cholesterol))
+If the true rate of high cholesterol in this population were 10%, what is the probability that you would see exactly as many people with high cholesterol as you saw here? (hint, you don’t need to use the dataset to answer this)
+
+#### b)  Thought question about True Population Metrics and conditional probability P(x >= P(hight cholesterol))
+If the true rate of high cholesterol in this population were 10%, what is the probability that you would see at least as many people with high cholesterol as you saw here? (hint, you don’t need to use the dataset to answer this)
+
+
+## Part 2: Covid Simulation
+Read the document on Simulations in R in module 3, about for loops. Let’s pretend we planning a covid-19 vaccine study, and need to think about how many covid-19 infections we might see during the course of the trial. Assume the true incidence is 5% ; that is, if we looked at the whole population, 5% of people will get infected with covid-19 during the study follow-up. Use the examples in the simulation document to do 3 simulations; each simulation should have 1,000 repetitions:
+
+
+#### Q1: Make a histogram of how many infections we can expect if we follow 10 people for the course of the trial.
+
+#### Q2: Make a histogram of how many infections we can expect if we follow 100 people for the course of the trial.
+
+#### Q3: Make a histogram of how many infections we can expect if we follow 1,000 people for the course of the trial.
+
+#### Reflection Question: Briefly describe what you notice about the three histograms. Can you explain why?
+
+
+## Part 3: Chapter 7 Textbook Problems
+
+#### Q10: Consider a group of seven individuals selected form the population of 65- to 74-year olds in the United States. The number of persons in this sample who suffer from diabetes is a binomial random variable with parameters n=7 and p=0.125
+
+#### a) If you wish to make a list of the seven persons chosen, in how many ways can they be ordered?
+
+#### b) Without regard to order, in how many ways can you select 4 individuals from this group of 7?
+
+#### c) what is the probability that exactly two of the individuals in your sample suffer from diabetes?
+
+#### d) what is the probability that four of them have diabetes?
+
+#### Q12: According to the Behavioral Risk Factor Surveillance System, 58% of all Americans adhere to a sedentary lifestyle
+
+#### a) If you selected repeated samples of size 12 from the US population, what would be the mean number of individuals per sample who do not exercise regularly? What would be the standard deviation?
+
+#### b) Suppose you select a sample of 12 individuals and find that 10 of them do not exercise regularly. Assuming the Surveillance System is correct, what is the probability you would have obtained results as bad or worse than those you observed?
+
+#### Q20: Framingham Study
+In the Framingham study, serum cholesterol levels were measured for a large number of healthy males. The population was followed for 16 years. At the end of the time, the men were divided into 2 groups: those who had developed coronary disease and those who had not. The distributions of the initial serum cholesterol levels for each group were found to be approximately normal. Among individuals who eventually developed coronary disease, the mean serum cholesterol level was μd= 244 mg/100 ml and the standard deviation was σd=51 mg/100ml; for those who did not go on to develop the disease, the mean serum cholesterol was μnd= 219 mg/100 ml and the standard deviation was σd=41 mg/100ml.
+
+#### a) Suppose that an initial serum cholesterol level of 260 mg/100ml was used to predict coronary heart disease. What is the probability of correctly predicting heart disease for a man who will go on to develop it?
+
+#### b) Using the cutpoint in (a), What is the probability of predicting heart disease for a man who will not go on to develop it?
+
+#### c) Using the cutpoint in (a), What is the probability of failing to predict heart disease for a man who will develop it?
+
+#### d) What would happen to the probabilities of false positives and false negative errors if the cutoff point for predicting heart disease was lowered to 250 mg/100 ml?
+
+#### e) In ths population, does initial serum cholesterol appear to be useful for predicting coronary heart disease? Why or why not?
+

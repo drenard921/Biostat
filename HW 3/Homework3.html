@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Homework 3 - Biostatistics</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="Homework3_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Homework3_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="Homework3_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="Homework3_files/libs/quarto-html/popper.min.js"></script>
+<script src="Homework3_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Homework3_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Homework3_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Homework3_files/libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Homework3_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Homework3_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Homework3_files/libs/bootstrap/bootstrap-81267100e462c21b3d6c0d5bf76a3417.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Homework 3 - Biostatistics</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="dylan-renard" class="level4">
+<h4 class="anchored" data-anchor-id="dylan-renard">Dylan Renard</h4>
+</section>
+<section id="professor-proschan-professor-nason" class="level4">
+<h4 class="anchored" data-anchor-id="professor-proschan-professor-nason">Professor Proschan &amp; Professor Nason</h4>
+</section>
+<section id="jhu-biostatistics" class="level4">
+<h4 class="anchored" data-anchor-id="jhu-biostatistics">JHU Biostatistics</h4>
+</section>
+<section id="june-4th-2025" class="level4">
+<h4 class="anchored" data-anchor-id="june-4th-2025">June 4th, 2025</h4>
+</section>
+<section id="homework-3" class="level1">
+<h1>Homework 3</h1>
+<p>This file explores creating stacked normal distribution plots, calculating probabilities in normal distributions, covid simulation of events simulating a binomial distribution as well as problems from the Textbook. All internet resources are cited in APA format at the end of this PDF document.</p>
+<section id="part-1-cholesterol-dataset-normal-distribution" class="level2">
+<h2 class="anchored" data-anchor-id="part-1-cholesterol-dataset-normal-distribution">Part 1: Cholesterol Dataset (Normal Distribution)</h2>
+<section id="q1-probability-histogram" class="level4">
+<h4 class="anchored" data-anchor-id="q1-probability-histogram">Q1: Probability Histogram</h4>
+<p>Make a histogram of the total cholesterol readings in this dataset, with the y-axis equal to the probability of being in each bar (not the frequency). Estimate the mean and standard deviation of this normal distribution. Give the estimates of these parameters, super-impose a normal distribution with that mean and SD on the histogram.</p>
+</section>
+<section id="q2-stacked-histogram" class="level4">
+<h4 class="anchored" data-anchor-id="q2-stacked-histogram">Q2: Stacked Histogram</h4>
+<p>Create a new variable that is a standardized version of total cholesterol by subtracting off the mean and dividing by the standard deviation. Make another histogram, this time of the standardized data. Superimpose a standard normal curve (“standard normal”: mean=0, SD=1)</p>
+</section>
+<section id="q3-px-240" class="level4">
+<h4 class="anchored" data-anchor-id="q3-px-240">Q3: P(x &gt;=240)</h4>
+<p>The American Heart Association (previously) defined “High (Total) Cholesterol” as 240 or above. What proportion of the people in this dataset have total cholesterol of 240 or above?</p>
+</section>
+<section id="q4-imagine-you-wanted-to-compare-the-population-from-which-this-sample-is-drawn-to-a-different-population-in-which-it-is-well-documented-that-10-of-people-have-total-cholesterol-of-240-or-above." class="level4">
+<h4 class="anchored" data-anchor-id="q4-imagine-you-wanted-to-compare-the-population-from-which-this-sample-is-drawn-to-a-different-population-in-which-it-is-well-documented-that-10-of-people-have-total-cholesterol-of-240-or-above.">Q4: Imagine you wanted to compare the population from which this sample is drawn to a different population, in which it is well-documented that 10% of people have total cholesterol of 240 or above.</h4>
+</section>
+<section id="a-thought-question-about-true-population-metrics-and-conditional-probability-px-phight-cholesterol" class="level4">
+<h4 class="anchored" data-anchor-id="a-thought-question-about-true-population-metrics-and-conditional-probability-px-phight-cholesterol">a) Thought question about True Population Metrics and conditional probability P(x =P(hight cholesterol))</h4>
+<p>If the true rate of high cholesterol in this population were 10%, what is the probability that you would see exactly as many people with high cholesterol as you saw here? (hint, you don’t need to use the dataset to answer this)</p>
+</section>
+<section id="b-thought-question-about-true-population-metrics-and-conditional-probability-px-phight-cholesterol" class="level4">
+<h4 class="anchored" data-anchor-id="b-thought-question-about-true-population-metrics-and-conditional-probability-px-phight-cholesterol">b) Thought question about True Population Metrics and conditional probability P(x &gt;= P(hight cholesterol))</h4>
+<p>If the true rate of high cholesterol in this population were 10%, what is the probability that you would see at least as many people with high cholesterol as you saw here? (hint, you don’t need to use the dataset to answer this)</p>
+</section>
+</section>
+<section id="part-2-covid-simulation" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-covid-simulation">Part 2: Covid Simulation</h2>
+<p>Read the document on Simulations in R in module 3, about for loops. Let’s pretend we planning a covid-19 vaccine study, and need to think about how many covid-19 infections we might see during the course of the trial. Assume the true incidence is 5% ; that is, if we looked at the whole population, 5% of people will get infected with covid-19 during the study follow-up. Use the examples in the simulation document to do 3 simulations; each simulation should have 1,000 repetitions:</p>
+<section id="q1-make-a-histogram-of-how-many-infections-we-can-expect-if-we-follow-10-people-for-the-course-of-the-trial." class="level4">
+<h4 class="anchored" data-anchor-id="q1-make-a-histogram-of-how-many-infections-we-can-expect-if-we-follow-10-people-for-the-course-of-the-trial.">Q1: Make a histogram of how many infections we can expect if we follow 10 people for the course of the trial.</h4>
+</section>
+<section id="q2-make-a-histogram-of-how-many-infections-we-can-expect-if-we-follow-100-people-for-the-course-of-the-trial." class="level4">
+<h4 class="anchored" data-anchor-id="q2-make-a-histogram-of-how-many-infections-we-can-expect-if-we-follow-100-people-for-the-course-of-the-trial.">Q2: Make a histogram of how many infections we can expect if we follow 100 people for the course of the trial.</h4>
+</section>
+<section id="q3-make-a-histogram-of-how-many-infections-we-can-expect-if-we-follow-1000-people-for-the-course-of-the-trial." class="level4">
+<h4 class="anchored" data-anchor-id="q3-make-a-histogram-of-how-many-infections-we-can-expect-if-we-follow-1000-people-for-the-course-of-the-trial.">Q3: Make a histogram of how many infections we can expect if we follow 1,000 people for the course of the trial.</h4>
+</section>
+<section id="reflection-question-briefly-describe-what-you-notice-about-the-three-histograms.-can-you-explain-why" class="level4">
+<h4 class="anchored" data-anchor-id="reflection-question-briefly-describe-what-you-notice-about-the-three-histograms.-can-you-explain-why">Reflection Question: Briefly describe what you notice about the three histograms. Can you explain why?</h4>
+</section>
+</section>
+<section id="part-3-chapter-7-textbook-problems" class="level2">
+<h2 class="anchored" data-anchor-id="part-3-chapter-7-textbook-problems">Part 3: Chapter 7 Textbook Problems</h2>
+<section id="q10-consider-a-group-of-seven-individuals-selected-form-the-population-of-65--to-74-year-olds-in-the-united-states.-the-number-of-persons-in-this-sample-who-suffer-from-diabetes-is-a-binomial-random-variable-with-parameters-n7-and-p0.125" class="level4">
+<h4 class="anchored" data-anchor-id="q10-consider-a-group-of-seven-individuals-selected-form-the-population-of-65--to-74-year-olds-in-the-united-states.-the-number-of-persons-in-this-sample-who-suffer-from-diabetes-is-a-binomial-random-variable-with-parameters-n7-and-p0.125">Q10: Consider a group of seven individuals selected form the population of 65- to 74-year olds in the United States. The number of persons in this sample who suffer from diabetes is a binomial random variable with parameters n=7 and p=0.125</h4>
+</section>
+<section id="a-if-you-wish-to-make-a-list-of-the-seven-persons-chosen-in-how-many-ways-can-they-be-ordered" class="level4">
+<h4 class="anchored" data-anchor-id="a-if-you-wish-to-make-a-list-of-the-seven-persons-chosen-in-how-many-ways-can-they-be-ordered">a) If you wish to make a list of the seven persons chosen, in how many ways can they be ordered?</h4>
+</section>
+<section id="b-without-regard-to-order-in-how-many-ways-can-you-select-4-individuals-from-this-group-of-7" class="level4">
+<h4 class="anchored" data-anchor-id="b-without-regard-to-order-in-how-many-ways-can-you-select-4-individuals-from-this-group-of-7">b) Without regard to order, in how many ways can you select 4 individuals from this group of 7?</h4>
+</section>
+<section id="c-what-is-the-probability-that-exactly-two-of-the-individuals-in-your-sample-suffer-from-diabetes" class="level4">
+<h4 class="anchored" data-anchor-id="c-what-is-the-probability-that-exactly-two-of-the-individuals-in-your-sample-suffer-from-diabetes">c) what is the probability that exactly two of the individuals in your sample suffer from diabetes?</h4>
+</section>
+<section id="d-what-is-the-probability-that-four-of-them-have-diabetes" class="level4">
+<h4 class="anchored" data-anchor-id="d-what-is-the-probability-that-four-of-them-have-diabetes">d) what is the probability that four of them have diabetes?</h4>
+</section>
+<section id="q12-according-to-the-behavioral-risk-factor-surveillance-system-58-of-all-americans-adhere-to-a-sedentary-lifestyle" class="level4">
+<h4 class="anchored" data-anchor-id="q12-according-to-the-behavioral-risk-factor-surveillance-system-58-of-all-americans-adhere-to-a-sedentary-lifestyle">Q12: According to the Behavioral Risk Factor Surveillance System, 58% of all Americans adhere to a sedentary lifestyle</h4>
+</section>
+<section id="a-if-you-selected-repeated-samples-of-size-12-from-the-us-population-what-would-be-the-mean-number-of-individuals-per-sample-who-do-not-exercise-regularly-what-would-be-the-standard-deviation" class="level4">
+<h4 class="anchored" data-anchor-id="a-if-you-selected-repeated-samples-of-size-12-from-the-us-population-what-would-be-the-mean-number-of-individuals-per-sample-who-do-not-exercise-regularly-what-would-be-the-standard-deviation">a) If you selected repeated samples of size 12 from the US population, what would be the mean number of individuals per sample who do not exercise regularly? What would be the standard deviation?</h4>
+</section>
+<section id="b-suppose-you-select-a-sample-of-12-individuals-and-find-that-10-of-them-do-not-exercise-regularly.-assuming-the-surveillance-system-is-correct-what-is-the-probability-you-would-have-obtained-results-as-bad-or-worse-than-those-you-observed" class="level4">
+<h4 class="anchored" data-anchor-id="b-suppose-you-select-a-sample-of-12-individuals-and-find-that-10-of-them-do-not-exercise-regularly.-assuming-the-surveillance-system-is-correct-what-is-the-probability-you-would-have-obtained-results-as-bad-or-worse-than-those-you-observed">b) Suppose you select a sample of 12 individuals and find that 10 of them do not exercise regularly. Assuming the Surveillance System is correct, what is the probability you would have obtained results as bad or worse than those you observed?</h4>
+</section>
+<section id="q20-framingham-study" class="level4">
+<h4 class="anchored" data-anchor-id="q20-framingham-study">Q20: Framingham Study</h4>
+<p>In the Framingham study, serum cholesterol levels were measured for a large number of healthy males. The population was followed for 16 years. At the end of the time, the men were divided into 2 groups: those who had developed coronary disease and those who had not. The distributions of the initial serum cholesterol levels for each group were found to be approximately normal. Among individuals who eventually developed coronary disease, the mean serum cholesterol level was μd= 244 mg/100 ml and the standard deviation was σd=51 mg/100ml; for those who did not go on to develop the disease, the mean serum cholesterol was μnd= 219 mg/100 ml and the standard deviation was σd=41 mg/100ml.</p>
+</section>
+<section id="a-suppose-that-an-initial-serum-cholesterol-level-of-260-mg100ml-was-used-to-predict-coronary-heart-disease.-what-is-the-probability-of-correctly-predicting-heart-disease-for-a-man-who-will-go-on-to-develop-it" class="level4">
+<h4 class="anchored" data-anchor-id="a-suppose-that-an-initial-serum-cholesterol-level-of-260-mg100ml-was-used-to-predict-coronary-heart-disease.-what-is-the-probability-of-correctly-predicting-heart-disease-for-a-man-who-will-go-on-to-develop-it">a) Suppose that an initial serum cholesterol level of 260 mg/100ml was used to predict coronary heart disease. What is the probability of correctly predicting heart disease for a man who will go on to develop it?</h4>
+</section>
+<section id="b-using-the-cutpoint-in-a-what-is-the-probability-of-predicting-heart-disease-for-a-man-who-will-not-go-on-to-develop-it" class="level4">
+<h4 class="anchored" data-anchor-id="b-using-the-cutpoint-in-a-what-is-the-probability-of-predicting-heart-disease-for-a-man-who-will-not-go-on-to-develop-it">b) Using the cutpoint in (a), What is the probability of predicting heart disease for a man who will not go on to develop it?</h4>
+</section>
+<section id="c-using-the-cutpoint-in-a-what-is-the-probability-of-failing-to-predict-heart-disease-for-a-man-who-will-develop-it" class="level4">
+<h4 class="anchored" data-anchor-id="c-using-the-cutpoint-in-a-what-is-the-probability-of-failing-to-predict-heart-disease-for-a-man-who-will-develop-it">c) Using the cutpoint in (a), What is the probability of failing to predict heart disease for a man who will develop it?</h4>
+</section>
+<section id="d-what-would-happen-to-the-probabilities-of-false-positives-and-false-negative-errors-if-the-cutoff-point-for-predicting-heart-disease-was-lowered-to-250-mg100-ml" class="level4">
+<h4 class="anchored" data-anchor-id="d-what-would-happen-to-the-probabilities-of-false-positives-and-false-negative-errors-if-the-cutoff-point-for-predicting-heart-disease-was-lowered-to-250-mg100-ml">d) What would happen to the probabilities of false positives and false negative errors if the cutoff point for predicting heart disease was lowered to 250 mg/100 ml?</h4>
+</section>
+<section id="e-in-ths-population-does-initial-serum-cholesterol-appear-to-be-useful-for-predicting-coronary-heart-disease-why-or-why-not" class="level4">
+<h4 class="anchored" data-anchor-id="e-in-ths-population-does-initial-serum-cholesterol-appear-to-be-useful-for-predicting-coronary-heart-disease-why-or-why-not">e) In ths population, does initial serum cholesterol appear to be useful for predicting coronary heart disease? Why or why not?</h4>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
