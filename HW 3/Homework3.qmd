@@ -28,7 +28,7 @@ if (!exists("chol_data")) {
   cat("Using previously loaded data.\n")
 }
 
-# PART 1: Histogram with normal curve ---------------------------------------
+# Histogram with normal curve
 
 # Extract Total Cholesterol column
 chol <- chol_data$TOTCHOL
@@ -59,7 +59,7 @@ cat("Standard Deviation:", chol_sd, "\n")
 #### Q2: Stacked Histogram
 Create a new variable that is a standardized version of total cholesterol by subtracting off the mean and dividing by the standard deviation. Make another histogram, this time of the standardized data. Superimpose a standard normal curve (“standard normal”: mean=0, SD=1)
 ```{r}
-# PART 2: Standardize Total Cholesterol and plot --------------------------------
+# Standardize Total Cholesterol and plot
 
 # Only compute standardized values if they don't already exist
 if (!"chol_std" %in% names(chol_data)) {
@@ -94,7 +94,7 @@ print(head(chol_std, 5))
 #### Q3: P(x >=240)
 The American Heart Association (previously) defined “High (Total) Cholesterol” as 240 or above. What proportion of the people in this dataset have total cholesterol of 240 or above?
 ```{r}
-# PART 3: Proportion with high cholesterol -----------------------------------
+# PART 3: Proportion with high cholesterol
 
 # Only compute if not already calculated
 if (!exists("high_chol_prop")) {
@@ -392,12 +392,120 @@ prob_10_or_more
 In the Framingham study, serum cholesterol levels were measured for a large number of healthy males. The population was followed for 16 years. At the end of the time, the men were divided into 2 groups: those who had developed coronary disease and those who had not. The distributions of the initial serum cholesterol levels for each group were found to be approximately normal. Among individuals who eventually developed coronary disease, the mean serum cholesterol level was μd= 244 mg/100 ml and the standard deviation was σd=51 mg/100ml; for those who did not go on to develop the disease, the mean serum cholesterol was μnd= 219 mg/100 ml and the standard deviation was σd=41 mg/100ml.
 
 #### a) Suppose that an initial serum cholesterol level of 260 mg/100ml was used to predict coronary heart disease. What is the probability of correctly predicting heart disease for a man who will go on to develop it?
+```{r}
+# Define parameters for those who develop heart disease
+mu_d <- 244     # Mean cholesterol
+sd_d <- 51      # Standard deviation
+cutoff <- 260   # Prediction threshold
+
+# Compute probability of correctly predicting disease (i.e., cholesterol > 260)
+prob_correct_prediction <- 1 - pnorm(cutoff, mean = mu_d, sd = sd_d)
+
+# Output result
+prob_correct_prediction
+```
+
+If a man will go on to develop coronary heart disease, there's about a 38.75% chance that his cholesterol will be over 260 mg/100ml, and thus be correctly identified using this cutoff.
+
 
 #### b) Using the cutpoint in (a), What is the probability of predicting heart disease for a man who will not go on to develop it?
+```{r}
+# Define parameters for those who do NOT develop heart disease
+mu_nd <- 219    # Mean cholesterol (no disease)
+sd_nd <- 41     # Standard deviation
+cutoff <- 260   # Prediction threshold (same as part a)
+
+# Compute probability of predicting disease (i.e., cholesterol > 260) for a healthy person
+prob_false_positive <- 1 - pnorm(cutoff, mean = mu_nd, sd = sd_nd)
+
+# Output result
+prob_false_positive
+```
+There is about a 17.32% chance that a healthy man (no coronary disease) would be incorrectly predicted to have the disease using a 260 mg/100ml cutoff.
+This is a false positive.
 
 #### c) Using the cutpoint in (a), What is the probability of failing to predict heart disease for a man who will develop it?
+```{r}
+# Parameters for disease group
+mu_d <- 244     # Mean cholesterol for disease group
+sd_d <- 51      # Standard deviation
+cutoff <- 260   # Same threshold as part (a)
+
+# Compute probability of failing to predict disease (cholesterol <= 260)
+prob_false_negative <- pnorm(cutoff, mean = mu_d, sd = sd_d)
+
+# Output result
+prob_false_negative
+```
+
+There is about a 61.25% chance of failing to predict heart disease (a false negative) for someone who will develop it, if 260 mg/100ml is used as the cutoff.
+
+This complements part (a), where only 38.75% were correctly predicted.
 
 #### d) What would happen to the probabilities of false positives and false negative errors if the cutoff point for predicting heart disease was lowered to 250 mg/100 ml?
 
+```{r}
+# Updated cutoff
+cutoff_new <- 250
+
+# Parameters for disease and non-disease groups
+mu_d <- 244
+sd_d <- 51
+
+mu_nd <- 219
+sd_nd <- 41
+
+# Recalculate probabilities with new cutoff (250 mg/100ml)
+
+# True positive rate: P(X > 250 | Disease)
+true_positive_rate <- 1 - pnorm(cutoff_new, mean = mu_d, sd = sd_d)
+
+# False positive rate: P(X > 250 | No Disease)
+false_positive_rate <- 1 - pnorm(cutoff_new, mean = mu_nd, sd = sd_nd)
+
+# Output both
+true_positive_rate
+false_positive_rate
+```
+True positive rate increases from ~38.75% (with cutoff at 260) to ~53.98% (with cutoff at 250):
+→ More people who do have heart disease are now correctly identified.
+
+False positive rate increases from ~17.32% to ~28.38%:
+→ More healthy people are incorrectly flagged.
+
+Conclusion: Lowering the cutoff improves sensitivity (fewer missed cases) but reduces specificity (more false alarms). This is the classic sensitivity–specificity tradeoff in diagnostic testing.
+
 #### e) In ths population, does initial serum cholesterol appear to be useful for predicting coronary heart disease? Why or why not?
 
+Initial serum cholesterol appears to be **somewhat useful**, but **not highly accurate** as a standalone predictor of coronary heart disease.
+
+There is a clear difference between the two populations:
+
+- Individuals who developed the disease had a mean cholesterol level of $\mu = 244$ with standard deviation $\sigma = 51$.
+- Those who did **not** develop the disease had a mean of $\mu = 219$ and $\sigma = 41$.
+
+However, the two distributions **overlap significantly**, which limits predictive accuracy. For example:
+
+- With a threshold of **260 mg/100ml**, the **true positive rate** is only about **39%**, and the **false negative rate** is about **61%**.
+- Lowering the threshold to **250 mg/100ml** increases sensitivity (true positives) to about **54%**, but also increases the **false positive rate** to nearly **28%**.
+
+This tradeoff reflects the limitations of using serum cholesterol **in isolation**. While it provides **some discriminatory power**, its predictive value improves when combined with other risk factors (e.g., age, smoking, blood pressure) in a **multivariable risk model**.
+
+Therefore, **serum cholesterol is helpful, but insufficient alone** for accurate prediction.
+
+## Sources: 
+Pagano, M., & Gauvreau, K. (2018). Principles of biostatistics / Marcello Pagano, Kimberlee Gauvreau. Duxbury Press.
+
+R Core Team. (2024). R: A language and environment for statistical computing. https://www.r-project.org/
+
+
+#### Thank you for reviewing and making it to the end of my work, in this assignment's signature end off I'd like to share a website we're using at work to find transcriptomic resources. Its part of the Human Transcriptomics Cell Atlas!
+
+
+The Human Transcriptome Cell Atlas provides high-resolution gene expression data across tissues and cell types.
+
+![HTC Atlas Homepage](htcatlas_homepage.png)
+
+![](TranscriptomicCellAtlas.png)
+
+Explore more at: [https://www.htcatlas.org](https://www.htcatlas.org)

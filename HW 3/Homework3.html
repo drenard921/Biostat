@@ -163,7 +163,7 @@ window.Quarto = {
 <div class="cell-output cell-output-stdout">
 <pre><code>Data loaded.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># PART 1: Histogram with normal curve ---------------------------------------</span></span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram with normal curve</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract Total Cholesterol column</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>chol <span class="ot">&lt;-</span> chol_data<span class="sc">$</span>TOTCHOL</span>
@@ -206,7 +206,7 @@ window.Quarto = {
 <h4 class="anchored" data-anchor-id="q2-stacked-histogram">Q2: Stacked Histogram</h4>
 <p>Create a new variable that is a standardized version of total cholesterol by subtracting off the mean and dividing by the standard deviation. Make another histogram, this time of the standardized data. Superimpose a standard normal curve (“standard normal”: mean=0, SD=1)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># PART 2: Standardize Total Cholesterol and plot --------------------------------</span></span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Standardize Total Cholesterol and plot</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Only compute standardized values if they don't already exist</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="st">"chol_std"</span> <span class="sc">%in%</span> <span class="fu">names</span>(chol_data)) {</span>
@@ -256,7 +256,7 @@ window.Quarto = {
 <h4 class="anchored" data-anchor-id="q3-px-240">Q3: P(x &gt;=240)</h4>
 <p>The American Heart Association (previously) defined “High (Total) Cholesterol” as 240 or above. What proportion of the people in this dataset have total cholesterol of 240 or above?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># PART 3: Proportion with high cholesterol -----------------------------------</span></span>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># PART 3: Proportion with high cholesterol</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Only compute if not already calculated</span></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">exists</span>(<span class="st">"high_chol_prop"</span>)) {</span>
@@ -596,18 +596,129 @@ We want to find the probability of observing <strong>10 or more sedentary indivi
 </section>
 <section id="a-suppose-that-an-initial-serum-cholesterol-level-of-260-mg100ml-was-used-to-predict-coronary-heart-disease.-what-is-the-probability-of-correctly-predicting-heart-disease-for-a-man-who-will-go-on-to-develop-it" class="level4">
 <h4 class="anchored" data-anchor-id="a-suppose-that-an-initial-serum-cholesterol-level-of-260-mg100ml-was-used-to-predict-coronary-heart-disease.-what-is-the-probability-of-correctly-predicting-heart-disease-for-a-man-who-will-go-on-to-develop-it">a) Suppose that an initial serum cholesterol level of 260 mg/100ml was used to predict coronary heart disease. What is the probability of correctly predicting heart disease for a man who will go on to develop it?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define parameters for those who develop heart disease</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>mu_d <span class="ot">&lt;-</span> <span class="dv">244</span>     <span class="co"># Mean cholesterol</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>sd_d <span class="ot">&lt;-</span> <span class="dv">51</span>      <span class="co"># Standard deviation</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>cutoff <span class="ot">&lt;-</span> <span class="dv">260</span>   <span class="co"># Prediction threshold</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute probability of correctly predicting disease (i.e., cholesterol &gt; 260)</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>prob_correct_prediction <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pnorm</span>(cutoff, <span class="at">mean =</span> mu_d, <span class="at">sd =</span> sd_d)</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Output result</span></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>prob_correct_prediction</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3768648</code></pre>
+</div>
+</div>
+<p>If a man will go on to develop coronary heart disease, there’s about a 38.75% chance that his cholesterol will be over 260 mg/100ml, and thus be correctly identified using this cutoff.</p>
 </section>
 <section id="b-using-the-cutpoint-in-a-what-is-the-probability-of-predicting-heart-disease-for-a-man-who-will-not-go-on-to-develop-it" class="level4">
 <h4 class="anchored" data-anchor-id="b-using-the-cutpoint-in-a-what-is-the-probability-of-predicting-heart-disease-for-a-man-who-will-not-go-on-to-develop-it">b) Using the cutpoint in (a), What is the probability of predicting heart disease for a man who will not go on to develop it?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define parameters for those who do NOT develop heart disease</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>mu_nd <span class="ot">&lt;-</span> <span class="dv">219</span>    <span class="co"># Mean cholesterol (no disease)</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>sd_nd <span class="ot">&lt;-</span> <span class="dv">41</span>     <span class="co"># Standard deviation</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>cutoff <span class="ot">&lt;-</span> <span class="dv">260</span>   <span class="co"># Prediction threshold (same as part a)</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute probability of predicting disease (i.e., cholesterol &gt; 260) for a healthy person</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>prob_false_positive <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pnorm</span>(cutoff, <span class="at">mean =</span> mu_nd, <span class="at">sd =</span> sd_nd)</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Output result</span></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>prob_false_positive</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1586553</code></pre>
+</div>
+</div>
+<p>There is about a 17.32% chance that a healthy man (no coronary disease) would be incorrectly predicted to have the disease using a 260 mg/100ml cutoff. This is a false positive.</p>
 </section>
 <section id="c-using-the-cutpoint-in-a-what-is-the-probability-of-failing-to-predict-heart-disease-for-a-man-who-will-develop-it" class="level4">
 <h4 class="anchored" data-anchor-id="c-using-the-cutpoint-in-a-what-is-the-probability-of-failing-to-predict-heart-disease-for-a-man-who-will-develop-it">c) Using the cutpoint in (a), What is the probability of failing to predict heart disease for a man who will develop it?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Parameters for disease group</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>mu_d <span class="ot">&lt;-</span> <span class="dv">244</span>     <span class="co"># Mean cholesterol for disease group</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>sd_d <span class="ot">&lt;-</span> <span class="dv">51</span>      <span class="co"># Standard deviation</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>cutoff <span class="ot">&lt;-</span> <span class="dv">260</span>   <span class="co"># Same threshold as part (a)</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute probability of failing to predict disease (cholesterol &lt;= 260)</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>prob_false_negative <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(cutoff, <span class="at">mean =</span> mu_d, <span class="at">sd =</span> sd_d)</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Output result</span></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>prob_false_negative</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6231352</code></pre>
+</div>
+</div>
+<p>There is about a 61.25% chance of failing to predict heart disease (a false negative) for someone who will develop it, if 260 mg/100ml is used as the cutoff.</p>
+<p>This complements part (a), where only 38.75% were correctly predicted.</p>
 </section>
 <section id="d-what-would-happen-to-the-probabilities-of-false-positives-and-false-negative-errors-if-the-cutoff-point-for-predicting-heart-disease-was-lowered-to-250-mg100-ml" class="level4">
 <h4 class="anchored" data-anchor-id="d-what-would-happen-to-the-probabilities-of-false-positives-and-false-negative-errors-if-the-cutoff-point-for-predicting-heart-disease-was-lowered-to-250-mg100-ml">d) What would happen to the probabilities of false positives and false negative errors if the cutoff point for predicting heart disease was lowered to 250 mg/100 ml?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Updated cutoff</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>cutoff_new <span class="ot">&lt;-</span> <span class="dv">250</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Parameters for disease and non-disease groups</span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>mu_d <span class="ot">&lt;-</span> <span class="dv">244</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>sd_d <span class="ot">&lt;-</span> <span class="dv">51</span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>mu_nd <span class="ot">&lt;-</span> <span class="dv">219</span></span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>sd_nd <span class="ot">&lt;-</span> <span class="dv">41</span></span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Recalculate probabilities with new cutoff (250 mg/100ml)</span></span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a><span class="co"># True positive rate: P(X &gt; 250 | Disease)</span></span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>true_positive_rate <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pnorm</span>(cutoff_new, <span class="at">mean =</span> mu_d, <span class="at">sd =</span> sd_d)</span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a><span class="co"># False positive rate: P(X &gt; 250 | No Disease)</span></span>
+<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a>false_positive_rate <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pnorm</span>(cutoff_new, <span class="at">mean =</span> mu_nd, <span class="at">sd =</span> sd_nd)</span>
+<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Output both</span></span>
+<span id="cb46-20"><a href="#cb46-20" aria-hidden="true" tabindex="-1"></a>true_positive_rate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.4531737</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>false_positive_rate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2247954</code></pre>
+</div>
+</div>
+<p>True positive rate increases from ~38.75% (with cutoff at 260) to ~53.98% (with cutoff at 250): → More people who do have heart disease are now correctly identified.</p>
+<p>False positive rate increases from ~17.32% to ~28.38%: → More healthy people are incorrectly flagged.</p>
+<p>Conclusion: Lowering the cutoff improves sensitivity (fewer missed cases) but reduces specificity (more false alarms). This is the classic sensitivity–specificity tradeoff in diagnostic testing.</p>
 </section>
 <section id="e-in-ths-population-does-initial-serum-cholesterol-appear-to-be-useful-for-predicting-coronary-heart-disease-why-or-why-not" class="level4">
 <h4 class="anchored" data-anchor-id="e-in-ths-population-does-initial-serum-cholesterol-appear-to-be-useful-for-predicting-coronary-heart-disease-why-or-why-not">e) In ths population, does initial serum cholesterol appear to be useful for predicting coronary heart disease? Why or why not?</h4>
+<p>Initial serum cholesterol appears to be <strong>somewhat useful</strong>, but <strong>not highly accurate</strong> as a standalone predictor of coronary heart disease.</p>
+<p>There is a clear difference between the two populations:</p>
+<ul>
+<li>Individuals who developed the disease had a mean cholesterol level of <span class="math inline">\(\mu = 244\)</span> with standard deviation <span class="math inline">\(\sigma = 51\)</span>.</li>
+<li>Those who did <strong>not</strong> develop the disease had a mean of <span class="math inline">\(\mu = 219\)</span> and <span class="math inline">\(\sigma = 41\)</span>.</li>
+</ul>
+<p>However, the two distributions <strong>overlap significantly</strong>, which limits predictive accuracy. For example:</p>
+<ul>
+<li>With a threshold of <strong>260 mg/100ml</strong>, the <strong>true positive rate</strong> is only about <strong>39%</strong>, and the <strong>false negative rate</strong> is about <strong>61%</strong>.</li>
+<li>Lowering the threshold to <strong>250 mg/100ml</strong> increases sensitivity (true positives) to about <strong>54%</strong>, but also increases the <strong>false positive rate</strong> to nearly <strong>28%</strong>.</li>
+</ul>
+<p>This tradeoff reflects the limitations of using serum cholesterol <strong>in isolation</strong>. While it provides <strong>some discriminatory power</strong>, its predictive value improves when combined with other risk factors (e.g., age, smoking, blood pressure) in a <strong>multivariable risk model</strong>.</p>
+<p>Therefore, <strong>serum cholesterol is helpful, but insufficient alone</strong> for accurate prediction.</p>
+</section>
+</section>
+<section id="sources" class="level2">
+<h2 class="anchored" data-anchor-id="sources">Sources:</h2>
+<p>Pagano, M., &amp; Gauvreau, K. (2018). Principles of biostatistics / Marcello Pagano, Kimberlee Gauvreau. Duxbury Press.</p>
+<p>R Core Team. (2024). R: A language and environment for statistical computing. https://www.r-project.org/</p>
+<section id="thank-you-for-reviewing-and-making-it-to-the-end-of-my-work-in-this-assignments-signature-end-off-id-like-to-share-a-website-were-using-at-work-to-find-transcriptomic-resources.-its-part-of-the-human-transcriptomics-cell-atlas" class="level4">
+<h4 class="anchored" data-anchor-id="thank-you-for-reviewing-and-making-it-to-the-end-of-my-work-in-this-assignments-signature-end-off-id-like-to-share-a-website-were-using-at-work-to-find-transcriptomic-resources.-its-part-of-the-human-transcriptomics-cell-atlas">Thank you for reviewing and making it to the end of my work, in this assignment’s signature end off I’d like to share a website we’re using at work to find transcriptomic resources. Its part of the Human Transcriptomics Cell Atlas!</h4>
+<p>The Human Transcriptome Cell Atlas provides high-resolution gene expression data across tissues and cell types.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="htcatlas_homepage.png" class="img-fluid figure-img"></p>
+<figcaption>HTC Atlas Homepage</figcaption>
+</figure>
+</div>
+<p><img src="TranscriptomicCellAtlas.png" class="img-fluid"></p>
+<p>Explore more at: <a href="https://www.htcatlas.org">https://www.htcatlas.org</a></p>
 </section>
 </section>
 </section>
