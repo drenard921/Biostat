@@ -16,20 +16,149 @@ This file explores creating stacked normal distribution plots, calculating proba
 
 #### Q1: Probability Histogram
 Make a histogram of the total cholesterol readings in this dataset, with the y-axis equal to the probability of being in each bar (not the frequency). Estimate the mean and standard deviation of this normal distribution. Give the estimates of these parameters, super-impose a normal distribution with that mean and SD on the histogram.
+```{r}
+# Load necessary library
+if (!require("ggplot2")) install.packages("ggplot2", dependencies = TRUE)
+
+# Only read in the dataset if it hasn't been loaded yet
+if (!exists("chol_data")) {
+  chol_data <- read.csv("cholesterol.txt")
+  cat("Data loaded.\n")
+} else {
+  cat("Using previously loaded data.\n")
+}
+
+# PART 1: Histogram with normal curve ---------------------------------------
+
+# Extract Total Cholesterol column
+chol <- chol_data$TOTCHOL
+
+# Calculate mean and standard deviation
+chol_mean <- mean(chol)
+chol_sd <- sd(chol)
+
+# Plot histogram with probability density
+hist(chol,
+     probability = TRUE,
+     col = "skyblue",
+     main = "Histogram of Total Cholesterol with Normal Curve",
+     xlab = "Total Cholesterol",
+     ylab = "Probability Density",
+     border = "black")
+
+# Overlay normal distribution curve
+curve(dnorm(x, mean = chol_mean, sd = chol_sd),
+      col = "red", lwd = 2, add = TRUE)
+
+# Output stats
+cat("Mean Total Cholesterol:", chol_mean, "\n")
+cat("Standard Deviation:", chol_sd, "\n")
+
+```
 
 #### Q2: Stacked Histogram
 Create a new variable that is a standardized version of total cholesterol by subtracting off the mean and dividing by the standard deviation. Make another histogram, this time of the standardized data. Superimpose a standard normal curve (“standard normal”: mean=0, SD=1)
+```{r}
+# PART 2: Standardize Total Cholesterol and plot --------------------------------
+
+# Only compute standardized values if they don't already exist
+if (!"chol_std" %in% names(chol_data)) {
+  # Standardize the data: Z = (X - mean) / SD
+  chol_data$chol_std <- (chol_data$TOTCHOL - chol_mean) / chol_sd
+  cat("Standardized cholesterol values added to dataset.\n")
+} else {
+  cat("Standardized cholesterol already exists.\n")
+}
+
+# Extract standardized values
+chol_std <- chol_data$chol_std
+
+# Plot histogram of standardized values
+hist(chol_std,
+     probability = TRUE,
+     col = "lightgreen",
+     main = "Histogram of Standardized Cholesterol (Z-scores)",
+     xlab = "Z-score",
+     ylab = "Probability Density",
+     border = "black")
+
+# Overlay standard normal curve (mean = 0, sd = 1)
+curve(dnorm(x, mean = 0, sd = 1),
+      col = "blue", lwd = 2, add = TRUE)
+
+# Optional: Print a few sample Z-scores
+cat("Example standardized values:\n")
+print(head(chol_std, 5))
+```
 
 #### Q3: P(x >=240)
 The American Heart Association (previously) defined “High (Total) Cholesterol” as 240 or above. What proportion of the people in this dataset have total cholesterol of 240 or above?
+```{r}
+# PART 3: Proportion with high cholesterol -----------------------------------
 
+# Only compute if not already calculated
+if (!exists("high_chol_prop")) {
+  high_chol_count <- sum(chol_data$TOTCHOL >= 240)
+  total_count <- nrow(chol_data)
+  high_chol_prop <- high_chol_count / total_count
+
+  cat("Number of people with cholesterol ≥ 240:", high_chol_count, "\n")
+  cat("Total number of people:", total_count, "\n")
+  cat("Proportion with high cholesterol:", round(high_chol_prop, 4), "\n")
+} else {
+  cat("Proportion with high cholesterol already computed.\n")
+}
+```
 #### Q4: Imagine you wanted to compare the population from which this sample is drawn to a different population, in which it is well-documented that 10% of people have total cholesterol of 240 or above.
 
-#### a) Thought question about True Population Metrics and conditional probability P(x =P(hight cholesterol))
+#### a) Thought question about True Population Metrics and conditional probability P(x=33)
 If the true rate of high cholesterol in this population were 10%, what is the probability that you would see exactly as many people with high cholesterol as you saw here? (hint, you don’t need to use the dataset to answer this)
+We now want to assess the probability of observing **exactly 33 individuals** with high cholesterol (defined as total cholesterol ≥ 240) in a sample of 453, under the assumption that the true population rate is 10%.
 
-#### b)  Thought question about True Population Metrics and conditional probability P(x >= P(hight cholesterol))
+This is a binomial probability problem, modeled as:
+
+- **n = 453** (sample size)  
+- **x = 33** (observed high cholesterol count)  
+- **p = 0.10** (true population proportion)
+
+We use the `dbinom()` function to compute:
+
+```{r}
+# Parameters
+n <- 453
+x <- 33
+p <- 0.10
+
+# Compute exact binomial probability
+p_exact <- dbinom(x, size = n, prob = p)
+p_exact
+```
+
+
+
+#### b)  Thought question about True Population Metrics and conditional probability P(x >=33)
 If the true rate of high cholesterol in this population were 10%, what is the probability that you would see at least as many people with high cholesterol as you saw here? (hint, you don’t need to use the dataset to answer this)
+
+To evaluate how surprising our observed result is, we calculate the probability of observing **33 or more** individuals with high cholesterol in a sample of 453, **assuming the true population rate is 10%**.
+
+This is the cumulative probability of the upper tail of the binomial distribution:
+
+- **n = 453** (sample size)  
+- **x = 33** (observed count)  
+- **p = 0.10** (true population rate)
+
+We compute this using:
+
+```{r}
+# Parameters
+n <- 453
+x <- 33
+p <- 0.10
+
+# Probability of seeing 33 or more cases
+p_at_least <- 1 - pbinom(x - 1, size = n, prob = p)
+p_at_least
+```
 
 
 ## Part 2: Covid Simulation
@@ -37,12 +166,119 @@ Read the document on Simulations in R in module 3, about for loops. Let’s pret
 
 
 #### Q1: Make a histogram of how many infections we can expect if we follow 10 people for the course of the trial.
+```{r}
+# Load ggplot2 if not already loaded
+if (!require("ggplot2")) install.packages("ggplot2", dependencies = TRUE)
+library(ggplot2)
+
+# Parameters
+set.seed(123)
+n_sim <- 1000
+size_1 <- 10
+p_inf <- 0.05
+
+# Simulate infections
+sim_10 <- rbinom(n = n_sim, size = size_1, prob = p_inf)
+df_10 <- data.frame(infections = sim_10)
+
+# Compute mean
+mean_10 <- mean(sim_10)
+
+# Plot with ggplot2
+ggplot(df_10, aes(x = infections)) +
+  geom_bar(fill = "#69b3a2", color = "black", width = 0.9) +
+  geom_vline(xintercept = mean_10, color = "red", linetype = "dashed", linewidth = 1.2) +
+  annotate("text", x = mean_10 + 0.3, y = max(table(sim_10)) * 0.9,
+           label = paste("Mean:", round(mean_10, 2)),
+           color = "red", hjust = 0) +
+  labs(title = "Simulated COVID-19 Infections (n = 10, 1,000 Trials)",
+       subtitle = "Red dashed line shows the mean",
+       x = "Number of Infections in Trial",
+       y = "Count of Trials") +
+  theme_minimal(base_size = 14)
+```
 
 #### Q2: Make a histogram of how many infections we can expect if we follow 100 people for the course of the trial.
+```{r}
+# Load ggplot2 if not already loaded
+if (!require("ggplot2")) install.packages("ggplot2", dependencies = TRUE)
+library(ggplot2)
 
+# Parameters
+set.seed(123)
+n_sim <- 1000
+size_2 <- 100
+p_inf <- 0.05
+
+# Simulate infections
+sim_100 <- rbinom(n = n_sim, size = size_2, prob = p_inf)
+df_100 <- data.frame(infections = sim_100)
+
+# Compute mean
+mean_100 <- mean(sim_100)
+
+# Plot
+ggplot(df_100, aes(x = infections)) +
+  geom_histogram(binwidth = 1, fill = "#FF9999", color = "black") +
+  geom_vline(xintercept = mean_100, color = "red", linetype = "dashed", linewidth = 1.2) +
+  annotate("text", x = mean_100 + 1, y = max(table(sim_100)) * 0.9,
+           label = paste("Mean:", round(mean_100, 2)),
+           color = "red", hjust = 0) +
+  labs(title = "Simulated COVID-19 Infections (n = 100, 1,000 Trials)",
+       subtitle = "Distribution of infections per trial",
+       x = "Number of Infections",
+       y = "Number of Simulations") +
+  theme_minimal(base_size = 14)
+```
 #### Q3: Make a histogram of how many infections we can expect if we follow 1,000 people for the course of the trial.
+```{r}
+# Load ggplot2 if needed
+if (!require("ggplot2")) install.packages("ggplot2", dependencies = TRUE)
+library(ggplot2)
+
+# Parameters
+set.seed(123)
+n_sim <- 1000
+size_3 <- 1000
+p_inf <- 0.05
+
+# Simulate infections
+sim_1000 <- rbinom(n = n_sim, size = size_3, prob = p_inf)
+df_1000 <- data.frame(infections = sim_1000)
+
+# Compute mean
+mean_1000 <- mean(sim_1000)
+
+# Plot
+ggplot(df_1000, aes(x = infections)) +
+  geom_histogram(binwidth = 5, fill = "#FDB462", color = "black") +
+  geom_vline(xintercept = mean_1000, color = "red", linetype = "dashed", linewidth = 1.2) +
+  annotate("text", x = mean_1000 + 8, y = max(table(sim_1000)) * 0.9,
+           label = paste("Mean:", round(mean_1000, 2)),
+           color = "red", hjust = 0) +
+  labs(title = "Simulated COVID-19 Infections (n = 1,000, 1,000 Trials)",
+       subtitle = "Notice the bell curve shape forming",
+       x = "Number of Infections",
+       y = "Number of Simulations") +
+  theme_minimal(base_size = 14)
+```
+
 
 #### Reflection Question: Briefly describe what you notice about the three histograms. Can you explain why?
+#### Reflection Question: Briefly describe what you notice about the three histograms. Can you explain why?
+
+As the sample size increased from 10 to 100 to 1,000, the histograms became progressively more symmetric and concentrated around the expected number of infections.
+
+- For a sample size of **10**, the histogram was more irregular and skewed, with a wider relative spread.
+- At **100**, the distribution became more bell-shaped and centered around the expected value of 5 infections.
+- By **1,000**, the histogram closely resembled a normal distribution, centered around 50 infections, with much less relative variability.
+
+This trend occurs because of two main reasons:
+1. **Law of Large Numbers** – larger samples tend to produce more stable and accurate estimates of the true proportion.
+2. **Central Limit Theorem** – the sum of many independent Bernoulli trials (like infection outcomes) tends to approximate a normal distribution as sample size increases.
+
+Overall, the histograms demonstrate how increasing sample size leads to more predictable and less variable trial outcomes.
+
 
 
 ## Part 3: Chapter 7 Textbook Problems
