@@ -70,6 +70,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="Homework3_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="Homework3_files/libs/bootstrap/bootstrap-81267100e462c21b3d6c0d5bf76a3417.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -107,8 +136,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="jhu-biostatistics" class="level4">
 <h4 class="anchored" data-anchor-id="jhu-biostatistics">JHU Biostatistics</h4>
 </section>
-<section id="june-4th-2025" class="level4">
-<h4 class="anchored" data-anchor-id="june-4th-2025">June 4th, 2025</h4>
+<section id="june-8th-2025" class="level4">
+<h4 class="anchored" data-anchor-id="june-8th-2025">June 8th, 2025</h4>
 </section>
 <section id="homework-3" class="level1">
 <h1>Homework 3</h1>
@@ -433,9 +462,6 @@ Proportion with high cholesterol: 0.0728 </code></pre>
 </section>
 <section id="reflection-question-briefly-describe-what-you-notice-about-the-three-histograms.-can-you-explain-why" class="level4">
 <h4 class="anchored" data-anchor-id="reflection-question-briefly-describe-what-you-notice-about-the-three-histograms.-can-you-explain-why">Reflection Question: Briefly describe what you notice about the three histograms. Can you explain why?</h4>
-</section>
-<section id="reflection-question-briefly-describe-what-you-notice-about-the-three-histograms.-can-you-explain-why-1" class="level4">
-<h4 class="anchored" data-anchor-id="reflection-question-briefly-describe-what-you-notice-about-the-three-histograms.-can-you-explain-why-1">Reflection Question: Briefly describe what you notice about the three histograms. Can you explain why?</h4>
 <p>As the sample size increased from 10 to 100 to 1,000, the histograms became progressively more symmetric and concentrated around the expected number of infections.</p>
 <ul>
 <li>For a sample size of <strong>10</strong>, the histogram was more irregular and skewed, with a wider relative spread.</li>
@@ -451,26 +477,118 @@ Proportion with high cholesterol: 0.0728 </code></pre>
 <section id="q10-consider-a-group-of-seven-individuals-selected-form-the-population-of-65--to-74-year-olds-in-the-united-states.-the-number-of-persons-in-this-sample-who-suffer-from-diabetes-is-a-binomial-random-variable-with-parameters-n7-and-p0.125" class="level4">
 <h4 class="anchored" data-anchor-id="q10-consider-a-group-of-seven-individuals-selected-form-the-population-of-65--to-74-year-olds-in-the-united-states.-the-number-of-persons-in-this-sample-who-suffer-from-diabetes-is-a-binomial-random-variable-with-parameters-n7-and-p0.125">Q10: Consider a group of seven individuals selected form the population of 65- to 74-year olds in the United States. The number of persons in this sample who suffer from diabetes is a binomial random variable with parameters n=7 and p=0.125</h4>
 </section>
-<section id="a-if-you-wish-to-make-a-list-of-the-seven-persons-chosen-in-how-many-ways-can-they-be-ordered" class="level4">
-<h4 class="anchored" data-anchor-id="a-if-you-wish-to-make-a-list-of-the-seven-persons-chosen-in-how-many-ways-can-they-be-ordered">a) If you wish to make a list of the seven persons chosen, in how many ways can they be ordered?</h4>
+<section id="a-if-you-wish-to-make-a-list-of-the-seven-persons-chosen-in-how-many-ways-can-they-be-orderedwe-are-selecting-7-individuals-and-want-to-know-how-many-ways-we-can-order-them." class="level4">
+<h4 class="anchored" data-anchor-id="a-if-you-wish-to-make-a-list-of-the-seven-persons-chosen-in-how-many-ways-can-they-be-orderedwe-are-selecting-7-individuals-and-want-to-know-how-many-ways-we-can-order-them.">a) If you wish to make a list of the seven persons chosen, in how many ways can they be ordered?We are selecting 7 individuals and want to know <strong>how many ways we can order them</strong>.</h4>
+<p>This is a <strong>permutation</strong> problem, where order <strong>does</strong> matter.<br>
+The number of ways to order <span class="math inline">\(n\)</span> individuals is given by:</p>
+<ul>
+<li><span class="math inline">\(n! = 7! = 7 \times 6 \times 5 \times 4 \times 3 \times 2 \times 1\)</span></li>
+</ul>
+<p>In R, we compute this using:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">factorial</span>(<span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5040</code></pre>
+</div>
+</div>
 </section>
 <section id="b-without-regard-to-order-in-how-many-ways-can-you-select-4-individuals-from-this-group-of-7" class="level4">
 <h4 class="anchored" data-anchor-id="b-without-regard-to-order-in-how-many-ways-can-you-select-4-individuals-from-this-group-of-7">b) Without regard to order, in how many ways can you select 4 individuals from this group of 7?</h4>
+<p>Now we want to know how many ways we can <strong>select 4 individuals</strong> from a group of 7, <strong>without regard to order</strong>.</p>
+<p>This is a <strong>combination</strong> problem, where order <strong>does not</strong> matter.<br>
+The number of combinations is given by:</p>
+<ul>
+<li><span class="math inline">\(\binom{7}{4} = \dfrac{7!}{4!(7 - 4)!} = \dfrac{7!}{4! \cdot 3!}\)</span></li>
+</ul>
+<p>In R, we compute this with:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">choose</span>(<span class="dv">7</span>, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 35</code></pre>
+</div>
+</div>
 </section>
 <section id="c-what-is-the-probability-that-exactly-two-of-the-individuals-in-your-sample-suffer-from-diabetes" class="level4">
 <h4 class="anchored" data-anchor-id="c-what-is-the-probability-that-exactly-two-of-the-individuals-in-your-sample-suffer-from-diabetes">c) what is the probability that exactly two of the individuals in your sample suffer from diabetes?</h4>
+<p>We want to find the probability that <strong>exactly 2 individuals</strong> in a sample of 7 have diabetes,<br>
+given that the diabetes rate in this population is 12.5% (i.e., <span class="math inline">\(p = 0.125\)</span>).</p>
+<p>Let: - <span class="math inline">\(X \sim \text{Binomial}(n = 7, p = 0.125)\)</span><br>
+- We want <span class="math inline">\(P(X = 2)\)</span></p>
+<p>This probability can be calculated in R as:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dbinom</span>(<span class="dv">2</span>, <span class="at">size =</span> <span class="dv">7</span>, <span class="at">prob =</span> <span class="fl">0.125</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1682982</code></pre>
+</div>
+</div>
 </section>
 <section id="d-what-is-the-probability-that-four-of-them-have-diabetes" class="level4">
 <h4 class="anchored" data-anchor-id="d-what-is-the-probability-that-four-of-them-have-diabetes">d) what is the probability that four of them have diabetes?</h4>
+<p>We now want to calculate the probability that <strong>exactly 4 out of 7 individuals</strong> have diabetes,<br>
+assuming the population diabetes rate is <span class="math inline">\(p = 0.125\)</span>.</p>
+<p>Let: - <span class="math inline">\(X \sim \text{Binomial}(n = 7, p = 0.125)\)</span><br>
+- We want <span class="math inline">\(P(X = 4)\)</span></p>
+<p>We can compute this in R with:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dbinom</span>(<span class="dv">4</span>, <span class="at">size =</span> <span class="dv">7</span>, <span class="at">prob =</span> <span class="fl">0.125</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.00572443</code></pre>
+</div>
+</div>
 </section>
 <section id="q12-according-to-the-behavioral-risk-factor-surveillance-system-58-of-all-americans-adhere-to-a-sedentary-lifestyle" class="level4">
 <h4 class="anchored" data-anchor-id="q12-according-to-the-behavioral-risk-factor-surveillance-system-58-of-all-americans-adhere-to-a-sedentary-lifestyle">Q12: According to the Behavioral Risk Factor Surveillance System, 58% of all Americans adhere to a sedentary lifestyle</h4>
 </section>
 <section id="a-if-you-selected-repeated-samples-of-size-12-from-the-us-population-what-would-be-the-mean-number-of-individuals-per-sample-who-do-not-exercise-regularly-what-would-be-the-standard-deviation" class="level4">
 <h4 class="anchored" data-anchor-id="a-if-you-selected-repeated-samples-of-size-12-from-the-us-population-what-would-be-the-mean-number-of-individuals-per-sample-who-do-not-exercise-regularly-what-would-be-the-standard-deviation">a) If you selected repeated samples of size 12 from the US population, what would be the mean number of individuals per sample who do not exercise regularly? What would be the standard deviation?</h4>
+<p>We are told that 58% of Americans are sedentary. If we take repeated samples of 12 individuals, the number of sedentary individuals per sample follows a <strong>binomial distribution</strong>:</p>
+<p>Let:<br>
+- <span class="math inline">\(n = 12\)</span> (sample size)<br>
+- <span class="math inline">\(p = 0.58\)</span> (probability of being sedentary)</p>
+<p>We use the formulas for the binomial distribution:</p>
+<ul>
+<li><p><strong>Mean</strong> (<span class="math inline">\(\mu\)</span>) is:<br>
+<span class="math inline">\(\mu = n \cdot p = 12 \cdot 0.58 = 6.96\)</span></p></li>
+<li><p><strong>Standard Deviation</strong> (<span class="math inline">\(\sigma\)</span>) is:<br>
+<span class="math inline">\(\sigma = \sqrt{n \cdot p \cdot (1 - p)} = \sqrt{12 \cdot 0.58 \cdot 0.42} \approx 1.71\)</span></p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Parameters</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">12</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fl">0.58</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Mean and standard deviation</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>mean_sedentary <span class="ot">&lt;-</span> n <span class="sc">*</span> p</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>sd_sedentary <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(n <span class="sc">*</span> p <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p))</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>mean_sedentary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6.96</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>sd_sedentary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.709737</code></pre>
+</div>
+</div>
 </section>
 <section id="b-suppose-you-select-a-sample-of-12-individuals-and-find-that-10-of-them-do-not-exercise-regularly.-assuming-the-surveillance-system-is-correct-what-is-the-probability-you-would-have-obtained-results-as-bad-or-worse-than-those-you-observed" class="level4">
 <h4 class="anchored" data-anchor-id="b-suppose-you-select-a-sample-of-12-individuals-and-find-that-10-of-them-do-not-exercise-regularly.-assuming-the-surveillance-system-is-correct-what-is-the-probability-you-would-have-obtained-results-as-bad-or-worse-than-those-you-observed">b) Suppose you select a sample of 12 individuals and find that 10 of them do not exercise regularly. Assuming the Surveillance System is correct, what is the probability you would have obtained results as bad or worse than those you observed?</h4>
+<p>In a sample of 12 individuals, we observe that <strong>10 do not exercise regularly</strong>.<br>
+We want to find the probability of observing <strong>10 or more sedentary individuals</strong>, assuming the true sedentary rate is 58%.</p>
+<p>Let: - <span class="math inline">\(X \sim \text{Binomial}(n = 12, p = 0.58)\)</span><br>
+- We want <span class="math inline">\(P(X \geq 10)\)</span></p>
+<p>This can be calculated in R as:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">12</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fl">0.58</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Probability of observing 10 or more sedentary individuals</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>prob_10_or_more <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pbinom</span>(<span class="dv">9</span>, <span class="at">size =</span> n, <span class="at">prob =</span> p)</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>prob_10_or_more</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.06419844</code></pre>
+</div>
+</div>
 </section>
 <section id="q20-framingham-study" class="level4">
 <h4 class="anchored" data-anchor-id="q20-framingham-study">Q20: Framingham Study</h4>

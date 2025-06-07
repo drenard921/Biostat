@@ -7,7 +7,7 @@ output: pdf_document
 #### Dylan Renard
 #### Professor Proschan & Professor Nason
 #### JHU Biostatistics
-#### June 4th, 2025
+#### June 8th, 2025
 
 # Homework 3
 This file explores creating stacked normal distribution plots, calculating probabilities in normal distributions, covid simulation of events simulating a binomial distribution as well as problems from the Textbook. All internet resources are cited in APA format at the end of this PDF document.
@@ -265,7 +265,6 @@ ggplot(df_1000, aes(x = infections)) +
 
 
 #### Reflection Question: Briefly describe what you notice about the three histograms. Can you explain why?
-#### Reflection Question: Briefly describe what you notice about the three histograms. Can you explain why?
 
 As the sample size increased from 10 to 100 to 1,000, the histograms became progressively more symmetric and concentrated around the expected number of infections.
 
@@ -279,25 +278,115 @@ This trend occurs because of two main reasons:
 
 Overall, the histograms demonstrate how increasing sample size leads to more predictable and less variable trial outcomes.
 
-
-
 ## Part 3: Chapter 7 Textbook Problems
 
 #### Q10: Consider a group of seven individuals selected form the population of 65- to 74-year olds in the United States. The number of persons in this sample who suffer from diabetes is a binomial random variable with parameters n=7 and p=0.125
 
-#### a) If you wish to make a list of the seven persons chosen, in how many ways can they be ordered?
+#### a) If you wish to make a list of the seven persons chosen, in how many ways can they be ordered?We are selecting 7 individuals and want to know **how many ways we can order them**.
+
+This is a **permutation** problem, where order **does** matter.  
+The number of ways to order $n$ individuals is given by:
+
+- $n! = 7! = 7 \times 6 \times 5 \times 4 \times 3 \times 2 \times 1$
+
+In R, we compute this using:
+
+```{r}
+factorial(7)
+```
 
 #### b) Without regard to order, in how many ways can you select 4 individuals from this group of 7?
+Now we want to know how many ways we can **select 4 individuals** from a group of 7, **without regard to order**.
+
+This is a **combination** problem, where order **does not** matter.  
+The number of combinations is given by:
+
+- $\binom{7}{4} = \dfrac{7!}{4!(7 - 4)!} = \dfrac{7!}{4! \cdot 3!}$
+
+In R, we compute this with:
+
+```{r}
+choose(7, 4)
+```
+
 
 #### c) what is the probability that exactly two of the individuals in your sample suffer from diabetes?
+We want to find the probability that **exactly 2 individuals** in a sample of 7 have diabetes,  
+given that the diabetes rate in this population is 12.5% (i.e., $p = 0.125$).
+
+Let:
+- $X \sim \text{Binomial}(n = 7, p = 0.125)$  
+- We want $P(X = 2)$
+
+This probability can be calculated in R as:
+
+```{r}
+dbinom(2, size = 7, prob = 0.125)
+```
 
 #### d) what is the probability that four of them have diabetes?
+We now want to calculate the probability that **exactly 4 out of 7 individuals** have diabetes,  
+assuming the population diabetes rate is $p = 0.125$.
+
+Let:
+- $X \sim \text{Binomial}(n = 7, p = 0.125)$  
+- We want $P(X = 4)$
+
+We can compute this in R with:
+
+```{r}
+dbinom(4, size = 7, prob = 0.125)
+```
+
 
 #### Q12: According to the Behavioral Risk Factor Surveillance System, 58% of all Americans adhere to a sedentary lifestyle
 
 #### a) If you selected repeated samples of size 12 from the US population, what would be the mean number of individuals per sample who do not exercise regularly? What would be the standard deviation?
+We are told that 58% of Americans are sedentary. If we take repeated samples of 12 individuals, the number of sedentary individuals per sample follows a **binomial distribution**:
+
+Let:  
+- $n = 12$ (sample size)  
+- $p = 0.58$ (probability of being sedentary)
+
+We use the formulas for the binomial distribution:
+
+- **Mean** ($\mu$) is:  
+  $\mu = n \cdot p = 12 \cdot 0.58 = 6.96$
+
+- **Standard Deviation** ($\sigma$) is:  
+  $\sigma = \sqrt{n \cdot p \cdot (1 - p)} = \sqrt{12 \cdot 0.58 \cdot 0.42} \approx 1.71$
+
+```{r}
+# Parameters
+n <- 12
+p <- 0.58
+
+# Mean and standard deviation
+mean_sedentary <- n * p
+sd_sedentary <- sqrt(n * p * (1 - p))
+
+mean_sedentary
+sd_sedentary
+```
 
 #### b) Suppose you select a sample of 12 individuals and find that 10 of them do not exercise regularly. Assuming the Surveillance System is correct, what is the probability you would have obtained results as bad or worse than those you observed?
+In a sample of 12 individuals, we observe that **10 do not exercise regularly**.  
+We want to find the probability of observing **10 or more sedentary individuals**, assuming the true sedentary rate is 58%.
+
+Let:
+- $X \sim \text{Binomial}(n = 12, p = 0.58)$  
+- We want $P(X \geq 10)$
+
+This can be calculated in R as:
+
+```{r}
+n <- 12
+p <- 0.58
+
+# Probability of observing 10 or more sedentary individuals
+prob_10_or_more <- 1 - pbinom(9, size = n, prob = p)
+prob_10_or_more
+```
 
 #### Q20: Framingham Study
 In the Framingham study, serum cholesterol levels were measured for a large number of healthy males. The population was followed for 16 years. At the end of the time, the men were divided into 2 groups: those who had developed coronary disease and those who had not. The distributions of the initial serum cholesterol levels for each group were found to be approximately normal. Among individuals who eventually developed coronary disease, the mean serum cholesterol level was μd= 244 mg/100 ml and the standard deviation was σd=51 mg/100ml; for those who did not go on to develop the disease, the mean serum cholesterol was μnd= 219 mg/100 ml and the standard deviation was σd=41 mg/100ml.
