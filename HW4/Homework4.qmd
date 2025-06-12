@@ -1,0 +1,533 @@
+---
+title: "Homework 4 - Biostatistics"
+Author: "Dylan Renard"
+output: pdf_document
+---
+
+#### Dylan Renard
+#### Professor Proschan & Professor Nason
+#### JHU Biostatistics
+#### June 11th, 2025
+
+# Homework 4
+This file tackles problems from chapter 8 and 9 of the course textbook. Exploring concepts such as sample distributions, confidence intervals and looking at the low birth weights dataset from two teaching hospitals in Boston as well as the Zinc levels dataset. 
+
+## 8.2  Why is it important that a sample drawn from a population be random ? 
+Random sampling is essential for producing a representative and unbiased subset of the population, which allows valid statistical inferences. It ensures that each unit in the population has an equal chance of selection, minimizing systematic error. As illustrated in the lecture, failure to sample randomly can lead to severely misleading conclusions. For example, the 1936 Literary Digest poll inaccurately predicted the presidential election outcome due to biased sampling and low response rates. In another example, Florida's method for estimating Medicaid overcharges relies on constructing confidence intervals from randomly selected visits; the validity of the estimate depends entirely on the randomness of the sample. Without true random sampling, both the accuracy of estimators and the validity of confidence intervals are compromised.
+
+## 8.11 In Norway, the distribution of birth weights for infants whose gestational age is 40 weeks is approximately normal with mean =3500 grams and standard deviation = 430 grams
+
+### a) Given a newborn whose gestational age is 40 weeks, what is the probability that his or her birth weight is less than 2500 g?  
+We are told that birth weight \( X \) is normally distributed:
+
+$$
+X \sim \mathcal{N}(\mu = 3500, \sigma = 430)
+$$
+
+To find the probability that a newborn weighs less than 2500 grams, we compute the Z-score:
+
+$$
+Z = \frac{2500 - 3500}{430} = \frac{-1000}{430} \approx -2.33
+$$
+
+Then we use the standard normal distribution to find:
+
+$$
+P(X < 2500) = P(Z < -2.33) \approx 0.0099
+$$
+
+**Answer:** The probability that a 40-week infant weighs less than 2500 grams is approximately **0.99%**.
+
+```{r}
+# Checking work with R
+pnorm(2500, mean = 3500, sd = 430)
+```
+
+### b) What value cuts off the lower 5% of the distribution of birth weights? 
+We are looking for the 5th percentile of a normal distribution:
+
+$$
+X \sim \mathcal{N}(\mu = 3500, \sigma = 430)
+$$
+
+We use the z-score corresponding to the 5th percentile, which is approximately:
+
+$$
+z_{0.05} = -1.645
+$$
+
+Then we apply the z-score formula in reverse to solve for the cutoff value \( x \):
+
+$$
+x = \mu + z \cdot \sigma = 3500 + (-1.645)(430) \approx 3500 - 707.35 = 2792.65
+$$
+
+**Answer:** The value that cuts off the lower 5% of birth weights is approximately **2793 grams**.
+
+```{r}
+# Checking work with R
+qnorm(0.05, mean = 3500, sd = 430)
+```
+
+### c) Describe the distribution of means of samples of size 5 drawn from this distribution. What would be the mean of the means? What would be the standard deviation of the means? 
+If we repeatedly draw samples of size $( n = 5 )$ from the population $X \sim \mathcal{N}(\mu = 3500, \sigma = 430)$, the distribution of the sample means will follow a normal distribution due to the Central Limit Theorem:
+
+$$
+\bar{X} \sim \mathcal{N}\left(\mu = 3500,\ \sigma_{\bar{X}} = \frac{\sigma}{\sqrt{n}} = \frac{430}{\sqrt{5}} \approx 192.33\right)
+$$
+
+- **Mean of the sample means:** $(\mu_{\bar{X}} = \mu = 3500)$
+- **Standard deviation of the sample means (standard error):** 
+
+$$
+\sigma_{\bar{X}} = \frac{430}{\sqrt{5}} \approx 192.33
+$$
+
+**Answer:** The distribution of sample means is normal with mean **3500 grams** and standard deviation **192.33 grams**.
+
+```{r}
+# Checking work in R
+mu <- 3500
+sigma <- 430
+n <- 5
+se <- sigma / sqrt(n)
+se
+```
+
+### d) What value cuts off the lower 5% of the distribution of means-from-samples-of-size-5 of birth weights? 
+We want the 5th percentile of the sampling distribution of the sample mean for $( n = 5 )$. From part (c), we know:
+
+$$
+\bar{X} \sim \mathcal{N}(\mu = 3500,\ \sigma_{\bar{X}} = 192.33)
+$$
+
+Using the z-score for the 5th percentile (\( z = -1.645 \)):
+
+$$
+x = \mu + z \cdot \sigma_{\bar{X}} = 3500 + (-1.645)(192.33) \approx 3500 - 316.19 = 3183.81
+$$
+
+**Answer:** The value that cuts off the lower 5% of the sample mean distribution (for samples of size 5) is approximately **3184 grams**.
+
+```{r}
+# Checking work in R
+mu <- 3500
+se <- 430 / sqrt(5)
+qnorm(0.05, mean = mu, sd = se)
+```
+
+### e) If you take a sample of 5 newborns, all with gestational age 40 weeks, what is the probability that their mean birthweight is less than 2500 grams? 
+We are calculating the probability that the sample mean $( \bar{X})$ is less than 2500 grams when:
+
+$$
+\bar{X} \sim \mathcal{N}(\mu = 3500,\ \sigma_{\bar{X}} = \frac{430}{\sqrt{5}} \approx 192.33)
+$$
+
+Compute the Z-score:
+
+$$
+Z = \frac{2500 - 3500}{192.33} = \frac{-1000}{192.33} \approx -5.20
+$$
+
+Using the standard normal distribution:
+
+$$
+P(\bar{X} < 2500) = P(Z < -5.20) \approx 0
+$$
+
+**Answer:** The probability that the average birthweight of five newborns is less than 2500 grams is effectively **zero**.
+
+```{r}
+# Checking work in R
+mu <- 3500
+se <- 430 / sqrt(5)
+pnorm(2500, mean = mu, sd = se)
+```
+
+### f) What is the probability that exactly one of the newborns in your sample of 5 has a birthweight less than 2500g? 
+We previously calculated the probability that a single newborn has a birthweight less than 2500 g:
+
+$$
+p = P(X < 2500) \approx 0.0099
+$$
+
+Let $X \sim \text{Binomial}(n = 5, p = 0.0099)$ represent the number of infants out of 5 who weigh less than 2500 grams.
+
+We want:
+
+$$
+P(X = 1) = \binom{5}{1} (0.0099)^1 (1 - 0.0099)^4 \approx 5 \cdot 0.0099 \cdot 0.9607 \approx 0.0475
+$$
+
+**Answer:** The probability that exactly one of five newborns weighs less than 2500 grams is approximately **4.75%**.
+
+```{r}
+# Checking work with R
+dbinom(1, size = 5, prob = 0.0099)
+```
+
+
+## 9.3 What are the factors that affect the length of a confidence interval for μ?
+The length of a confidence interval for the population mean $\mu$ is primarily influenced by three factors: the variability in the data, the sample size, and the confidence level. Higher variability, reflected in a larger standard deviation, increases the margin of error and thus widens the interval. A larger sample size reduces the standard error $( \sigma / \sqrt{n})$, leading to a narrower interval. Finally, increasing the confidence level (e.g., from 90% to 99%) requires a larger critical value (such as $z$ or $t$), which also widens the interval. As discussed in lecture, this trade-off between precision and confidence must be balanced carefully in study design.
+
+## 9.12 Serum zinc levels for 462 males between the ages of 15 and 17 are saved under the variable name zinc in the dataset serzinc. The units of measurement for serum zinc measurement are micrograms per deciliter.  
+
+### a) Find a two-sided 95% confidence interval for μ, the true mean serum zinc level for this population of males.
+
+We use the standard formula for a two-sided confidence interval for the population mean:
+
+$$
+\bar{x} \pm t_{(0.025,\ n-1)} \cdot \frac{s}{\sqrt{n}}
+$$
+
+From the dataset:
+- Sample size $n = 462$
+- Sample mean $\bar{x} = 87.94$ µg/dL
+- Sample standard deviation $s = 16.00$ µg/dL
+
+The critical value $t_{0.025,\ 461} \approx 1.965$ comes from the $t$-distribution with 461 degrees of freedom.
+
+$$
+\text{Margin of error} = 1.965 \times \frac{16.00}{\sqrt{462}} \approx 1.46
+$$
+
+$$
+\text{95\% CI} = (87.94 - 1.46,\ 87.94 + 1.46) = (86.47,\ 89.40)
+$$
+
+**Answer:** We are 95% confident that the true mean serum zinc level for males aged 15–17 lies between **86.47** and **89.40** micrograms per deciliter.
+
+```{r}
+# Load zinc data from TXT file
+serzinc <- read.table("serzinc-1.TXT", header = TRUE)
+zinc_levels <- serzinc$zinc
+
+# Summary statistics
+n <- length(zinc_levels)
+mean_zinc <- mean(zinc_levels)
+sd_zinc <- sd(zinc_levels)
+
+# t critical value for 95% CI
+t_crit <- qt(0.975, df = n - 1)
+
+# Margin of error
+margin_error <- t_crit * sd_zinc / sqrt(n)
+
+# Confidence interval
+ci_lower <- mean_zinc - margin_error
+ci_upper <- mean_zinc + margin_error
+c(ci_lower, ci_upper)
+```
+
+### b) Interpret the confidence interval.
+The 95% confidence interval for the true mean serum zinc level in males aged 15–17 is approximately (86.47, 89.40) micrograms per deciliter. This means that if we were to repeatedly draw random samples of 462 males from this population and compute a 95% confidence interval for each sample, approximately 95% of those intervals would contain the true population mean $\mu$. It does not mean there is a 95% probability that the specific interval we calculated contains $\mu$—the population parameter is fixed, and the interval either contains it or it does not.
+
+
+### c) Calculate a 90% confidence interval.  How does  the 90% confidence interval compare to the 95% confidence interval? Why?  
+
+To construct a 90% confidence interval for the population mean $\mu$, we use the formula:
+
+$$
+\bar{x} \pm t_{(0.05,\ n-1)} \cdot \frac{s}{\sqrt{n}}
+$$
+
+Where:
+- $\bar{x} = 87.94$
+- $s = 16.00$
+- $n = 462$
+- $t_{0.05, 461} \approx 1.648$
+
+$$
+\text{Margin of error} = 1.648 \times \frac{16.00}{\sqrt{462}} \approx 1.22
+$$
+
+$$
+\text{90\% CI} = (87.94 - 1.22,\ 87.94 + 1.22) = (86.72,\ 89.16)
+$$
+
+**Answer:** The 90% confidence interval is approximately (86.72, 89.16) micrograms per deciliter.
+
+**Comparison:** The 90% confidence interval is narrower than the 95% confidence interval (86.47, 89.40) because a lower confidence level requires a smaller margin of error. In general, higher confidence levels require wider intervals to ensure that they capture the true mean more reliably.
+
+```{r}
+# 90% confidence interval calculation
+t_crit_90 <- qt(0.95, df = n - 1)  # Two-tailed, so use 0.95
+margin_error_90 <- t_crit_90 * sd_zinc / sqrt(n)
+ci_lower_90 <- mean_zinc - margin_error_90
+ci_upper_90 <- mean_zinc + margin_error_90
+c(ci_lower_90, ci_upper_90)
+```
+
+## 9.13 The dataset lowbwt contains information recorded for a sample of 100 low birth weight infants born in two teaching hospitals in Boston. Measurements of systolic blood pressure are saved under the variable named sbp, while indicators of gender-- 1 indicating a male and 0 indicating a female-- are saved under the variable name sex.  
+
+### a) Compute a 95% confidence interval for the true mean systolic blood pressure of male low birth weight infants.
+
+We calculate the confidence interval using:
+
+$$
+\bar{x} \pm t_{(0.025,\ n-1)} \cdot \frac{s}{\sqrt{n}}
+$$
+
+From the dataset:
+- Sample size of males: $n = 44$
+- Sample mean systolic blood pressure: $\bar{x} = 47.86$ mmHg
+- Sample standard deviation: $s = 11.81$ mmHg
+- Critical value from the $t$ distribution with 43 degrees of freedom: $t_{0.025, 43} \approx 2.016$
+
+$$
+\text{Margin of error} = 2.016 \times \frac{11.81}{\sqrt{44}} \approx 3.59
+$$
+
+$$
+\text{95\% CI} = (47.86 - 3.59,\ 47.86 + 3.59) = (44.27,\ 51.45)
+$$
+
+**Answer:** We are 95% confident that the true mean systolic blood pressure of male low birth weight infants lies between **44.27 mmHg** and **51.45 mmHg**.
+
+```{r}
+# R code to check work
+lowbwt <- read.csv("lowbwt-1.csv")
+male_sbp <- lowbwt$sbp[lowbwt$sex == 1]
+
+n <- length(male_sbp)
+mean_sbp <- mean(male_sbp)
+sd_sbp <- sd(male_sbp)
+t_crit <- qt(0.975, df = n - 1)
+
+margin <- t_crit * sd_sbp / sqrt(n)
+ci_lower <- mean_sbp - margin
+ci_upper <- mean_sbp + margin
+c(ci_lower, ci_upper)
+```
+
+
+### b) Compute a 95% confidence interval for the true mean systolic blood pressure of female low birth weight infants.
+We calculate the 95% confidence interval using:
+
+$$
+\bar{x} \pm t_{(0.025,\ n-1)} \cdot \frac{s}{\sqrt{n}}
+$$
+
+From the dataset:
+- Sample size of females: $n = 56$
+- Sample mean systolic blood pressure: $\bar{x} = 46.46$ mmHg
+- Sample standard deviation: $s = 11.15$ mmHg
+- Critical value from the $t$ distribution with 55 degrees of freedom: $t_{0.025, 55} \approx 2.004$
+
+$$
+\text{Margin of error} = 2.004 \times \frac{11.15}{\sqrt{56}} \approx 2.98
+$$
+
+$$
+\text{95\% CI} = (46.46 - 2.98,\ 46.46 + 2.98) = (43.48,\ 49.45)
+$$
+
+**Answer:** We are 95% confident that the true mean systolic blood pressure of female low birth weight infants lies between **43.48 mmHg** and **49.45 mmHg**.
+
+```{r}
+# R code to check work
+female_sbp <- lowbwt$sbp[lowbwt$sex == 0]
+
+n <- length(female_sbp)
+mean_sbp <- mean(female_sbp)
+sd_sbp <- sd(female_sbp)
+t_crit <- qt(0.975, df = n - 1)
+
+margin <- t_crit * sd_sbp / sqrt(n)
+ci_lower <- mean_sbp - margin
+ci_upper <- mean_sbp + margin
+c(ci_lower, ci_upper)
+```
+
+### c) Do you think it's possible that males and females have the same mean systolic blood pressure? Explain briefly.
+Yes, it is possible that males and females have the same true mean systolic blood pressure. The 95% confidence interval for males is (44.27, 51.45) mmHg and for females is (43.48, 49.45) mmHg. These intervals overlap, which suggests that the difference in sample means may be due to random sampling variation rather than a true difference in population means. However, to formally assess this, a two-sample $t$-test would be needed. Confidence interval overlap is suggestive but not conclusive evidence regarding equality of means.
+
+### d) Calculate 90% confidence intervals for both male and female low birth weight infants (two separate intervals).
+
+We use the formula for a 90% confidence interval:
+
+$$
+\bar{x} \pm t_{(0.05,\ n-1)} \cdot \frac{s}{\sqrt{n}}
+$$
+
+#### For Males:
+- $\bar{x} = 47.86$ mmHg  
+- $s = 11.81$, $n = 44$  
+- $t_{0.05,\ 43} \approx 1.682$
+
+$$
+\text{90\% CI (males)} = (47.86 \pm 1.99) = (44.87,\ 50.86)
+$$
+
+#### For Females:
+- $\bar{x} = 46.46$ mmHg  
+- $s = 11.15$, $n = 56$  
+- $t_{0.05,\ 55} \approx 1.673$
+
+$$
+\text{90\% CI (females)} = (46.46 \pm 2.49) = (43.97,\ 48.96)
+$$
+
+**Answer:**  
+- The 90% confidence interval for **males** is **(44.87, 50.86)** mmHg.  
+- The 90% confidence interval for **females** is **(43.97, 48.96)** mmHg.
+
+```{r}
+# R code to compute both 90% confidence intervals for checking work
+lowbwt <- read.csv("lowbwt-1.csv")
+
+# Male data
+male_sbp <- lowbwt$sbp[lowbwt$sex == 1]
+n_male <- length(male_sbp)
+mean_male <- mean(male_sbp)
+sd_male <- sd(male_sbp)
+t_crit_male_90 <- qt(0.95, df = n_male - 1)
+margin_male_90 <- t_crit_male_90 * sd_male / sqrt(n_male)
+ci_male_90 <- c(mean_male - margin_male_90, mean_male + margin_male_90)
+
+# Female data
+female_sbp <- lowbwt$sbp[lowbwt$sex == 0]
+n_female <- length(female_sbp)
+mean_female <- mean(female_sbp)
+sd_female <- sd(female_sbp)
+t_crit_female_90 <- qt(0.95, df = n_female - 1)
+margin_female_90 <- t_crit_female_90 * sd_female / sqrt(n_female)
+ci_female_90 <- c(mean_female - margin_female_90, mean_female + margin_female_90)
+
+ci_male_90
+ci_female_90
+```
+
+### e) Calculate a 99% confidence interval for both male and female low birth weight infants (two separate intervals). 
+We use the formula for a 99% confidence interval:
+
+$$
+\bar{x} \pm t_{(0.005,\ n-1)} \cdot \frac{s}{\sqrt{n}}
+$$
+
+#### For Males:
+- $\bar{x} = 47.86$ mmHg  
+- $s = 11.81$, $n = 44$  
+- $t_{0.005,\ 43} \approx 2.695$
+
+$$
+\text{99\% CI (males)} = (47.86 \pm 4.79) = (43.07,\ 52.66)
+$$
+
+#### For Females:
+- $\bar{x} = 46.46$ mmHg  
+- $s = 11.15$, $n = 56$  
+- $t_{0.005,\ 55} \approx 2.674$
+
+$$
+\text{99\% CI (females)} = (46.46 \pm 3.97) = (42.49,\ 50.44)
+$$
+
+**Answer:**  
+- The 99% confidence interval for **males** is **(43.07, 52.66)** mmHg.  
+- The 99% confidence interval for **females** is **(42.49, 50.44)** mmHg.
+
+```{r}
+# R code to compute both 99% confidence intervals
+lowbwt <- read.csv("lowbwt-1.csv")
+
+# Male data
+male_sbp <- lowbwt$sbp[lowbwt$sex == 1]
+n_male <- length(male_sbp)
+mean_male <- mean(male_sbp)
+sd_male <- sd(male_sbp)
+t_crit_male_99 <- qt(0.995, df = n_male - 1)
+margin_male_99 <- t_crit_male_99 * sd_male / sqrt(n_male)
+ci_male_99 <- c(mean_male - margin_male_99, mean_male + margin_male_99)
+
+# Female data
+female_sbp <- lowbwt$sbp[lowbwt$sex == 0]
+n_female <- length(female_sbp)
+mean_female <- mean(female_sbp)
+sd_female <- sd(female_sbp)
+t_crit_female_99 <- qt(0.995, df = n_female - 1)
+margin_female_99 <- t_crit_female_99 * sd_female / sqrt(n_female)
+ci_female_99 <- c(mean_female - margin_female_99, mean_female + margin_female_99)
+
+ci_male_99
+ci_female_99
+```
+
+
+
+### f) Suppose the standard deviation (σ) of the larger population of low birth weight infants is known to be 11 mm. Construct 95% confidence intervals for males and females using this. 
+
+When the population standard deviation $\sigma$ is known, we use the **z-distribution** instead of the t-distribution. The formula becomes:
+
+$$
+\bar{x} \pm z_{(0.025)} \cdot \frac{\sigma}{\sqrt{n}}
+$$
+
+Where $z_{0.025} \approx 1.96$ for a 95% confidence level.
+
+#### For Males:
+- $\bar{x} = 47.86$, $n = 44$
+- $\text{SE} = \frac{11}{\sqrt{44}} \approx 1.66$
+
+$$
+\text{95\% CI (males)} = (47.86 \pm 1.96 \cdot 1.66) = (44.61,\ 51.11)
+$$
+
+#### For Females:
+- $\bar{x} = 46.46$, $n = 56$
+- $\text{SE} = \frac{11}{\sqrt{56}} \approx 1.47$
+
+$$
+\text{95\% CI (females)} = (46.46 \pm 1.96 \cdot 1.47) = (43.58,\ 49.35)
+$$
+
+**Answer:**
+- The 95% confidence interval for **males** using known $\sigma$ is **(44.61, 51.11)** mmHg.
+- The 95% confidence interval for **females** using known $\sigma$ is **(43.58, 49.35)** mmHg.
+
+```{r}
+# R code using known sigma = 11
+
+# Male calculations
+male_sbp <- lowbwt$sbp[lowbwt$sex == 1]
+n_male <- length(male_sbp)
+mean_male <- mean(male_sbp)
+sigma <- 11
+z_crit <- qnorm(0.975)
+se_male <- sigma / sqrt(n_male)
+ci_male <- c(mean_male - z_crit * se_male, mean_male + z_crit * se_male)
+
+# Female calculations
+female_sbp <- lowbwt$sbp[lowbwt$sex == 0]
+n_female <- length(female_sbp)
+mean_female <- mean(female_sbp)
+se_female <- sigma / sqrt(n_female)
+ci_female <- c(mean_female - z_crit * se_female, mean_female + z_crit * se_female)
+
+ci_male
+ci_female
+```
+
+
+### g) How does the interval calculated based on σ differ from the 95% interval based on s? 
+
+The confidence intervals calculated using the known population standard deviation $\sigma = 11$ are slightly **narrower** than those calculated using the sample standard deviation $s$. This occurs because:
+
+- When $\sigma$ is known, we use the **z-distribution**, which has **less spread** than the t-distribution, especially for small to moderate sample sizes.
+- When $\sigma$ is unknown, we must estimate it using $s$ and use the **t-distribution**, which has **heavier tails** to account for added uncertainty in estimating variability.
+
+For example:
+- The 95% CI for **males** using $s = 11.81$ was **(44.27, 51.45)**, while using $\sigma = 11$ it narrowed to **(44.61, 51.11)**.
+- The 95% CI for **females** using $s = 11.15$ was **(43.48, 49.45)**, while using $\sigma = 11$ it narrowed to **(43.58, 49.35)**.
+
+**Conclusion:** Using the known population standard deviation produces slightly tighter intervals because it eliminates the uncertainty associated with estimating variability from the sample.
+
+
+## Sources: 
+Pagano, M., & Gauvreau, K. (2018). Principles of biostatistics / Marcello Pagano, Kimberlee Gauvreau. Duxbury Press.
+
+#### Thank you for reviewing and making it to the end of my work, in this assignment's signature end off I'd like to share the open source R package collection known as pharmaverse. I learned about it from some informational interviews with Biostats professionals and wanted to ask if any of you have had experience with these libraries? Let me know in the comments or if we can discuss further in Office Hours. Best, Dylan
+
+![Example Libraries](Pharmaverse.png)
+
+Explore more at: [https://pharmaverse.org/](https://pharmaverse.org/)

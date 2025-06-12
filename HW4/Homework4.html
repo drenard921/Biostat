@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Homework 4 - Biostatistics</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Homework4_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Homework4_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="Homework4_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="Homework4_files/libs/quarto-html/popper.min.js"></script>
+<script src="Homework4_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Homework4_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Homework4_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Homework4_files/libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Homework4_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Homework4_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Homework4_files/libs/bootstrap/bootstrap-9facd9cce4e76957794a226f9ed503ad.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Homework 4 - Biostatistics</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="dylan-renard" class="level4">
+<h4 class="anchored" data-anchor-id="dylan-renard">Dylan Renard</h4>
+</section>
+<section id="professor-proschan-professor-nason" class="level4">
+<h4 class="anchored" data-anchor-id="professor-proschan-professor-nason">Professor Proschan &amp; Professor Nason</h4>
+</section>
+<section id="jhu-biostatistics" class="level4">
+<h4 class="anchored" data-anchor-id="jhu-biostatistics">JHU Biostatistics</h4>
+</section>
+<section id="june-11th-2025" class="level4">
+<h4 class="anchored" data-anchor-id="june-11th-2025">June 11th, 2025</h4>
+</section>
+<section id="homework-4" class="level1">
+<h1>Homework 4</h1>
+<p>This file tackles problems from chapter 8 and 9 of the course textbook. Exploring concepts such as sample distributions, confidence intervals and looking at the low birth weights dataset from two teaching hospitals in Boston as well as the Zinc levels dataset.</p>
+<section id="why-is-it-important-that-a-sample-drawn-from-a-population-be-random" class="level2">
+<h2 class="anchored" data-anchor-id="why-is-it-important-that-a-sample-drawn-from-a-population-be-random">8.2 Why is it important that a sample drawn from a population be random ?</h2>
+<p>Random sampling is essential for producing a representative and unbiased subset of the population, which allows valid statistical inferences. It ensures that each unit in the population has an equal chance of selection, minimizing systematic error. As illustrated in the lecture, failure to sample randomly can lead to severely misleading conclusions. For example, the 1936 Literary Digest poll inaccurately predicted the presidential election outcome due to biased sampling and low response rates. In another example, Florida’s method for estimating Medicaid overcharges relies on constructing confidence intervals from randomly selected visits; the validity of the estimate depends entirely on the randomness of the sample. Without true random sampling, both the accuracy of estimators and the validity of confidence intervals are compromised.</p>
+</section>
+<section id="in-norway-the-distribution-of-birth-weights-for-infants-whose-gestational-age-is-40-weeks-is-approximately-normal-with-mean-3500-grams-and-standard-deviation-430-grams" class="level2">
+<h2 class="anchored" data-anchor-id="in-norway-the-distribution-of-birth-weights-for-infants-whose-gestational-age-is-40-weeks-is-approximately-normal-with-mean-3500-grams-and-standard-deviation-430-grams">8.11 In Norway, the distribution of birth weights for infants whose gestational age is 40 weeks is approximately normal with mean =3500 grams and standard deviation = 430 grams</h2>
+<section id="a-given-a-newborn-whose-gestational-age-is-40-weeks-what-is-the-probability-that-his-or-her-birth-weight-is-less-than-2500-g" class="level3">
+<h3 class="anchored" data-anchor-id="a-given-a-newborn-whose-gestational-age-is-40-weeks-what-is-the-probability-that-his-or-her-birth-weight-is-less-than-2500-g">a) Given a newborn whose gestational age is 40 weeks, what is the probability that his or her birth weight is less than 2500 g?</h3>
+<p>We are told that birth weight ( X ) is normally distributed:</p>
+<p><span class="math display">\[
+X \sim \mathcal{N}(\mu = 3500, \sigma = 430)
+\]</span></p>
+<p>To find the probability that a newborn weighs less than 2500 grams, we compute the Z-score:</p>
+<p><span class="math display">\[
+Z = \frac{2500 - 3500}{430} = \frac{-1000}{430} \approx -2.33
+\]</span></p>
+<p>Then we use the standard normal distribution to find:</p>
+<p><span class="math display">\[
+P(X &lt; 2500) = P(Z &lt; -2.33) \approx 0.0099
+\]</span></p>
+<p><strong>Answer:</strong> The probability that a 40-week infant weighs less than 2500 grams is approximately <strong>0.99%</strong>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking work with R</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="dv">2500</span>, <span class="at">mean =</span> <span class="dv">3500</span>, <span class="at">sd =</span> <span class="dv">430</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.01002045</code></pre>
+</div>
+</div>
+</section>
+<section id="b-what-value-cuts-off-the-lower-5-of-the-distribution-of-birth-weights" class="level3">
+<h3 class="anchored" data-anchor-id="b-what-value-cuts-off-the-lower-5-of-the-distribution-of-birth-weights">b) What value cuts off the lower 5% of the distribution of birth weights?</h3>
+<p>We are looking for the 5th percentile of a normal distribution:</p>
+<p><span class="math display">\[
+X \sim \mathcal{N}(\mu = 3500, \sigma = 430)
+\]</span></p>
+<p>We use the z-score corresponding to the 5th percentile, which is approximately:</p>
+<p><span class="math display">\[
+z_{0.05} = -1.645
+\]</span></p>
+<p>Then we apply the z-score formula in reverse to solve for the cutoff value ( x ):</p>
+<p><span class="math display">\[
+x = \mu + z \cdot \sigma = 3500 + (-1.645)(430) \approx 3500 - 707.35 = 2792.65
+\]</span></p>
+<p><strong>Answer:</strong> The value that cuts off the lower 5% of birth weights is approximately <strong>2793 grams</strong>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking work with R</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fl">0.05</span>, <span class="at">mean =</span> <span class="dv">3500</span>, <span class="at">sd =</span> <span class="dv">430</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2792.713</code></pre>
+</div>
+</div>
+</section>
+<section id="c-describe-the-distribution-of-means-of-samples-of-size-5-drawn-from-this-distribution.-what-would-be-the-mean-of-the-means-what-would-be-the-standard-deviation-of-the-means" class="level3">
+<h3 class="anchored" data-anchor-id="c-describe-the-distribution-of-means-of-samples-of-size-5-drawn-from-this-distribution.-what-would-be-the-mean-of-the-means-what-would-be-the-standard-deviation-of-the-means">c) Describe the distribution of means of samples of size 5 drawn from this distribution. What would be the mean of the means? What would be the standard deviation of the means?</h3>
+<p>If we repeatedly draw samples of size <span class="math inline">\(( n = 5 )\)</span> from the population <span class="math inline">\(X \sim \mathcal{N}(\mu = 3500, \sigma = 430)\)</span>, the distribution of the sample means will follow a normal distribution due to the Central Limit Theorem:</p>
+<p><span class="math display">\[
+\bar{X} \sim \mathcal{N}\left(\mu = 3500,\ \sigma_{\bar{X}} = \frac{\sigma}{\sqrt{n}} = \frac{430}{\sqrt{5}} \approx 192.33\right)
+\]</span></p>
+<ul>
+<li><strong>Mean of the sample means:</strong> <span class="math inline">\((\mu_{\bar{X}} = \mu = 3500)\)</span></li>
+<li><strong>Standard deviation of the sample means (standard error):</strong></li>
+</ul>
+<p><span class="math display">\[
+\sigma_{\bar{X}} = \frac{430}{\sqrt{5}} \approx 192.33
+\]</span></p>
+<p><strong>Answer:</strong> The distribution of sample means is normal with mean <strong>3500 grams</strong> and standard deviation <strong>192.33 grams</strong>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking work in R</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="dv">3500</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="dv">430</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>se <span class="ot">&lt;-</span> sigma <span class="sc">/</span> <span class="fu">sqrt</span>(n)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>se</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 192.3018</code></pre>
+</div>
+</div>
+</section>
+<section id="d-what-value-cuts-off-the-lower-5-of-the-distribution-of-means-from-samples-of-size-5-of-birth-weights" class="level3">
+<h3 class="anchored" data-anchor-id="d-what-value-cuts-off-the-lower-5-of-the-distribution-of-means-from-samples-of-size-5-of-birth-weights">d) What value cuts off the lower 5% of the distribution of means-from-samples-of-size-5 of birth weights?</h3>
+<p>We want the 5th percentile of the sampling distribution of the sample mean for <span class="math inline">\(( n = 5 )\)</span>. From part (c), we know:</p>
+<p><span class="math display">\[
+\bar{X} \sim \mathcal{N}(\mu = 3500,\ \sigma_{\bar{X}} = 192.33)
+\]</span></p>
+<p>Using the z-score for the 5th percentile (( z = -1.645 )):</p>
+<p><span class="math display">\[
+x = \mu + z \cdot \sigma_{\bar{X}} = 3500 + (-1.645)(192.33) \approx 3500 - 316.19 = 3183.81
+\]</span></p>
+<p><strong>Answer:</strong> The value that cuts off the lower 5% of the sample mean distribution (for samples of size 5) is approximately <strong>3184 grams</strong>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking work in R</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="dv">3500</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>se <span class="ot">&lt;-</span> <span class="dv">430</span> <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="dv">5</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="fl">0.05</span>, <span class="at">mean =</span> mu, <span class="at">sd =</span> se)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3183.692</code></pre>
+</div>
+</div>
+</section>
+<section id="e-if-you-take-a-sample-of-5-newborns-all-with-gestational-age-40-weeks-what-is-the-probability-that-their-mean-birthweight-is-less-than-2500-grams" class="level3">
+<h3 class="anchored" data-anchor-id="e-if-you-take-a-sample-of-5-newborns-all-with-gestational-age-40-weeks-what-is-the-probability-that-their-mean-birthweight-is-less-than-2500-grams">e) If you take a sample of 5 newborns, all with gestational age 40 weeks, what is the probability that their mean birthweight is less than 2500 grams?</h3>
+<p>We are calculating the probability that the sample mean <span class="math inline">\(( \bar{X})\)</span> is less than 2500 grams when:</p>
+<p><span class="math display">\[
+\bar{X} \sim \mathcal{N}(\mu = 3500,\ \sigma_{\bar{X}} = \frac{430}{\sqrt{5}} \approx 192.33)
+\]</span></p>
+<p>Compute the Z-score:</p>
+<p><span class="math display">\[
+Z = \frac{2500 - 3500}{192.33} = \frac{-1000}{192.33} \approx -5.20
+\]</span></p>
+<p>Using the standard normal distribution:</p>
+<p><span class="math display">\[
+P(\bar{X} &lt; 2500) = P(Z &lt; -5.20) \approx 0
+\]</span></p>
+<p><strong>Answer:</strong> The probability that the average birthweight of five newborns is less than 2500 grams is effectively <strong>zero</strong>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking work in R</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="dv">3500</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>se <span class="ot">&lt;-</span> <span class="dv">430</span> <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="dv">5</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="dv">2500</span>, <span class="at">mean =</span> mu, <span class="at">sd =</span> se)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 9.955955e-08</code></pre>
+</div>
+</div>
+</section>
+<section id="f-what-is-the-probability-that-exactly-one-of-the-newborns-in-your-sample-of-5-has-a-birthweight-less-than-2500g" class="level3">
+<h3 class="anchored" data-anchor-id="f-what-is-the-probability-that-exactly-one-of-the-newborns-in-your-sample-of-5-has-a-birthweight-less-than-2500g">f) What is the probability that exactly one of the newborns in your sample of 5 has a birthweight less than 2500g?</h3>
+<p>We previously calculated the probability that a single newborn has a birthweight less than 2500 g:</p>
+<p><span class="math display">\[
+p = P(X &lt; 2500) \approx 0.0099
+\]</span></p>
+<p>Let <span class="math inline">\(X \sim \text{Binomial}(n = 5, p = 0.0099)\)</span> represent the number of infants out of 5 who weigh less than 2500 grams.</p>
+<p>We want:</p>
+<p><span class="math display">\[
+P(X = 1) = \binom{5}{1} (0.0099)^1 (1 - 0.0099)^4 \approx 5 \cdot 0.0099 \cdot 0.9607 \approx 0.0475
+\]</span></p>
+<p><strong>Answer:</strong> The probability that exactly one of five newborns weighs less than 2500 grams is approximately <strong>4.75%</strong>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking work with R</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dbinom</span>(<span class="dv">1</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">prob =</span> <span class="fl">0.0099</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.04756872</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="what-are-the-factors-that-affect-the-length-of-a-confidence-interval-for-μ" class="level2">
+<h2 class="anchored" data-anchor-id="what-are-the-factors-that-affect-the-length-of-a-confidence-interval-for-μ">9.3 What are the factors that affect the length of a confidence interval for μ?</h2>
+<p>The length of a confidence interval for the population mean <span class="math inline">\(\mu\)</span> is primarily influenced by three factors: the variability in the data, the sample size, and the confidence level. Higher variability, reflected in a larger standard deviation, increases the margin of error and thus widens the interval. A larger sample size reduces the standard error <span class="math inline">\(( \sigma / \sqrt{n})\)</span>, leading to a narrower interval. Finally, increasing the confidence level (e.g., from 90% to 99%) requires a larger critical value (such as <span class="math inline">\(z\)</span> or <span class="math inline">\(t\)</span>), which also widens the interval. As discussed in lecture, this trade-off between precision and confidence must be balanced carefully in study design.</p>
+</section>
+<section id="serum-zinc-levels-for-462-males-between-the-ages-of-15-and-17-are-saved-under-the-variable-name-zinc-in-the-dataset-serzinc.-the-units-of-measurement-for-serum-zinc-measurement-are-micrograms-per-deciliter." class="level2">
+<h2 class="anchored" data-anchor-id="serum-zinc-levels-for-462-males-between-the-ages-of-15-and-17-are-saved-under-the-variable-name-zinc-in-the-dataset-serzinc.-the-units-of-measurement-for-serum-zinc-measurement-are-micrograms-per-deciliter.">9.12 Serum zinc levels for 462 males between the ages of 15 and 17 are saved under the variable name zinc in the dataset serzinc. The units of measurement for serum zinc measurement are micrograms per deciliter.</h2>
+<section id="a-find-a-two-sided-95-confidence-interval-for-μ-the-true-mean-serum-zinc-level-for-this-population-of-males." class="level3">
+<h3 class="anchored" data-anchor-id="a-find-a-two-sided-95-confidence-interval-for-μ-the-true-mean-serum-zinc-level-for-this-population-of-males.">a) Find a two-sided 95% confidence interval for μ, the true mean serum zinc level for this population of males.</h3>
+<p>We use the standard formula for a two-sided confidence interval for the population mean:</p>
+<p><span class="math display">\[
+\bar{x} \pm t_{(0.025,\ n-1)} \cdot \frac{s}{\sqrt{n}}
+\]</span></p>
+<p>From the dataset: - Sample size <span class="math inline">\(n = 462\)</span> - Sample mean <span class="math inline">\(\bar{x} = 87.94\)</span> µg/dL - Sample standard deviation <span class="math inline">\(s = 16.00\)</span> µg/dL</p>
+<p>The critical value <span class="math inline">\(t_{0.025,\ 461} \approx 1.965\)</span> comes from the <span class="math inline">\(t\)</span>-distribution with 461 degrees of freedom.</p>
+<p><span class="math display">\[
+\text{Margin of error} = 1.965 \times \frac{16.00}{\sqrt{462}} \approx 1.46
+\]</span></p>
+<p><span class="math display">\[
+\text{95\% CI} = (87.94 - 1.46,\ 87.94 + 1.46) = (86.47,\ 89.40)
+\]</span></p>
+<p><strong>Answer:</strong> We are 95% confident that the true mean serum zinc level for males aged 15–17 lies between <strong>86.47</strong> and <strong>89.40</strong> micrograms per deciliter.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load zinc data from TXT file</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>serzinc <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"serzinc-1.TXT"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>zinc_levels <span class="ot">&lt;-</span> serzinc<span class="sc">$</span>zinc</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary statistics</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(zinc_levels)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>mean_zinc <span class="ot">&lt;-</span> <span class="fu">mean</span>(zinc_levels)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>sd_zinc <span class="ot">&lt;-</span> <span class="fu">sd</span>(zinc_levels)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co"># t critical value for 95% CI</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>t_crit <span class="ot">&lt;-</span> <span class="fu">qt</span>(<span class="fl">0.975</span>, <span class="at">df =</span> n <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Margin of error</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>margin_error <span class="ot">&lt;-</span> t_crit <span class="sc">*</span> sd_zinc <span class="sc">/</span> <span class="fu">sqrt</span>(n)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Confidence interval</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>ci_lower <span class="ot">&lt;-</span> mean_zinc <span class="sc">-</span> margin_error</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>ci_upper <span class="ot">&lt;-</span> mean_zinc <span class="sc">+</span> margin_error</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(ci_lower, ci_upper)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 86.47399 89.40047</code></pre>
+</div>
+</div>
+</section>
+<section id="b-interpret-the-confidence-interval." class="level3">
+<h3 class="anchored" data-anchor-id="b-interpret-the-confidence-interval.">b) Interpret the confidence interval.</h3>
+<p>The 95% confidence interval for the true mean serum zinc level in males aged 15–17 is approximately (86.47, 89.40) micrograms per deciliter. This means that if we were to repeatedly draw random samples of 462 males from this population and compute a 95% confidence interval for each sample, approximately 95% of those intervals would contain the true population mean <span class="math inline">\(\mu\)</span>. It does not mean there is a 95% probability that the specific interval we calculated contains <span class="math inline">\(\mu\)</span>—the population parameter is fixed, and the interval either contains it or it does not.</p>
+</section>
+<section id="c-calculate-a-90-confidence-interval.-how-does-the-90-confidence-interval-compare-to-the-95-confidence-interval-why" class="level3">
+<h3 class="anchored" data-anchor-id="c-calculate-a-90-confidence-interval.-how-does-the-90-confidence-interval-compare-to-the-95-confidence-interval-why">c) Calculate a 90% confidence interval. How does the 90% confidence interval compare to the 95% confidence interval? Why?</h3>
+<p>To construct a 90% confidence interval for the population mean <span class="math inline">\(\mu\)</span>, we use the formula:</p>
+<p><span class="math display">\[
+\bar{x} \pm t_{(0.05,\ n-1)} \cdot \frac{s}{\sqrt{n}}
+\]</span></p>
+<p>Where: - <span class="math inline">\(\bar{x} = 87.94\)</span> - <span class="math inline">\(s = 16.00\)</span> - <span class="math inline">\(n = 462\)</span> - <span class="math inline">\(t_{0.05, 461} \approx 1.648\)</span></p>
+<p><span class="math display">\[
+\text{Margin of error} = 1.648 \times \frac{16.00}{\sqrt{462}} \approx 1.22
+\]</span></p>
+<p><span class="math display">\[
+\text{90\% CI} = (87.94 - 1.22,\ 87.94 + 1.22) = (86.72,\ 89.16)
+\]</span></p>
+<p><strong>Answer:</strong> The 90% confidence interval is approximately (86.72, 89.16) micrograms per deciliter.</p>
+<p><strong>Comparison:</strong> The 90% confidence interval is narrower than the 95% confidence interval (86.47, 89.40) because a lower confidence level requires a smaller margin of error. In general, higher confidence levels require wider intervals to ensure that they capture the true mean more reliably.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 90% confidence interval calculation</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>t_crit_90 <span class="ot">&lt;-</span> <span class="fu">qt</span>(<span class="fl">0.95</span>, <span class="at">df =</span> n <span class="sc">-</span> <span class="dv">1</span>)  <span class="co"># Two-tailed, so use 0.95</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>margin_error_90 <span class="ot">&lt;-</span> t_crit_90 <span class="sc">*</span> sd_zinc <span class="sc">/</span> <span class="fu">sqrt</span>(n)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>ci_lower_90 <span class="ot">&lt;-</span> mean_zinc <span class="sc">-</span> margin_error_90</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>ci_upper_90 <span class="ot">&lt;-</span> mean_zinc <span class="sc">+</span> margin_error_90</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(ci_lower_90, ci_upper_90)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 86.71000 89.16446</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="the-dataset-lowbwt-contains-information-recorded-for-a-sample-of-100-low-birth-weight-infants-born-in-two-teaching-hospitals-in-boston.-measurements-of-systolic-blood-pressure-are-saved-under-the-variable-named-sbp-while-indicators-of-gender-1-indicating-a-male-and-0-indicating-a-female-are-saved-under-the-variable-name-sex." class="level2">
+<h2 class="anchored" data-anchor-id="the-dataset-lowbwt-contains-information-recorded-for-a-sample-of-100-low-birth-weight-infants-born-in-two-teaching-hospitals-in-boston.-measurements-of-systolic-blood-pressure-are-saved-under-the-variable-named-sbp-while-indicators-of-gender-1-indicating-a-male-and-0-indicating-a-female-are-saved-under-the-variable-name-sex.">9.13 The dataset lowbwt contains information recorded for a sample of 100 low birth weight infants born in two teaching hospitals in Boston. Measurements of systolic blood pressure are saved under the variable named sbp, while indicators of gender– 1 indicating a male and 0 indicating a female– are saved under the variable name sex.</h2>
+<section id="a-compute-a-95-confidence-interval-for-the-true-mean-systolic-blood-pressure-of-male-low-birth-weight-infants." class="level3">
+<h3 class="anchored" data-anchor-id="a-compute-a-95-confidence-interval-for-the-true-mean-systolic-blood-pressure-of-male-low-birth-weight-infants.">a) Compute a 95% confidence interval for the true mean systolic blood pressure of male low birth weight infants.</h3>
+<p>We calculate the confidence interval using:</p>
+<p><span class="math display">\[
+\bar{x} \pm t_{(0.025,\ n-1)} \cdot \frac{s}{\sqrt{n}}
+\]</span></p>
+<p>From the dataset: - Sample size of males: <span class="math inline">\(n = 44\)</span> - Sample mean systolic blood pressure: <span class="math inline">\(\bar{x} = 47.86\)</span> mmHg - Sample standard deviation: <span class="math inline">\(s = 11.81\)</span> mmHg - Critical value from the <span class="math inline">\(t\)</span> distribution with 43 degrees of freedom: <span class="math inline">\(t_{0.025, 43} \approx 2.016\)</span></p>
+<p><span class="math display">\[
+\text{Margin of error} = 2.016 \times \frac{11.81}{\sqrt{44}} \approx 3.59
+\]</span></p>
+<p><span class="math display">\[
+\text{95\% CI} = (47.86 - 3.59,\ 47.86 + 3.59) = (44.27,\ 51.45)
+\]</span></p>
+<p><strong>Answer:</strong> We are 95% confident that the true mean systolic blood pressure of male low birth weight infants lies between <strong>44.27 mmHg</strong> and <strong>51.45 mmHg</strong>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># R code to check work</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>lowbwt <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"lowbwt-1.csv"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>male_sbp <span class="ot">&lt;-</span> lowbwt<span class="sc">$</span>sbp[lowbwt<span class="sc">$</span>sex <span class="sc">==</span> <span class="dv">1</span>]</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(male_sbp)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>mean_sbp <span class="ot">&lt;-</span> <span class="fu">mean</span>(male_sbp)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>sd_sbp <span class="ot">&lt;-</span> <span class="fu">sd</span>(male_sbp)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>t_crit <span class="ot">&lt;-</span> <span class="fu">qt</span>(<span class="fl">0.975</span>, <span class="at">df =</span> n <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>margin <span class="ot">&lt;-</span> t_crit <span class="sc">*</span> sd_sbp <span class="sc">/</span> <span class="fu">sqrt</span>(n)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>ci_lower <span class="ot">&lt;-</span> mean_sbp <span class="sc">-</span> margin</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>ci_upper <span class="ot">&lt;-</span> mean_sbp <span class="sc">+</span> margin</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(ci_lower, ci_upper)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 44.27435 51.45292</code></pre>
+</div>
+</div>
+</section>
+<section id="b-compute-a-95-confidence-interval-for-the-true-mean-systolic-blood-pressure-of-female-low-birth-weight-infants." class="level3">
+<h3 class="anchored" data-anchor-id="b-compute-a-95-confidence-interval-for-the-true-mean-systolic-blood-pressure-of-female-low-birth-weight-infants.">b) Compute a 95% confidence interval for the true mean systolic blood pressure of female low birth weight infants.</h3>
+<p>We calculate the 95% confidence interval using:</p>
+<p><span class="math display">\[
+\bar{x} \pm t_{(0.025,\ n-1)} \cdot \frac{s}{\sqrt{n}}
+\]</span></p>
+<p>From the dataset: - Sample size of females: <span class="math inline">\(n = 56\)</span> - Sample mean systolic blood pressure: <span class="math inline">\(\bar{x} = 46.46\)</span> mmHg - Sample standard deviation: <span class="math inline">\(s = 11.15\)</span> mmHg - Critical value from the <span class="math inline">\(t\)</span> distribution with 55 degrees of freedom: <span class="math inline">\(t_{0.025, 55} \approx 2.004\)</span></p>
+<p><span class="math display">\[
+\text{Margin of error} = 2.004 \times \frac{11.15}{\sqrt{56}} \approx 2.98
+\]</span></p>
+<p><span class="math display">\[
+\text{95\% CI} = (46.46 - 2.98,\ 46.46 + 2.98) = (43.48,\ 49.45)
+\]</span></p>
+<p><strong>Answer:</strong> We are 95% confident that the true mean systolic blood pressure of female low birth weight infants lies between <strong>43.48 mmHg</strong> and <strong>49.45 mmHg</strong>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># R code to check work</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>female_sbp <span class="ot">&lt;-</span> lowbwt<span class="sc">$</span>sbp[lowbwt<span class="sc">$</span>sex <span class="sc">==</span> <span class="dv">0</span>]</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(female_sbp)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>mean_sbp <span class="ot">&lt;-</span> <span class="fu">mean</span>(female_sbp)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>sd_sbp <span class="ot">&lt;-</span> <span class="fu">sd</span>(female_sbp)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>t_crit <span class="ot">&lt;-</span> <span class="fu">qt</span>(<span class="fl">0.975</span>, <span class="at">df =</span> n <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>margin <span class="ot">&lt;-</span> t_crit <span class="sc">*</span> sd_sbp <span class="sc">/</span> <span class="fu">sqrt</span>(n)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>ci_lower <span class="ot">&lt;-</span> mean_sbp <span class="sc">-</span> margin</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>ci_upper <span class="ot">&lt;-</span> mean_sbp <span class="sc">+</span> margin</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(ci_lower, ci_upper)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 43.47956 49.44901</code></pre>
+</div>
+</div>
+</section>
+<section id="c-do-you-think-its-possible-that-males-and-females-have-the-same-mean-systolic-blood-pressure-explain-briefly." class="level3">
+<h3 class="anchored" data-anchor-id="c-do-you-think-its-possible-that-males-and-females-have-the-same-mean-systolic-blood-pressure-explain-briefly.">c) Do you think it’s possible that males and females have the same mean systolic blood pressure? Explain briefly.</h3>
+<p>Yes, it is possible that males and females have the same true mean systolic blood pressure. The 95% confidence interval for males is (44.27, 51.45) mmHg and for females is (43.48, 49.45) mmHg. These intervals overlap, which suggests that the difference in sample means may be due to random sampling variation rather than a true difference in population means. However, to formally assess this, a two-sample <span class="math inline">\(t\)</span>-test would be needed. Confidence interval overlap is suggestive but not conclusive evidence regarding equality of means.</p>
+</section>
+<section id="d-calculate-90-confidence-intervals-for-both-male-and-female-low-birth-weight-infants-two-separate-intervals." class="level3">
+<h3 class="anchored" data-anchor-id="d-calculate-90-confidence-intervals-for-both-male-and-female-low-birth-weight-infants-two-separate-intervals.">d) Calculate 90% confidence intervals for both male and female low birth weight infants (two separate intervals).</h3>
+<p>We use the formula for a 90% confidence interval:</p>
+<p><span class="math display">\[
+\bar{x} \pm t_{(0.05,\ n-1)} \cdot \frac{s}{\sqrt{n}}
+\]</span></p>
+<section id="for-males" class="level4">
+<h4 class="anchored" data-anchor-id="for-males">For Males:</h4>
+<ul>
+<li><span class="math inline">\(\bar{x} = 47.86\)</span> mmHg<br>
+</li>
+<li><span class="math inline">\(s = 11.81\)</span>, <span class="math inline">\(n = 44\)</span><br>
+</li>
+<li><span class="math inline">\(t_{0.05,\ 43} \approx 1.682\)</span></li>
+</ul>
+<p><span class="math display">\[
+\text{90\% CI (males)} = (47.86 \pm 1.99) = (44.87,\ 50.86)
+\]</span></p>
+</section>
+<section id="for-females" class="level4">
+<h4 class="anchored" data-anchor-id="for-females">For Females:</h4>
+<ul>
+<li><span class="math inline">\(\bar{x} = 46.46\)</span> mmHg<br>
+</li>
+<li><span class="math inline">\(s = 11.15\)</span>, <span class="math inline">\(n = 56\)</span><br>
+</li>
+<li><span class="math inline">\(t_{0.05,\ 55} \approx 1.673\)</span></li>
+</ul>
+<p><span class="math display">\[
+\text{90\% CI (females)} = (46.46 \pm 2.49) = (43.97,\ 48.96)
+\]</span></p>
+<p><strong>Answer:</strong><br>
+- The 90% confidence interval for <strong>males</strong> is <strong>(44.87, 50.86)</strong> mmHg.<br>
+- The 90% confidence interval for <strong>females</strong> is <strong>(43.97, 48.96)</strong> mmHg.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># R code to compute both 90% confidence intervals for checking work</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>lowbwt <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"lowbwt-1.csv"</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Male data</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>male_sbp <span class="ot">&lt;-</span> lowbwt<span class="sc">$</span>sbp[lowbwt<span class="sc">$</span>sex <span class="sc">==</span> <span class="dv">1</span>]</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>n_male <span class="ot">&lt;-</span> <span class="fu">length</span>(male_sbp)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>mean_male <span class="ot">&lt;-</span> <span class="fu">mean</span>(male_sbp)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>sd_male <span class="ot">&lt;-</span> <span class="fu">sd</span>(male_sbp)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>t_crit_male_90 <span class="ot">&lt;-</span> <span class="fu">qt</span>(<span class="fl">0.95</span>, <span class="at">df =</span> n_male <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>margin_male_90 <span class="ot">&lt;-</span> t_crit_male_90 <span class="sc">*</span> sd_male <span class="sc">/</span> <span class="fu">sqrt</span>(n_male)</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>ci_male_90 <span class="ot">&lt;-</span> <span class="fu">c</span>(mean_male <span class="sc">-</span> margin_male_90, mean_male <span class="sc">+</span> margin_male_90)</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Female data</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>female_sbp <span class="ot">&lt;-</span> lowbwt<span class="sc">$</span>sbp[lowbwt<span class="sc">$</span>sex <span class="sc">==</span> <span class="dv">0</span>]</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>n_female <span class="ot">&lt;-</span> <span class="fu">length</span>(female_sbp)</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>mean_female <span class="ot">&lt;-</span> <span class="fu">mean</span>(female_sbp)</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>sd_female <span class="ot">&lt;-</span> <span class="fu">sd</span>(female_sbp)</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>t_crit_female_90 <span class="ot">&lt;-</span> <span class="fu">qt</span>(<span class="fl">0.95</span>, <span class="at">df =</span> n_female <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>margin_female_90 <span class="ot">&lt;-</span> t_crit_female_90 <span class="sc">*</span> sd_female <span class="sc">/</span> <span class="fu">sqrt</span>(n_female)</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>ci_female_90 <span class="ot">&lt;-</span> <span class="fu">c</span>(mean_female <span class="sc">-</span> margin_female_90, mean_female <span class="sc">+</span> margin_female_90)</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>ci_male_90</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 44.87169 50.85559</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>ci_female_90</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 43.97256 48.95602</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="e-calculate-a-99-confidence-interval-for-both-male-and-female-low-birth-weight-infants-two-separate-intervals." class="level3">
+<h3 class="anchored" data-anchor-id="e-calculate-a-99-confidence-interval-for-both-male-and-female-low-birth-weight-infants-two-separate-intervals.">e) Calculate a 99% confidence interval for both male and female low birth weight infants (two separate intervals).</h3>
+<p>We use the formula for a 99% confidence interval:</p>
+<p><span class="math display">\[
+\bar{x} \pm t_{(0.005,\ n-1)} \cdot \frac{s}{\sqrt{n}}
+\]</span></p>
+<section id="for-males-1" class="level4">
+<h4 class="anchored" data-anchor-id="for-males-1">For Males:</h4>
+<ul>
+<li><span class="math inline">\(\bar{x} = 47.86\)</span> mmHg<br>
+</li>
+<li><span class="math inline">\(s = 11.81\)</span>, <span class="math inline">\(n = 44\)</span><br>
+</li>
+<li><span class="math inline">\(t_{0.005,\ 43} \approx 2.695\)</span></li>
+</ul>
+<p><span class="math display">\[
+\text{99\% CI (males)} = (47.86 \pm 4.79) = (43.07,\ 52.66)
+\]</span></p>
+</section>
+<section id="for-females-1" class="level4">
+<h4 class="anchored" data-anchor-id="for-females-1">For Females:</h4>
+<ul>
+<li><span class="math inline">\(\bar{x} = 46.46\)</span> mmHg<br>
+</li>
+<li><span class="math inline">\(s = 11.15\)</span>, <span class="math inline">\(n = 56\)</span><br>
+</li>
+<li><span class="math inline">\(t_{0.005,\ 55} \approx 2.674\)</span></li>
+</ul>
+<p><span class="math display">\[
+\text{99\% CI (females)} = (46.46 \pm 3.97) = (42.49,\ 50.44)
+\]</span></p>
+<p><strong>Answer:</strong><br>
+- The 99% confidence interval for <strong>males</strong> is <strong>(43.07, 52.66)</strong> mmHg.<br>
+- The 99% confidence interval for <strong>females</strong> is <strong>(42.49, 50.44)</strong> mmHg.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># R code to compute both 99% confidence intervals</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>lowbwt <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"lowbwt-1.csv"</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Male data</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>male_sbp <span class="ot">&lt;-</span> lowbwt<span class="sc">$</span>sbp[lowbwt<span class="sc">$</span>sex <span class="sc">==</span> <span class="dv">1</span>]</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>n_male <span class="ot">&lt;-</span> <span class="fu">length</span>(male_sbp)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>mean_male <span class="ot">&lt;-</span> <span class="fu">mean</span>(male_sbp)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>sd_male <span class="ot">&lt;-</span> <span class="fu">sd</span>(male_sbp)</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>t_crit_male_99 <span class="ot">&lt;-</span> <span class="fu">qt</span>(<span class="fl">0.995</span>, <span class="at">df =</span> n_male <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>margin_male_99 <span class="ot">&lt;-</span> t_crit_male_99 <span class="sc">*</span> sd_male <span class="sc">/</span> <span class="fu">sqrt</span>(n_male)</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>ci_male_99 <span class="ot">&lt;-</span> <span class="fu">c</span>(mean_male <span class="sc">-</span> margin_male_99, mean_male <span class="sc">+</span> margin_male_99)</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Female data</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>female_sbp <span class="ot">&lt;-</span> lowbwt<span class="sc">$</span>sbp[lowbwt<span class="sc">$</span>sex <span class="sc">==</span> <span class="dv">0</span>]</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>n_female <span class="ot">&lt;-</span> <span class="fu">length</span>(female_sbp)</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>mean_female <span class="ot">&lt;-</span> <span class="fu">mean</span>(female_sbp)</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>sd_female <span class="ot">&lt;-</span> <span class="fu">sd</span>(female_sbp)</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>t_crit_female_99 <span class="ot">&lt;-</span> <span class="fu">qt</span>(<span class="fl">0.995</span>, <span class="at">df =</span> n_female <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>margin_female_99 <span class="ot">&lt;-</span> t_crit_female_99 <span class="sc">*</span> sd_female <span class="sc">/</span> <span class="fu">sqrt</span>(n_female)</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>ci_female_99 <span class="ot">&lt;-</span> <span class="fu">c</span>(mean_female <span class="sc">-</span> margin_female_99, mean_female <span class="sc">+</span> margin_female_99)</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>ci_male_99</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 43.06693 52.66035</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>ci_female_99</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 42.49038 50.43819</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="f-suppose-the-standard-deviation-σ-of-the-larger-population-of-low-birth-weight-infants-is-known-to-be-11-mm.-construct-95-confidence-intervals-for-males-and-females-using-this." class="level3">
+<h3 class="anchored" data-anchor-id="f-suppose-the-standard-deviation-σ-of-the-larger-population-of-low-birth-weight-infants-is-known-to-be-11-mm.-construct-95-confidence-intervals-for-males-and-females-using-this.">f) Suppose the standard deviation (σ) of the larger population of low birth weight infants is known to be 11 mm. Construct 95% confidence intervals for males and females using this.</h3>
+<p>When the population standard deviation <span class="math inline">\(\sigma\)</span> is known, we use the <strong>z-distribution</strong> instead of the t-distribution. The formula becomes:</p>
+<p><span class="math display">\[
+\bar{x} \pm z_{(0.025)} \cdot \frac{\sigma}{\sqrt{n}}
+\]</span></p>
+<p>Where <span class="math inline">\(z_{0.025} \approx 1.96\)</span> for a 95% confidence level.</p>
+<section id="for-males-2" class="level4">
+<h4 class="anchored" data-anchor-id="for-males-2">For Males:</h4>
+<ul>
+<li><span class="math inline">\(\bar{x} = 47.86\)</span>, <span class="math inline">\(n = 44\)</span></li>
+<li><span class="math inline">\(\text{SE} = \frac{11}{\sqrt{44}} \approx 1.66\)</span></li>
+</ul>
+<p><span class="math display">\[
+\text{95\% CI (males)} = (47.86 \pm 1.96 \cdot 1.66) = (44.61,\ 51.11)
+\]</span></p>
+</section>
+<section id="for-females-2" class="level4">
+<h4 class="anchored" data-anchor-id="for-females-2">For Females:</h4>
+<ul>
+<li><span class="math inline">\(\bar{x} = 46.46\)</span>, <span class="math inline">\(n = 56\)</span></li>
+<li><span class="math inline">\(\text{SE} = \frac{11}{\sqrt{56}} \approx 1.47\)</span></li>
+</ul>
+<p><span class="math display">\[
+\text{95\% CI (females)} = (46.46 \pm 1.96 \cdot 1.47) = (43.58,\ 49.35)
+\]</span></p>
+<p><strong>Answer:</strong> - The 95% confidence interval for <strong>males</strong> using known <span class="math inline">\(\sigma\)</span> is <strong>(44.61, 51.11)</strong> mmHg. - The 95% confidence interval for <strong>females</strong> using known <span class="math inline">\(\sigma\)</span> is <strong>(43.58, 49.35)</strong> mmHg.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># R code using known sigma = 11</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Male calculations</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>male_sbp <span class="ot">&lt;-</span> lowbwt<span class="sc">$</span>sbp[lowbwt<span class="sc">$</span>sex <span class="sc">==</span> <span class="dv">1</span>]</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>n_male <span class="ot">&lt;-</span> <span class="fu">length</span>(male_sbp)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>mean_male <span class="ot">&lt;-</span> <span class="fu">mean</span>(male_sbp)</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="dv">11</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>z_crit <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>)</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>se_male <span class="ot">&lt;-</span> sigma <span class="sc">/</span> <span class="fu">sqrt</span>(n_male)</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>ci_male <span class="ot">&lt;-</span> <span class="fu">c</span>(mean_male <span class="sc">-</span> z_crit <span class="sc">*</span> se_male, mean_male <span class="sc">+</span> z_crit <span class="sc">*</span> se_male)</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Female calculations</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>female_sbp <span class="ot">&lt;-</span> lowbwt<span class="sc">$</span>sbp[lowbwt<span class="sc">$</span>sex <span class="sc">==</span> <span class="dv">0</span>]</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>n_female <span class="ot">&lt;-</span> <span class="fu">length</span>(female_sbp)</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>mean_female <span class="ot">&lt;-</span> <span class="fu">mean</span>(female_sbp)</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>se_female <span class="ot">&lt;-</span> sigma <span class="sc">/</span> <span class="fu">sqrt</span>(n_female)</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>ci_female <span class="ot">&lt;-</span> <span class="fu">c</span>(mean_female <span class="sc">-</span> z_crit <span class="sc">*</span> se_female, mean_female <span class="sc">+</span> z_crit <span class="sc">*</span> se_female)</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>ci_male</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 44.61340 51.11387</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>ci_female</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 43.58326 49.34531</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="g-how-does-the-interval-calculated-based-on-σ-differ-from-the-95-interval-based-on-s" class="level3">
+<h3 class="anchored" data-anchor-id="g-how-does-the-interval-calculated-based-on-σ-differ-from-the-95-interval-based-on-s">g) How does the interval calculated based on σ differ from the 95% interval based on s?</h3>
+<p>The confidence intervals calculated using the known population standard deviation <span class="math inline">\(\sigma = 11\)</span> are slightly <strong>narrower</strong> than those calculated using the sample standard deviation <span class="math inline">\(s\)</span>. This occurs because:</p>
+<ul>
+<li>When <span class="math inline">\(\sigma\)</span> is known, we use the <strong>z-distribution</strong>, which has <strong>less spread</strong> than the t-distribution, especially for small to moderate sample sizes.</li>
+<li>When <span class="math inline">\(\sigma\)</span> is unknown, we must estimate it using <span class="math inline">\(s\)</span> and use the <strong>t-distribution</strong>, which has <strong>heavier tails</strong> to account for added uncertainty in estimating variability.</li>
+</ul>
+<p>For example: - The 95% CI for <strong>males</strong> using <span class="math inline">\(s = 11.81\)</span> was <strong>(44.27, 51.45)</strong>, while using <span class="math inline">\(\sigma = 11\)</span> it narrowed to <strong>(44.61, 51.11)</strong>. - The 95% CI for <strong>females</strong> using <span class="math inline">\(s = 11.15\)</span> was <strong>(43.48, 49.45)</strong>, while using <span class="math inline">\(\sigma = 11\)</span> it narrowed to <strong>(43.58, 49.35)</strong>.</p>
+<p><strong>Conclusion:</strong> Using the known population standard deviation produces slightly tighter intervals because it eliminates the uncertainty associated with estimating variability from the sample.</p>
+</section>
+</section>
+<section id="sources" class="level2">
+<h2 class="anchored" data-anchor-id="sources">Sources:</h2>
+<p>Pagano, M., &amp; Gauvreau, K. (2018). Principles of biostatistics / Marcello Pagano, Kimberlee Gauvreau. Duxbury Press.</p>
+<section id="thank-you-for-reviewing-and-making-it-to-the-end-of-my-work-in-this-assignments-signature-end-off-id-like-to-share-the-open-source-r-package-collection-known-as-pharmaverse.-i-learned-about-it-from-some-informational-interviews-with-biostats-professionals-and-wanted-to-ask-if-any-of-you-have-had-experience-with-these-libraries-let-me-know-in-the-comments-or-if-we-can-discuss-further-in-office-hours.-best-dylan" class="level4">
+<h4 class="anchored" data-anchor-id="thank-you-for-reviewing-and-making-it-to-the-end-of-my-work-in-this-assignments-signature-end-off-id-like-to-share-the-open-source-r-package-collection-known-as-pharmaverse.-i-learned-about-it-from-some-informational-interviews-with-biostats-professionals-and-wanted-to-ask-if-any-of-you-have-had-experience-with-these-libraries-let-me-know-in-the-comments-or-if-we-can-discuss-further-in-office-hours.-best-dylan">Thank you for reviewing and making it to the end of my work, in this assignment’s signature end off I’d like to share the open source R package collection known as pharmaverse. I learned about it from some informational interviews with Biostats professionals and wanted to ask if any of you have had experience with these libraries? Let me know in the comments or if we can discuss further in Office Hours. Best, Dylan</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Pharmaverse.png" class="img-fluid figure-img"></p>
+<figcaption>Example Libraries</figcaption>
+</figure>
+</div>
+<p>Explore more at: <a href="https://pharmaverse.org/">https://pharmaverse.org/</a></p>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
