@@ -1,0 +1,103 @@
+---
+title: "Homework 5 - Biostatistics"
+Author: "Dylan Renard"
+output: pdf_document
+---
+
+#### Dylan Renard
+#### Professor Proschan & Professor Nason
+#### JHU Biostatistics
+#### June 19th, 2025
+
+# Homework 5
+In this assignment, we will analyze longitudinal measurements of CD127 expression on CD8 cells from 40 donors to assess whether storage time affects sample quality. Using the blood_CD8.csv dataset, we will apply t-tests and confidence intervals to evaluate changes in mean expression across time points, with particular focus on 4-hour levels and the changes from 4 to 72 hours. 
+
+
+# Part 1: Coding Questions
+```{r}
+# Load blood_CD8.csv only if blood_CD8 not already in memory
+if (!exists("blood_CD8")) {
+  blood_CD8 <- read.csv("blood_CD8.csv", stringsAsFactors = FALSE)
+}
+```
+
+## 1) Using the function t.test(), Construct a 95% confidence interval for the mean %CD127 at 4 hours.  Describe the set of plausible values for the true mean.  
+```{r}
+# Extract 4-hour CD127 values
+cd127_4h <- blood_CD8$`X4`
+
+# Construct a 95% confidence interval for the mean
+t.test(cd127_4h, conf.level = 0.95)
+```
+
+The 95% confidence interval for the true mean %CD127 expression at 4 hours is approximately (40.19%, 50.49%). This means we are 95% confident that the true average expression lies within this range, making it a plausible set of values based on the observed data.
+
+
+
+## 2) Test the hypothesis that the true mean %CD127 is 40 in this population. What is the p-value? Write a one-sentence conclusion from the test, based on a two-sided alpha of .05. 
+
+## 3) Looking back at your answer to part (a), how could you have answered (b) without doing another test?  
+
+## 4) Make a histogram of the change variable, and get the 95% CI for mu. “No change” would be equivalent to a mean change of 0.  Does the Confidence interval include 0? What can you say about change from 4 hours from this confidence interval?  
+
+## 5) Do a t-test as to whether the mean change at 72 hours is significantly different than 0. What is the p-value? Write a one-sentence conclusion from the test, based on a two-sided alpha of .05. 
+
+## 6) Looking back at your answer to part (d), how could you have answered (e) without doing a test?  
+
+# Part 2: Textbook problems from Chapter 10
+
+## 10.3) What is a p-value? What does the p-value mean in words? 
+
+## 10.4) Briefly explain the relationship between confidence intervals and hypothesis testing. 
+
+## 10.9) The distribution of diastolic blood pressures for the population of female diabetics between the ages of 30 and 34 has an unknown mean μd and a standard deviation σd = 9.1 mm Hg. It may be useful to physicians to know whether the mean of this population is equal to the mean of the general population of females in this age group, 74.4 mm Hg. 
+
+### a) What is the null hypothesis of the appropriate test?
+
+### b) What is the alternative hypothesis?
+
+### c) A sample of 10 diabetic women is selected; their mean diastolic blood pressure is x-bard= 84 mm Hg. Using this information, conduct a two-sided test at the α = 0.05 level of significance. What is the p-value of the test?
+
+### d) What conclusion do you draw from the results of the test?
+
+### e) Would your conclusion have been different if you had chosen α = 0.01 instead of α = 0.05?
+
+## 10.10) E. canis infection is a tick-borne disease of dogs that is sometimes contracted by humans. Among infected humans, the distribution of white blood cell counts has an unknown mean μ and a standard deviation σ. In the general population, the mean white blood cell count is 7250/mm3. It is believed that persons infected with E. canis must on average have lower white blood cell counts.
+
+### a) What are the null and alternative hypotheses for a one-sided test?
+
+### b) For a sample of 15 infected persons, the mean white blood cell count is Xbar =4767 /mm3 and the standard deviation s~ 3204/mm3. Conduct the test at the α=0.05 level.
+
+### c) What do you conclude?
+
+## 10.11) Body mass index is calculated by dividing a person's weight by the square of his or her height; it is a measure of the extent to which the individual is overweight. For the population of middle-aged men who later develop diabetes mellitus, the distribution of baseline body mass indices is approximately normal with an unknown mean μ and standard deviation σ. A sample of 58 men selected from this group has mean Xbar= 25.0 kg/m2 and standard deviations~ 2.7 kg/m2.
+
+### a) Construct a 95% confidence interval for the population mean μ.
+
+### b) At the 0.05 level of significance, test whether the mean baseline body mass index for the population of middle-aged men who do develop diabetes is equal to 24.0 kg/m2, the mean for the population of men who do not. What is the p-value of the test?
+
+### c) What do you conclude?
+
+### d) Based on the 95% confidence interval, would you have expected to reject or not to reject the null hypothesis? Why?
+
+## Additional Thought Question
+You should get a result , and a plot.  Can you explain what your result means, what this plot represents, and why it is relevant? (Note, it may be helpful to run it more than once)
+```{r}
+nreps <- 80
+population <- rnorm(n=10000, mean=100, sd=10)
+true.mean <- mean(population)
+in.CI <- rep(NA, nreps)
+
+plot(true.mean,0,type="n", xlim=c(85, 115), ylim=c(0,100),xlab="Confidence Intervals", ylab="")
+abline(v=true.mean, lty=2)
+
+for (i in 1:nreps) {  
+x <- sample(population, 20)  
+temp.CI <- t.test(x)$conf.int  
+segments(temp.CI[1], i, temp.CI[2],i)
+in.CI[i] <- true.mean>temp.CI[1] & true.mean<temp.CI[2]   
+}
+mean( in.CI )
+
+```
+
