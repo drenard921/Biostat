@@ -136,8 +136,8 @@ window.Quarto = {
 <section id="jhu-biostatistics" class="level4">
 <h4 class="anchored" data-anchor-id="jhu-biostatistics">JHU Biostatistics</h4>
 </section>
-<section id="june-19th-2025" class="level4">
-<h4 class="anchored" data-anchor-id="june-19th-2025">June 19th, 2025</h4>
+<section id="june-22nd-2025" class="level4">
+<h4 class="anchored" data-anchor-id="june-22nd-2025">June 22nd, 2025</h4>
 </section>
 <section id="homework-5" class="level1">
 <h1>Homework 5</h1>
@@ -478,44 +478,147 @@ ME = t^* \cdot SE \approx 2.002 \times 0.3545 \approx 0.7099
 </section>
 <section id="b-at-the-0.05-level-of-significance-test-whether-the-mean-baseline-body-mass-index-for-the-population-of-middle-aged-men-who-do-develop-diabetes-is-equal-to-24.0-kgm2-the-mean-for-the-population-of-men-who-do-not.-what-is-the-p-value-of-the-test" class="level3">
 <h3 class="anchored" data-anchor-id="b-at-the-0.05-level-of-significance-test-whether-the-mean-baseline-body-mass-index-for-the-population-of-middle-aged-men-who-do-develop-diabetes-is-equal-to-24.0-kgm2-the-mean-for-the-population-of-men-who-do-not.-what-is-the-p-value-of-the-test">b) At the 0.05 level of significance, test whether the mean baseline body mass index for the population of middle-aged men who do develop diabetes is equal to 24.0 kg/m2, the mean for the population of men who do not. What is the p-value of the test?</h3>
+<p>We are testing whether the mean baseline BMI of middle-aged men who develop diabetes differs from that of those who do not.</p>
+<ul>
+<li><strong>Null Hypothesis (H₀):</strong> μ = 24.0 kg/m²<br>
+</li>
+<li><strong>Alternative Hypothesis (Hₐ):</strong> μ ≠ 24.0 kg/m²<br>
+</li>
+<li><strong>Significance Level (α):</strong> 0.05</li>
+</ul>
+<p><strong>Given:</strong> - Sample mean: <span class="math inline">\(\bar{x} = 25.0\)</span><br>
+- Hypothesized mean: <span class="math inline">\(\mu_0 = 24.0\)</span><br>
+- Standard deviation: <span class="math inline">\(s = 2.7\)</span><br>
+- Sample size: <span class="math inline">\(n = 58\)</span><br>
+- Degrees of freedom: <span class="math inline">\(df = 57\)</span></p>
+<p><strong>Step 1: Compute the standard error (SE):</strong></p>
+<p><span class="math display">\[
+SE = \frac{s}{\sqrt{n}} = \frac{2.7}{\sqrt{58}} \approx 0.3545
+\]</span></p>
+<p><strong>Step 2: Calculate the t-statistic:</strong></p>
+<p><span class="math display">\[
+t = \frac{\bar{x} - \mu_0}{SE} = \frac{25.0 - 24.0}{0.3545} \approx 2.82
+\]</span></p>
+<p><strong>Step 3: Compute the two-sided p-value:</strong></p>
+<p>Using a t-distribution with 57 degrees of freedom:</p>
+<p><span class="math display">\[
+p = 2 \times P(T_{57} &gt; 2.82) \approx 0.0066
+\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># R-code to test work</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Given values</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>x_bar <span class="ot">&lt;-</span> <span class="fl">25.0</span>    <span class="co"># Sample mean</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>mu_0 <span class="ot">&lt;-</span> <span class="fl">24.0</span>     <span class="co"># Hypothesized mean</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fl">2.7</span>         <span class="co"># Sample standard deviation</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">58</span>          <span class="co"># Sample size</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Standard error</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>se <span class="ot">&lt;-</span> s <span class="sc">/</span> <span class="fu">sqrt</span>(n)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="co"># t-statistic</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>t_stat <span class="ot">&lt;-</span> (x_bar <span class="sc">-</span> mu_0) <span class="sc">/</span> se</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Degrees of freedom</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> n <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Two-sided p-value</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>p_value <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pt</span>(<span class="fu">abs</span>(t_stat), df))</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Output results</span></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"t ="</span>, <span class="fu">round</span>(t_stat, <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>t = 2.821 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"p-value ="</span>, <span class="fu">round</span>(p_value, <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>p-value = 0.0066 </code></pre>
+</div>
+</div>
 </section>
 <section id="c-what-do-you-conclude-1" class="level3">
 <h3 class="anchored" data-anchor-id="c-what-do-you-conclude-1">c) What do you conclude?</h3>
+<p>Since the p-value(0.0066) is less than the significance level alpha = 0.05, we reject the null hypothesis. This indicates that the mean baseline BMI of middle-aged men who develop diabetes is significantly different from the mean BMI of those who do not (24.0 kg/m^2).</p>
 </section>
 <section id="d-based-on-the-95-confidence-interval-would-you-have-expected-to-reject-or-not-to-reject-the-null-hypothesis-why" class="level3">
 <h3 class="anchored" data-anchor-id="d-based-on-the-95-confidence-interval-would-you-have-expected-to-reject-or-not-to-reject-the-null-hypothesis-why">d) Based on the 95% confidence interval, would you have expected to reject or not to reject the null hypothesis? Why?</h3>
+<p>We would have expected to reject the nully hypothesis based on the 95% confidence interbal. This is becaouse the 95% confidence interval was [24.29, 25.71], which does not include the hypothesized value of 24.0. Since the null value lies outside this interval, it suggests that the true mean is significantly different from 24.0 (consistent with rejecting the null hypothesis in the two sided test).</p>
 </section>
 </section>
 <section id="additional-thought-question" class="level2">
 <h2 class="anchored" data-anchor-id="additional-thought-question">Additional Thought Question</h2>
 <p>You should get a result , and a plot. Can you explain what your result means, what this plot represents, and why it is relevant? (Note, it may be helpful to run it more than once)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>nreps <span class="ot">&lt;-</span> <span class="dv">80</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>population <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n=</span><span class="dv">10000</span>, <span class="at">mean=</span><span class="dv">100</span>, <span class="at">sd=</span><span class="dv">10</span>)</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>true.mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(population)</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>in.CI <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, nreps)</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(true.mean,<span class="dv">0</span>,<span class="at">type=</span><span class="st">"n"</span>, <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">85</span>, <span class="dv">115</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>),<span class="at">xlab=</span><span class="st">"Confidence Intervals"</span>, <span class="at">ylab=</span><span class="st">""</span>)</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>true.mean, <span class="at">lty=</span><span class="dv">2</span>)</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nreps) {  </span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">sample</span>(population, <span class="dv">20</span>)  </span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>temp.CI <span class="ot">&lt;-</span> <span class="fu">t.test</span>(x)<span class="sc">$</span>conf.int  </span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(temp.CI[<span class="dv">1</span>], i, temp.CI[<span class="dv">2</span>],i)</span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>in.CI[i] <span class="ot">&lt;-</span> true.mean<span class="sc">&gt;</span>temp.CI[<span class="dv">1</span>] <span class="sc">&amp;</span> true.mean<span class="sc">&lt;</span>temp.CI[<span class="dv">2</span>]   </span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>nreps <span class="ot">&lt;-</span> <span class="dv">80</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>population <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n=</span><span class="dv">10000</span>, <span class="at">mean=</span><span class="dv">100</span>, <span class="at">sd=</span><span class="dv">10</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>true.mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(population)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>in.CI <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, nreps)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(true.mean,<span class="dv">0</span>,<span class="at">type=</span><span class="st">"n"</span>, <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">85</span>, <span class="dv">115</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>),<span class="at">xlab=</span><span class="st">"Confidence Intervals"</span>, <span class="at">ylab=</span><span class="st">""</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>true.mean, <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nreps) {  </span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">sample</span>(population, <span class="dv">20</span>)  </span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>temp.CI <span class="ot">&lt;-</span> <span class="fu">t.test</span>(x)<span class="sc">$</span>conf.int  </span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(temp.CI[<span class="dv">1</span>], i, temp.CI[<span class="dv">2</span>],i)</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>in.CI[i] <span class="ot">&lt;-</span> true.mean<span class="sc">&gt;</span>temp.CI[<span class="dv">1</span>] <span class="sc">&amp;</span> true.mean<span class="sc">&lt;</span>temp.CI[<span class="dv">2</span>]   </span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Homework5_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Homework5_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>( in.CI )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>( in.CI )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.95</code></pre>
+<pre><code>[1] 0.925</code></pre>
 </div>
 </div>
+<section id="sidenote-the-above-code-was-modified-to-80-random-samples-to-provide-a-better-visual-in-the-quarto-document." class="level3">
+<h3 class="anchored" data-anchor-id="sidenote-the-above-code-was-modified-to-80-random-samples-to-provide-a-better-visual-in-the-quarto-document.">Sidenote: The above code was modified to 80 random samples to provide a better visual in the quarto document.</h3>
+</section>
+<section id="what-does-the-code-do" class="level3">
+<h3 class="anchored" data-anchor-id="what-does-the-code-do">What does the code do:</h3>
+<ul>
+<li>It draws 80 random samples (each of size 20) from a normal population with known mean of 100 and standard deviation of 10.</li>
+<li>For each sample, it calculates a 95% confidence interval for the mean using a t-test.</li>
+<li>It then plots each CI as a horizontal line and marks whether the true population mean falls within it.</li>
+<li>The proportion of intervals that contain the true mean is stored in mean(in.CI).</li>
+</ul>
+</section>
+<section id="what-the-plot-shows" class="level3">
+<h3 class="anchored" data-anchor-id="what-the-plot-shows">What the Plot Shows:</h3>
+<ul>
+<li>Each horizontal line represents a 95% CI from one sample.</li>
+<li>The vertical dashed line shows the true population mean.</li>
+<li>Most segments intersect this line, but a few might miss it.</li>
+</ul>
+</section>
+<section id="what-the-result-tells-us" class="level3">
+<h3 class="anchored" data-anchor-id="what-the-result-tells-us">What the Result tells us:</h3>
+<ul>
+<li>mean(in.CI) returns the proportion of confidence intervals that captured the true mean.</li>
+<li>For 95% CIs, we expect about 95% of the intervals to contain the true mean.</li>
+<li>If the result is ~0.95 (0.94 or 0.96), it confirms that the confidence interval behaves as expected.</li>
+</ul>
+</section>
+<section id="why-does-it-matter" class="level3">
+<h3 class="anchored" data-anchor-id="why-does-it-matter">Why does it matter:</h3>
+<ul>
+<li>It visually reinforces the idea that a 95% confidence itnerval doesn’t guarantee the true mean is inside (it means that over many samples, about 95% of such intervals contain the true value).</li>
+<li>It helps differentiate confidence in the procedure, not in a single interval.</li>
+</ul>
+</section>
+</section>
+<section id="sources" class="level2">
+<h2 class="anchored" data-anchor-id="sources">Sources:</h2>
+<p>Danaher, P., McGuire, D., Wu, L. et al.&nbsp;InSituCor: exploring spatially correlated genes conditional on the cell type landscape. Genome Biol 26, 105 (2025). https://doi.org/10.1186/s13059-025-03554-1</p>
+<p>Pagano, M., &amp; Gauvreau, K. (2018). Principles of biostatistics / Marcello Pagano, Kimberlee Gauvreau. Duxbury Press.</p>
+<section id="thank-you-for-reviewing-and-making-it-to-the-end-of-my-work-in-this-assignments-signature-end-off-id-like-to-share-an-exciting-paper-to-come-out-of-my-company-bruker-spatial-biology.-they-explore-new-methods-of-cell-typing-classification-in-spatial-biology-samples.-i-hope-one-day-to-have-a-biostatistics-level-of-understanding-to-build-on-work-like-this-best-dylan-renard." class="level4">
+<h4 class="anchored" data-anchor-id="thank-you-for-reviewing-and-making-it-to-the-end-of-my-work-in-this-assignments-signature-end-off-id-like-to-share-an-exciting-paper-to-come-out-of-my-company-bruker-spatial-biology.-they-explore-new-methods-of-cell-typing-classification-in-spatial-biology-samples.-i-hope-one-day-to-have-a-biostatistics-level-of-understanding-to-build-on-work-like-this-best-dylan-renard.">Thank you for reviewing and making it to the end of my work, in this assignment’s signature end off I’d like to share an exciting paper to come out of my company Bruker spatial biology. They explore new methods of cell typing classification in spatial biology samples. I hope one day to have a biostatistics level of understanding to build on work like this! Best, Dylan Renard.</h4>
+<p><img src="InSituCor.png" class="img-fluid"></p>
+<p>Explore more at: <a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-025-03554-1">article link</a></p>
+</section>
 </section>
 </section>
 

@@ -7,7 +7,7 @@ output: pdf_document
 #### Dylan Renard
 #### Professor Proschan & Professor Nason
 #### JHU Biostatistics
-#### June 19th, 2025
+#### June 22nd, 2025
 
 # Homework 5
 In this assignment, we will analyze longitudinal measurements of CD127 expression on CD8 cells from 40 donors to assess whether storage time affects sample quality. Using the blood_CD8.csv dataset, we will apply t-tests and confidence intervals to evaluate changes in mean expression across time points, with particular focus on 4-hour levels and the changes from 4 to 72 hours. 
@@ -299,10 +299,69 @@ cat("95% Confidence Interval: [", round(ci_lower, 2), ",", round(ci_upper, 2), "
 ```
 
 ### b) At the 0.05 level of significance, test whether the mean baseline body mass index for the population of middle-aged men who do develop diabetes is equal to 24.0 kg/m2, the mean for the population of men who do not. What is the p-value of the test?
+We are testing whether the mean baseline BMI of middle-aged men who develop diabetes differs from that of those who do not.
+
+- **Null Hypothesis (H₀):** μ = 24.0 kg/m²  
+- **Alternative Hypothesis (Hₐ):** μ ≠ 24.0 kg/m²  
+- **Significance Level (α):** 0.05  
+
+**Given:**
+- Sample mean: $\bar{x} = 25.0$  
+- Hypothesized mean: $\mu_0 = 24.0$  
+- Standard deviation: $s = 2.7$  
+- Sample size: $n = 58$  
+- Degrees of freedom: $df = 57$
+
+**Step 1: Compute the standard error (SE):**
+
+$$
+SE = \frac{s}{\sqrt{n}} = \frac{2.7}{\sqrt{58}} \approx 0.3545
+$$
+
+**Step 2: Calculate the t-statistic:**
+
+$$
+t = \frac{\bar{x} - \mu_0}{SE} = \frac{25.0 - 24.0}{0.3545} \approx 2.82
+$$
+
+**Step 3: Compute the two-sided p-value:**
+
+Using a t-distribution with 57 degrees of freedom:
+
+$$
+p = 2 \times P(T_{57} > 2.82) \approx 0.0066
+$$
+
+```{r}
+# R-code to test work
+# Given values
+x_bar <- 25.0    # Sample mean
+mu_0 <- 24.0     # Hypothesized mean
+s <- 2.7         # Sample standard deviation
+n <- 58          # Sample size
+
+# Standard error
+se <- s / sqrt(n)
+
+# t-statistic
+t_stat <- (x_bar - mu_0) / se
+
+# Degrees of freedom
+df <- n - 1
+
+# Two-sided p-value
+p_value <- 2 * (1 - pt(abs(t_stat), df))
+
+# Output results
+cat("t =", round(t_stat, 3), "\n")
+cat("p-value =", round(p_value, 4), "\n")
+```
 
 ### c) What do you conclude?
+Since the p-value(0.0066) is less than the significance level alpha = 0.05, we reject the null hypothesis. This indicates that the mean baseline BMI of middle-aged men who develop diabetes is significantly different from the mean BMI of those who do not (24.0 kg/m^2).
 
 ### d) Based on the 95% confidence interval, would you have expected to reject or not to reject the null hypothesis? Why?
+We would have expected to reject the nully hypothesis based on the 95% confidence interbal. This is becaouse the 95% confidence interval was [24.29, 25.71], which does not include the hypothesized value of 24.0. Since the null value lies outside this interval, it suggests that the true mean is significantly different from 24.0 (consistent with rejecting the null hypothesis in the two sided test).
 
 ## Additional Thought Question
 You should get a result , and a plot.  Can you explain what your result means, what this plot represents, and why it is relevant? (Note, it may be helpful to run it more than once)
@@ -325,3 +384,35 @@ mean( in.CI )
 
 ```
 
+### Sidenote: The above code was modified to 80 random samples to provide a better visual in the quarto document.
+
+### What does the code do:
+- It draws 80 random samples (each of size 20) from a normal population with known mean of 100 and standard deviation of 10.
+- For each sample, it calculates a 95% confidence interval for the mean using a t-test.
+- It then plots each CI as a horizontal line and marks whether the true population mean falls within it.
+- The proportion of intervals that contain the true mean is stored in mean(in.CI).
+
+### What the Plot Shows:
+- Each horizontal line represents a 95% CI from one sample.
+- The vertical dashed line shows the true population mean.
+- Most segments intersect this line, but a few might miss it. 
+
+### What the Result tells us:
+- mean(in.CI) returns the proportion of confidence intervals that captured the true mean.
+- For 95% CIs, we expect about 95% of the intervals to contain the true mean.
+- If the result is ~0.95 (0.94 or 0.96), it confirms that the confidence interval behaves as expected.
+
+### Why does it matter:
+- It visually reinforces the idea that a 95% confidence itnerval doesn't guarantee the true mean is inside (it means that over many samples, about 95% of such intervals contain the true value).
+- It helps differentiate confidence in the procedure, not in a single interval.
+
+## Sources: 
+Danaher, P., McGuire, D., Wu, L. et al. InSituCor: exploring spatially correlated genes conditional on the cell type landscape. Genome Biol 26, 105 (2025). https://doi.org/10.1186/s13059-025-03554-1
+
+Pagano, M., & Gauvreau, K. (2018). Principles of biostatistics / Marcello Pagano, Kimberlee Gauvreau. Duxbury Press.
+
+#### Thank you for reviewing and making it to the end of my work, in this assignment's signature end off I'd like to share an exciting paper to come out of my company Bruker spatial biology. They explore new methods of cell typing classification in spatial biology samples. I hope one day to have a biostatistics level of understanding to build on work like this! Best, Dylan Renard.
+
+![](InSituCor.png)
+
+Explore more at: [article link](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-025-03554-1)
