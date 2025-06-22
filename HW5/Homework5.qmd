@@ -112,8 +112,6 @@ The mean diastolic blood pressure of female diabetic aged 30-34 is not equal to 
 
 ### c) A sample of 10 diabetic women is selected; their mean diastolic blood pressure is x-bard= 84 mm Hg. Using this information, conduct a two-sided test at the α = 0.05 level of significance. What is the p-value of the test?
 
-### c) Hypothesis Test Calculation
-
 We are testing:
 
 - **Null Hypothesis (H₀):** μ = 74.4 mm Hg  
