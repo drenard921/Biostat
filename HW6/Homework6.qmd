@@ -35,7 +35,7 @@ paired_data <- merge(cd8_4h, cd8_72h, by = "ID")
 t.test(paired_data$CD8_4h, paired_data$CD8_72h, paired = "TRUE")
 ```
 
-In conclusion, we found a statistically ignificant decrease in the percentage of CD8+ T cells expressing CD127 between 4 and 72 hours after each blood collection (paired t-test, p=0.00017). On average, CD8+CD127+ expression dropped by 3.66% percentage points over this time period, with a 95% confidence interval ranging from 1.93% to 5.39%. These results support concerns that prolonged storage negatively affects CD8 marker expression, potentially impacting downstream experimental reliability.
+In conclusion, we found a statistically significant decrease in the percentage of CD8+ T cells expressing CD127 between 4 and 72 hours after each blood collection (paired t-test, p=0.00017). On average, CD8+CD127+ expression dropped by 3.66% percentage points over this time period, with a 95% confidence interval ranging from 1.93% to 5.39%. These results support concerns that prolonged storage negatively affects CD8 marker expression, potentially impacting downstream experimental reliability.
 
 ## Q2:
 Some of the individuals in the sample had taken IL-2 in the recent past when their blood was drawn; others had not. Do a t-test to answer the question as to whether there is a difference in the CD4% between people who have and have not taken IL-2, based on the 4 hour data. Write a one-sentence conclusion (including the p-value) of the results of the test, the way you might include it in a science paper. Also give the 95% confidence interval for the difference in means. Do this:
@@ -59,13 +59,21 @@ no_group <- subset(cd4_4h, IL2 == "NO")$CD4.xCD127
 t.test(yes_group, no_group, var.equal = TRUE)
 ```
 
+There was no statistically significant difference in CD4+CD127+ expression at 4 hours between individuals with and without recent IL-2 exposure (two-sample t-test, equal variances assumed p = 0.2423, alpha = 0.05)
 
 ### b) Assuming unequal variances.
 ```{r}
 # Unpaired t-test assuming unequal variances
 t.test(yes_group, no_group, var.equal = FALSE)
 ```
-### c) Minimum Sample Size threshold for a given Statistical power.
+
+There was no statistically significant difference in CD4+CD127+ expression at 4 hours between individuals with and without recent IL-2 exposure (Welch's t-test, p=0.1864, alpha = 0.05).
+
+
+
+### c) Minimum Sample Size threshold for a given Statistical power (optional).
+The researcher comes back to you a few weeks later and wants to design two new trials to address the same questions, with higher statistical power. How many subjects to answer the following question: Are there differences between people with/without a history of IL2? Assume that CD4% in both groups will be normally distributed with a standard deviation of 8%. How many people are needed PER GROUP in order to have 80% power to detect a difference of 5% or greater?
+
 ```{r}
 # To detect a 5% difference with SD = 8%, 80% power, alpha = 0.5
 # Install 'pwr' package if not already installed
@@ -75,36 +83,214 @@ if (!requireNamespace("pwr", quietly = TRUE)) {
 library(pwr)
 pwr.t.test(d = 5 / 8, power = 0.80, sig.level = 0.05, type = "two.sample", alternative = "two.sided")
 ```
-
-The researcher comes back to you a few weeks later and wants to design two new trials to address the same questions, with higher statistical power. How many subjects to answer the following question: Are there differences between people with/without a history of IL2? Assume that CD4% in both groups will be normally distributed with a standard deviation of 8%. How many people are needed PER GROUP in order to have 80% power to detect a difference of 5% or greater?
-
+Although part c for Q2 was not required, determing the appropriate sample size per group to detect a 5% difference in CD4+CD127+ expression with 80% power and a standard deviation of 8% would involve a two-sample power calculation. This ensures future studies are adequately powered to detect meaningful differences without being under- or over-resourced. 
 
 ## Part 2 text book problems from Chapter 11
 
 ## Q3 Problem 5:
 A crossover study was conducted to investigate whether oat bran cereal helps to lower cholesterol levels in hypercholesterolemic males. Fourteen such individuals were randomly placed on a diet that included either oat bran or corn flakes; after two weeks, their low-density lipoprotein (LDL) cholesterol levels were recorded. Each man was then switched to the alternative diet. After a second two-week period, the LDL cholesterol level of each individual was again recorded. The data from this study are shown below:
 
-![](Problem-5-data.png)
+```{r}
+
+#| echo: false
+# Load required library
+if (!requireNamespace("DT", quietly = TRUE)) {
+  install.packages("DT")
+}
+library(DT)
+
+# Read the data from CSV
+ldl_data <- read.csv("LDL_crossover_study.csv")
+
+# Display the data as an interactive DT table
+datatable(ldl_data, 
+          caption = "LDL cholesterol levels (mmol/L) for each subject after corn flakes and oat bran diets", 
+          options = list(pageLength = 14,
+                         dom = 't'))
+```
 
 ### a) Are the two samples paired or independent?
+The two samples are paired, because each subject consumed both oat bran and corn flakes in a crossover study design. LDL levels were measured for the same individuals under both conditions, so the observations are not independent - they are matched within subjects. 
+
 
 ### b) What are the appropriate null and alternative hypotheses for a two-sided test
+Let $\mu_D$ represent the **mean difference in LDL cholesterol** (Corn Flakes − Oat Bran) across all subjects.
+
+- **Null Hypothesis ($H_0$):** $\mu_D = 0$  
+  There is no difference in LDL cholesterol between the two diets.
+
+- **Alternative Hypothesis ($H_1$):** $\mu_D \ne 0$  
+  There is a difference in LDL cholesterol between the two diets.
+
 
 ### c) Conduct the test at the 0.05 level of significance. What is the p-value?
 
+We compute the difference in LDL cholesterol for each subject:
+
+$$
+\text{Difference}_i = \text{LDL}_{\text{Corn Flakes}, i} - \text{LDL}_{\text{Oat Bran}, i}
+$$
+
+#### Step 1: Differences
+
+The differences (rounded to 2 significant figures for easy viewing) are:
+
+```
+0.77, 0.85, -0.45, -0.26, 0.30, 0.86, 0.60, 0.62, 0.31, 0.72, 0.09, 0.16, 0.41, 0.10
+```
+
+> *Note: Full-precision values were used for all subsequent calculations.*
+
+#### Step 2: Mean of the Differences
+
+$$
+\bar{d} = \frac{1}{n} \sum_{i=1}^{n} d_i = 0.362857 \text{ mmol/L}
+$$
+
+#### Step 3: Standard Deviation of the Differences
+
+$$
+s_d = 0.405964 \text{ mmol/L}
+$$
+
+#### Step 4: Standard Error (SE)
+
+$$
+SE = \frac{s_d}{\sqrt{n}} = \frac{0.405964}{\sqrt{14}} = \frac{0.405964}{3.741657} = 0.108498
+$$
+
+#### Step 5: t-Statistic
+
+$$
+t = \frac{\bar{d}}{SE} = \frac{0.362857}{0.108498} = 3.344
+$$
+
+#### Step 6: 95% Confidence Interval
+
+We use the critical value for a two-sided 95% confidence interval with 13 degrees of freedom (n -1 degrees, n = 14):
+
+$$
+t^* = 2.1604
+$$
+
+Margin of error:
+
+$$
+ME = t^* \cdot SE = 2.1604 \cdot 0.108498 = 0.234397
+$$
+
+Confidence interval:
+
+$$
+\bar{d} \pm ME = 0.362857 \pm 0.234397
+$$
+
+$$
+\text{95\% CI} = [0.128461,\ 0.597254] \text{ mmol/L}
+$$
+
+#### Step 7: Estimating the p-Value by Hand
+
+We can assess statistical significance in two ways: using the **confidence interval** or by comparing our **t-statistic to a t-distribution table**.
+
+---
+
+**Method 1: Use the Confidence Interval**
+
+The 95% confidence interval was:
+
+$$
+[0.128461,\ 0.597254]
+$$
+
+Since this interval does **not include 0**, it implies that the **two-sided p-value is less than 0.05**, and we reject the null hypothesis.
+
+---
+**Method 2: Use a t-table to estimate the p-value**
+
+Given: $t = 3.3444$ and $df = 13$
+
+From the t-table for 13 degrees of freedom:
+
+- $t = 3.012$ corresponds to two-tailed $p = 0.01$
+- $t = 3.852$ corresponds to two-tailed $p = 0.002$  
+
+Since $3.012 < 3.3444 < 3.852$, we estimate:
+
+$p$ is between $0.01$ and $0.002$
+
+The **exact p-value**, calculated using R, is:
+
+$p = 0.005278$
+
+This falls within our range, confirming our t-table estimate but also illustrating the limits of printed tables — they only provide rough intervals, not precise probabilities.
+
+
+![T-table used to estimate p-value for t = 3.3444, df = 13 (SJSU 2007).](Problem%205%20T-table.png){fig-alt="t-table with values for df=13 highlighted" width=600}
+
+```{r}
+# R-code to check work:
+# Perform paired t-test: Corn Flakes vs. Oat Bran
+t.test(ldl_data$Corn_Flakes, ldl_data$Oat_Bran, paired = TRUE)
+```
+With R, the P-value is 0.005278.
+
 ### d) What do you conclude?
+Both methods confirm that $p < 0.05$, allowing us to reject $H_0$. The precise p-value from R, $p = 0.005278$, shows moderately strong evidence that oat bran lowers LDL cholesterol compared to corn flakes.
 
 ## Q4 Problem 8:
 A study was conducted to determine whether an expectant mother's cigarette smoking has any effect on the bone mineral content of her otherwise healthy child. A sample of 77 newborns whose mothers smoked during pregnancy has mean bone mineral content x-bar1 = 0.098 g/cm and standard deviation s1 = 0.026 g/cm; a sample of 161 infants whose mothers did not smoke has mean x-bar2 = 0.095 g/cm and standard deviation s2 = 0.025 g/cm. Assume that the underlying population variances are equal.
 
 
 ### a) Are the two samples paired or independent?
+The two samples are **independent**, not paired. Each measurement of bone mineral content comes from a different infant, and the infants are grouped based on whether their mothers **did** or **did not** smoke during pregnancy. There is no matching or repeated measurement across the groups, so a paired design is not appropriate.
 
 ### b) State the null and alternative hypotheses of the two-sided test.
+Let $\mu_1$ be the mean bone mineral content in infants whose mothers **smoked**, and $\mu_2$ be the mean in infants whose mothers **did not smoke**.
+
+- **Null Hypothesis ($H_0$):** $\mu_1 = \mu_2$ (No difference in bone mineral content)  
+- **Alternative Hypothesis ($H_A$):** $\mu_1 \ne \mu_2$ (Difference in bone mineral content)
+
 
 ### c) Conduct the test at the 0.05 level of significance. What do you conclude?
+```{r}
+### Problem 8, Part c: Manual Two-Sample t-Test from Summary Stats
 
+```{r}
+# Given values
+x1_bar <- 0.098
+s1 <- 0.026
+n1 <- 77
 
+x2_bar <- 0.095
+s2 <- 0.025
+n2 <- 161
+
+# Pooled standard deviation
+sp_squared <- ((n1 - 1) * s1^2 + (n2 - 1) * s2^2) / (n1 + n2 - 2)
+sp <- sqrt(sp_squared)
+
+# Standard error
+se <- sp * sqrt(1/n1 + 1/n2)
+
+# t-statistic
+t_stat <- (x1_bar - x2_bar) / se
+
+# degrees of freedom
+df <- n1 + n2 - 2
+
+# two-sided p-value
+p_value <- 2 * pt(-abs(t_stat), df)
+
+# Output
+list(t_statistic = t_stat, df = df, p_value = p_value)
+```
+
+> *Note:* We computed the t-statistic manually using the pooled standard deviation formula in R, as raw data were not available. This two-sample t-test assumes **equal variances**, as specified in the problem.
+
+### Problem 8, Part c: Conclusion
+
+There was no statistically significant difference in bone mineral content between infants whose mothers smoked and those whose mothers did not (two-sample t-test, equal variances assumed, $t = 0.8549$, $df = 236$, $p = 0.3935$). We fail to reject the null hypothesis at the $\alpha = 0.05$ level.
 
 
 
@@ -112,5 +298,6 @@ A study was conducted to determine whether an expectant mother's cigarette smoki
 
 Pagano, M., & Gauvreau, K. (2018). Principles of biostatistics / Marcello Pagano, Kimberlee Gauvreau. Duxbury Press.
 
-#### Thank you for reviewing and making it to the end of my work, in this assignment's signature end off I'd like to share an exciting paper to come out of my company Bruker spatial biology. They explore new methods of cell typing classification in spatial biology samples. I hope one day to have a biostatistics level of understanding to build on work like this! Best, Dylan Renard.
+San Jose State University. (2007). T table. t-table. https://www.sjsu.edu/faculty/gerstman/StatPrimer/t-table.pdf 
 
+#### Thank you for reviewing and making it to the end of my work, in this assignment's signature end off I'd like to ask for feedback on what type of showing work method is preferred in this document. Does the mathmatical proof format used in problem 5 seem more professional or is the coding format in problem 8's calculation more legible. Let me know preference in the assignment comments. Best, Dylan 
