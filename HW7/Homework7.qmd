@@ -1,0 +1,56 @@
+---
+title: "Homework 7 - Biostatistics"
+Author: "Dylan Renard"
+output: pdf_document
+---
+
+#### Dylan Renard
+#### Professor Proschan & Professor Nason
+#### JHU Biostatistics
+#### July 3rd, 2025
+
+# Homework 7
+
+## Q1: 
+Download Elisa.txt data, and test whether there are differences between Lots with respect to mean Optical Density. If appropriate, compare each pair of lots using t-tests with Holm's  adjustment. What can you say from this?
+
+## Q2:
+The researcher then tells you that moving forward, they are only going to be comparing two lots at a time (new vs old), but that it will be important that if the lots are different by 0.1 or more they want to be very confident they will be able to detect that. She asks you how many samples per lot they should analyze in order to have 99% power to detect a difference of 0.1 or greater? Assume that the standard deviation within lots is 0.08 and that you will use an alpha=0.05. 
+
+If they instead use 10 per group, what will be their power to detect this difference of 0.1 or greater? 
+
+## Q3:
+install the package MASS using the command install.package("MASS") followed by library(MASS). Now you will have a dataset loaded called Cushings, that contains data on the results of Diagnostic Tests of Patients with Cushing’s syndrome. Information about the dataset can be found in the help file for this dataset using the command ?Cushings 
+
+Is there a difference between average excretion rates of Tetrahydrocortisone depending on the underlying type of Cushings syndrome? Which groups are significantly different?
+
+## Part 2 textbook problems from Chapter 12
+
+## Q4 Problem 12.1:
+When you are testing the equality of several population means, what problems arise if you attempt to perform all possible pairwise tests?
+
+## Q5 Problem 12.2:
+What is the idea behind one-wau Analysis of Variance? What two measures of variation are being compared?
+
+## Q6 Problem 12.4:
+Describe the purpose of the Bongerroni correction for multiple comparisons?
+
+## Q7 Problem 12.7:
+A study of patients with insulin-dependent diabetes was conducted to investigate the effects of cigarette smoking on renal and retinal complications. Before examining the results of the study, you wish to compare the systolic blood pressure across three subgroups: nonsmokers, current smokers, and ex-smokers. A sample is selected from each subgroup; the relevant data are shown below. Means and standard deviation are expressed in mm Hg. Assume that systolic blood pressure is normally distributed.
+
+### a) Calculate the estimate of the within-groups variance 
+
+### b) Calculate the estimate of the between groups variance 
+
+### c) At the 0.05 level of significance, test the null hypothesis that the mean systolic blood pressures of the 3 groups are identical. What do you conclude? 
+
+### d) If you find that the means are not all equal, use the Fisher’s LSD multiple comparisons procedure to determine where the differences lie. 
+
+## Q8 Problem 12.11:
+Use the same lowbwt dataset as before, focusing on sbp and gender this time.
+
+### a) Assuming equal variances for males and females, use the two-sample t-test to evaluate the null hypothesis that among low birth weight infants, the mean systolic blood pressure for girls is identical to that for boys. 
+
+### b) Test the same null hypothesis using ANOVA. 
+
+### c) Do you get the same answer? Why or why not? 
