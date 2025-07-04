@@ -35,6 +35,9 @@ for (pkg in required_pkgs) {
 # load Elisa dataset
 ELISA_df <- read.csv("ELISA.txt")
 
+# Confirm factor structure
+ELISA_df$Lot <- as.factor(ELISA_df$Lot)
+
 # Load low birth weight data
 lowbwt_df <- read.csv("lowbwtHW7.csv")
 
@@ -44,15 +47,152 @@ mass_df <- as.data.frame(Cushings)
 
 ## Q1: 
 Download Elisa.txt data, and test whether there are differences between Lots with respect to mean Optical Density. If appropriate, compare each pair of lots using t-tests with Holm's  adjustment. What can you say from this?
+### What is our Hypothesis?
+
+First we define the null hypothesis (H₀) in this instance, that the mean Optical Density is the same across all ELISA lots or in other words, there is no difference between lots. 
+
+The alternative hypothesis (H₁) in this experiment is that at least one lot has a mean Optical Density that differs from the others.
+
+### What is ANOVA?
+Analysis of Variance (ANOVA) is a statistical method used to determine whether there are significant differences between the means of three or more independent groups. It does this by comparing the variability between group means to the variability within groups, producing an F-statistic to assess whether the observed differences are likely due to chance. The F-statistic measures the ratio of variability between group means to the variablity within groups; a larger value suggests greater evidence that at least one group mean differs significantly.
+
+### Why use ANOVA?
+
+We can use ANOVA to compare mean Optical Density values across ELISA lots because several key assumptions are reasonably met. First, the outcome variable (Optical Density) is continuous, and the grouping variable (Lot) is categorical with more than two independent levels. 
+
+The assumption of independence holds because each sample was drawn from a separate measurement run, meaning that the Optical Density of one sample does not influence another.
+
+The assumption of equal variance (homogeneity of variance) can be considered reasonable here by prior validation of lab protocol or can be assessed using a diagnostic Q-Q plot or Levene's test.
+
+The Q-Q plot visually compairs the distribution of residuals to a normal distribution, helping identify deviations such as skewness or heavy tails that may affect variance. 
+
+Levene's test provides a statistical method to assess whether variances are equal across groups, regardless of normality, making it especially useful in real-world data. 
+
+While these tools were not covered in lecture, they represent important extensions for validating assumptions and ensuring the reliablilty of lab data prior to downstream statistical analysis. Links to relevant articles on this subject can be found in the sources section.
+
+Lastly, the assumption of normality of residuals can be reasonably assumed due to the moderate sample size (n = 75), which invokes the Central Limit Theorem, making the ANOVA robust to minor deviations from normality.
+
+### ANOVA Analysis in R
 ```{r}
-# One-way ANOVA to test for differences in mean Optical Density across Lots
-anova_result <- aov('Optical_Density' ~ Lot, data = ELISA_df)
-summary(anova_result)
+
+# Fit a one-way ANOVA model 
+# to test whether the mean Optical_Density differs across levels of Lot
+# Our alpha value will be 0.05, 
+# so if the p-value is significant (< 0.05) 
+# we will then move onto to compare each pair of lots
+# using t-tests with Holm's adjustment
+anova_result <- aov(Optical_Density ~ Lot, data = ELISA_df)
+
+# Extract and coerce the summary to a data frame
+anova_table <- as.data.frame(summary(anova_result)[[1]])
+
+# Rename columns for clarity
+colnames(anova_table) <- c(
+  "Degrees of Freedom",
+  "Sum of Squares",
+  "Mean Square",
+  "F Value",
+  "P Value"
+)
+
+# Round numeric values to 3 decimal places
+anova_table <- anova_table %>%
+  mutate(across(where(is.numeric), ~ round(.x, 3)))
+
+# Display using DT with just the body
+DT::datatable(
+  anova_table,
+  rownames = FALSE,
+  options = list(
+    dom = 't',
+    ordering = FALSE,
+    pageLength = nrow(anova_table)
+  ),
+  callback = JS(
+    "table.columns().every(function() {
+       $(this.header()).css('text-align', 'left');
+     });"
+  ) # Helped align wonly header
+) %>%
+  DT::formatStyle(
+    columns = names(anova_table),
+    'text-align' = 'left'
+  )
 
 ```
 
+### Interpreting initial ANOVA results:
+*The F-statistic of 3.892 with a p-value of 0.007 indicates a statistically significant difference in mean Optical Density across the five ELISA lots at the α = 0.05 significance level.
+
+* The degrees of freedom for Lot (4) and residuals (70) confirm a comparison between 5 groups (k = 5) and 75 total observations (n = 75).
+
+* Since the p-value is below 0.05, we reject the null hypothesis and conclude that at least one ELISA lot has a different mean Optical Density from the others.
 
 
+
+
+
+
+```{r}
+# Since ANOVA is significant, perform pairwise t-tests with Holm’s adjustment
+pairwise_result <- pairwise.t.test(
+  x = ELISA_df$Optical_Density,
+  g = ELISA_df$Lot,
+  p.adjust.method = "holm"
+)
+
+# Extract p-value matrix, replace NAs with empty string
+pairwise_matrix <- round(pairwise_result$p.value, 4)
+pairwise_matrix[is.na(pairwise_matrix)] <- ""
+
+# Convert matrix to data frame
+pairwise_df <- as.data.frame(pairwise_matrix)
+
+# Add row names as a column for clarity
+pairwise_df <- tibble::rownames_to_column(pairwise_df, var = "Comparison Lot")
+
+# Display using DT with center-aligned columns
+DT::datatable(
+  pairwise_df,
+  rownames = FALSE,
+  options = list(dom = 't', ordering = FALSE),
+  caption = "Holm-adjusted pairwise p-values between ELISA lots"
+) %>%
+  DT::formatStyle(
+    columns = names(pairwise_df),
+    `text-align` = "left"
+  )
+
+```
+
+### Interpreting pairwise t-test results:
+After the ANOVA indicated a significant difference in mean Optical Density across the five ELISA lots (*F*(4, 70) = 3.892, *p* = 0.007), we conducted post hoc pairwise *t*-tests using Holm’s adjustment to control for multiple comparisons.
+
+Holm’s method was applied to control the familywise error rate, which is the probability of making at least one Type I error across all pairwise tests. It is less conservative than the Bonferroni method while still providing strong error control, making it well-suited for a moderate number of comparisons like the ten made here.
+
+The results show that most pairwise p-values were not statistically significant (*p* > 0.05), except for the following comparisons:
+
+- Lot 2 vs. Lot 5 (*p* = 0.0044), which is statistically significant  
+- Lot 3 vs. Lot 5 (*p* = 0.0401), which is borderline significant
+
+All other comparisons resulted in p-values greater than 0.4, indicating no statistically significant difference in Optical Density between those pairs after adjusting for multiple testing.
+
+### Conclusion
+
+Although the overall ANOVA confirmed that differences exist among the lots, the Holm-adjusted pairwise *t*-tests reveal that Lot 5 differs meaningfully from Lots 2 and 3. These findings help identify specific sources of variation in Optical Density and can inform follow-up steps for quality control or experimental review.
+
+### QQ Plot for the ;) plot
+```{r q1-qqplot, fig.cap="Q–Q Plot of Residuals from ANOVA Model, echo=FALSE"}
+# Extract residuals from the ANOVA model
+residuals_q1 <- residuals(anova_result)
+
+# Generate Q–Q plot to visually assess normality
+qqnorm(residuals_q1,
+       main = "Q–Q Plot of ANOVA Residuals",
+       pch = 19, col = "#1f77b4")
+qqline(residuals_q1, col = "red", lwd = 2)
+```
+The Q–Q plot shows how the residuals from the ANOVA model compare to a theoretical normal distribution. If the points lie approximately along the red reference line, this supports the assumption of normality required for ANOVA. Minor deviations are expected and acceptable due to sample size (*n* = 75), and the Central Limit Theorem provides additional robustness.
 
 ## Q2:
 The researcher then tells you that moving forward, they are only going to be comparing two lots at a time (new vs old), but that it will be important that if the lots are different by 0.1 or more they want to be very confident they will be able to detect that. She asks you how many samples per lot they should analyze in order to have 99% power to detect a difference of 0.1 or greater? Assume that the standard deviation within lots is 0.08 and that you will use an alpha=0.05. 

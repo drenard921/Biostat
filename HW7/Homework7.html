@@ -131,16 +131,167 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># load Elisa dataset</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>ELISA_df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"ELISA.txt"</span>)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Load low birth weight data</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>lowbwt_df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"lowbwtHW7.csv"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Confirm factor structure</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>ELISA_df<span class="sc">$</span>Lot <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(ELISA_df<span class="sc">$</span>Lot)</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Load Cushings dataset from MASS package</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>mass_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(Cushings)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Load low birth weight data</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>lowbwt_df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"lowbwtHW7.csv"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Load Cushings dataset from MASS package</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>mass_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(Cushings)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="q1" class="level2">
 <h2 class="anchored" data-anchor-id="q1">Q1:</h2>
-<p>Download Elisa.txt data, and test whether there are differences between Lots with respect to mean Optical Density. If appropriate, compare each pair of lots using t-tests with Holm’s adjustment. What can you say from this?</p>
+<p>Download Elisa.txt data, and test whether there are differences between Lots with respect to mean Optical Density. If appropriate, compare each pair of lots using t-tests with Holm’s adjustment. What can you say from this? ### What is our Hypothesis?</p>
+<p>First we define the null hypothesis (H₀) in this instance, that the mean Optical Density is the same across all ELISA lots or in other words, there is no difference between lots.</p>
+<p>The alternative hypothesis (H₁) in this experiment is that at least one lot has a mean Optical Density that differs from the others.</p>
+<section id="what-is-anova" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-anova">What is ANOVA?</h3>
+<p>Analysis of Variance (ANOVA) is a statistical method used to determine whether there are significant differences between the means of three or more independent groups. It does this by comparing the variability between group means to the variability within groups, producing an F-statistic to assess whether the observed differences are likely due to chance. The F-statistic measures the ratio of variability between group means to the variablity within groups; a larger value suggests greater evidence that at least one group mean differs significantly.</p>
+</section>
+<section id="why-use-anova" class="level3">
+<h3 class="anchored" data-anchor-id="why-use-anova">Why use ANOVA?</h3>
+<p>We can use ANOVA to compare mean Optical Density values across ELISA lots because several key assumptions are reasonably met. First, the outcome variable (Optical Density) is continuous, and the grouping variable (Lot) is categorical with more than two independent levels.</p>
+<p>The assumption of independence holds because each sample was drawn from a separate measurement run, meaning that the Optical Density of one sample does not influence another.</p>
+<p>The assumption of equal variance (homogeneity of variance) can be considered reasonable here by prior validation of lab protocol or can be assessed using a diagnostic Q-Q plot or Levene’s test.</p>
+<p>The Q-Q plot visually compairs the distribution of residuals to a normal distribution, helping identify deviations such as skewness or heavy tails that may affect variance.</p>
+<p>Levene’s test provides a statistical method to assess whether variances are equal across groups, regardless of normality, making it especially useful in real-world data.</p>
+<p>While these tools were not covered in lecture, they represent important extensions for validating assumptions and ensuring the reliablilty of lab data prior to downstream statistical analysis. Links to relevant articles on this subject can be found in the sources section.</p>
+<p>Lastly, the assumption of normality of residuals can be reasonably assumed due to the moderate sample size (n = 75), which invokes the Central Limit Theorem, making the ANOVA robust to minor deviations from normality.</p>
+</section>
+<section id="anova-analysis-in-r" class="level3">
+<h3 class="anchored" data-anchor-id="anova-analysis-in-r">ANOVA Analysis in R</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit a one-way ANOVA model </span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># to test whether the mean Optical_Density differs across levels of Lot</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Our alpha value will be 0.05, </span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># so if the p-value is significant (&lt; 0.05) </span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># we will then move onto to compare each pair of lots</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># using t-tests with Holm's adjustment</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>anova_result <span class="ot">&lt;-</span> <span class="fu">aov</span>(Optical_Density <span class="sc">~</span> Lot, <span class="at">data =</span> ELISA_df)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract and coerce the summary to a data frame</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>anova_table <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">summary</span>(anova_result)[[<span class="dv">1</span>]])</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename columns for clarity</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(anova_table) <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Degrees of Freedom"</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sum of Squares"</span>,</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Mean Square"</span>,</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">"F Value"</span>,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="st">"P Value"</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Round numeric values to 3 decimal places</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>anova_table <span class="ot">&lt;-</span> anova_table <span class="sc">%&gt;%</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), <span class="sc">~</span> <span class="fu">round</span>(.x, <span class="dv">3</span>)))</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Display using DT with just the body</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>DT<span class="sc">::</span><span class="fu">datatable</span>(</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>  anova_table,</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">rownames =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">options =</span> <span class="fu">list</span>(</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">dom =</span> <span class="st">'t'</span>,</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">ordering =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">pageLength =</span> <span class="fu">nrow</span>(anova_table)</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">callback =</span> <span class="fu">JS</span>(</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    <span class="st">"table.columns().every(function() {</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="st">       $(this.header()).css('text-align', 'left');</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="st">     });"</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>  ) <span class="co"># Helped align wonly header</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">formatStyle</span>(</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">names</span>(anova_table),</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>    <span class="st">'text-align'</span> <span class="ot">=</span> <span class="st">'left'</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="datatables html-widget html-fill-item" id="htmlwidget-82c7d3cd628e368fb0e6" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-82c7d3cd628e368fb0e6">{"x":{"filter":"none","vertical":false,"data":[[4,70],[0.426,1.917],[0.107,0.027],[3.892,null],[0.007,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Degrees of Freedom<\/th>\n      <th>Sum of Squares<\/th>\n      <th>Mean Square<\/th>\n      <th>F Value<\/th>\n      <th>P Value<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","ordering":false,"pageLength":2,"columnDefs":[{"className":"dt-right","targets":[0,1,2,3,4]},{"name":"Degrees of Freedom","targets":0},{"name":"Sum of Squares","targets":1},{"name":"Mean Square","targets":2},{"name":"F Value","targets":3},{"name":"P Value","targets":4}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[2,10,25,50,100],"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[0]; $(this.api().cell(row, 0).node()).css({'text-align':'left'});\nvar value=data[1]; $(this.api().cell(row, 1).node()).css({'text-align':'left'});\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'text-align':'left'});\nvar value=data[3]; $(this.api().cell(row, 3).node()).css({'text-align':'left'});\nvar value=data[4]; $(this.api().cell(row, 4).node()).css({'text-align':'left'});\n}"},"callback":"function(table) {\ntable.columns().every(function() {\n       $(this.header()).css('text-align', 'left');\n     });\n}"},"evals":["options.rowCallback","callback"],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="interpreting-initial-anova-results" class="level3">
+<h3 class="anchored" data-anchor-id="interpreting-initial-anova-results">Interpreting initial ANOVA results:</h3>
+<p>*The F-statistic of 3.892 with a p-value of 0.007 indicates a statistically significant difference in mean Optical Density across the five ELISA lots at the α = 0.05 significance level.</p>
+<ul>
+<li><p>The degrees of freedom for Lot (4) and residuals (70) confirm a comparison between 5 groups (k = 5) and 75 total observations (n = 75).</p></li>
+<li><p>Since the p-value is below 0.05, we reject the null hypothesis and conclude that at least one ELISA lot has a different mean Optical Density from the others.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Since ANOVA is significant, perform pairwise t-tests with Holm’s adjustment</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>pairwise_result <span class="ot">&lt;-</span> <span class="fu">pairwise.t.test</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> ELISA_df<span class="sc">$</span>Optical_Density,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">g =</span> ELISA_df<span class="sc">$</span>Lot,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">p.adjust.method =</span> <span class="st">"holm"</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract p-value matrix, replace NAs with empty string</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>pairwise_matrix <span class="ot">&lt;-</span> <span class="fu">round</span>(pairwise_result<span class="sc">$</span>p.value, <span class="dv">4</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>pairwise_matrix[<span class="fu">is.na</span>(pairwise_matrix)] <span class="ot">&lt;-</span> <span class="st">""</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert matrix to data frame</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>pairwise_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(pairwise_matrix)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Add row names as a column for clarity</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>pairwise_df <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">rownames_to_column</span>(pairwise_df, <span class="at">var =</span> <span class="st">"Comparison Lot"</span>)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Display using DT with center-aligned columns</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>DT<span class="sc">::</span><span class="fu">datatable</span>(</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  pairwise_df,</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">rownames =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">options =</span> <span class="fu">list</span>(<span class="at">dom =</span> <span class="st">'t'</span>, <span class="at">ordering =</span> <span class="cn">FALSE</span>),</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"Holm-adjusted pairwise p-values between ELISA lots"</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">formatStyle</span>(</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">names</span>(pairwise_df),</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">text-align</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"left"</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="datatables html-widget html-fill-item" id="htmlwidget-b6838951575f2e9cc6e6" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-b6838951575f2e9cc6e6">{"x":{"filter":"none","vertical":false,"caption":"<caption>Holm-adjusted pairwise p-values between ELISA lots<\/caption>","data":[["2","3","4","5"],["0.4992","1","1","0.4001"],["","1","1","0.0044"],["","","1","0.0401"],["","","","0.1112"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Comparison Lot<\/th>\n      <th>1<\/th>\n      <th>2<\/th>\n      <th>3<\/th>\n      <th>4<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","ordering":false,"columnDefs":[{"name":"Comparison Lot","targets":0},{"name":"1","targets":1},{"name":"2","targets":2},{"name":"3","targets":3},{"name":"4","targets":4}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[0]; $(this.api().cell(row, 0).node()).css({'text-align':'left'});\nvar value=data[1]; $(this.api().cell(row, 1).node()).css({'text-align':'left'});\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'text-align':'left'});\nvar value=data[3]; $(this.api().cell(row, 3).node()).css({'text-align':'left'});\nvar value=data[4]; $(this.api().cell(row, 4).node()).css({'text-align':'left'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="interpreting-pairwise-t-test-results" class="level3">
+<h3 class="anchored" data-anchor-id="interpreting-pairwise-t-test-results">Interpreting pairwise t-test results:</h3>
+<p>After the ANOVA indicated a significant difference in mean Optical Density across the five ELISA lots (<em>F</em>(4, 70) = 3.892, <em>p</em> = 0.007), we conducted post hoc pairwise <em>t</em>-tests using Holm’s adjustment to control for multiple comparisons.</p>
+<p>Holm’s method was applied to control the familywise error rate, which is the probability of making at least one Type I error across all pairwise tests. It is less conservative than the Bonferroni method while still providing strong error control, making it well-suited for a moderate number of comparisons like the ten made here.</p>
+<p>The results show that most pairwise p-values were not statistically significant (<em>p</em> &gt; 0.05), except for the following comparisons:</p>
+<ul>
+<li>Lot 2 vs.&nbsp;Lot 5 (<em>p</em> = 0.0044), which is statistically significant<br>
+</li>
+<li>Lot 3 vs.&nbsp;Lot 5 (<em>p</em> = 0.0401), which is borderline significant</li>
+</ul>
+<p>All other comparisons resulted in p-values greater than 0.4, indicating no statistically significant difference in Optical Density between those pairs after adjusting for multiple testing.</p>
+</section>
+<section id="conclusion" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
+<p>Although the overall ANOVA confirmed that differences exist among the lots, the Holm-adjusted pairwise <em>t</em>-tests reveal that Lot 5 differs meaningfully from Lots 2 and 3. These findings help identify specific sources of variation in Optical Density and can inform follow-up steps for quality control or experimental review.</p>
+</section>
+<section id="qq-plot-for-the-plot" class="level3">
+<h3 class="anchored" data-anchor-id="qq-plot-for-the-plot">QQ Plot for the ;) plot</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract residuals from the ANOVA model</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>residuals_q1 <span class="ot">&lt;-</span> <span class="fu">residuals</span>(anova_result)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate Q–Q plot to visually assess normality</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(residuals_q1,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="st">"Q–Q Plot of ANOVA Residuals"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"#1f77b4"</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(residuals_q1, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Homework7_files/figure-html/q1-qqplot-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Q–Q Plot of Residuals from ANOVA Model, echo=FALSE</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The Q–Q plot shows how the residuals from the ANOVA model compare to a theoretical normal distribution. If the points lie approximately along the red reference line, this supports the assumption of normality required for ANOVA. Minor deviations are expected and acceptable due to sample size (<em>n</em> = 75), and the Central Limit Theorem provides additional robustness.</p>
+</section>
 </section>
 <section id="q2" class="level2">
 <h2 class="anchored" data-anchor-id="q2">Q2:</h2>
@@ -172,8 +323,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>A study of patients with insulin-dependent diabetes was conducted to investigate the effects of cigarette smoking on renal and retinal complications. Before examining the results of the study, you wish to compare the systolic blood pressure across three subgroups: nonsmokers, current smokers, and ex-smokers. A sample is selected from each subgroup; the relevant data are shown below. Means and standard deviation are expressed in mm Hg. Assume that systolic blood pressure is normally distributed.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-792c74de787d771e5db8" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-792c74de787d771e5db8">{"x":{"filter":"none","vertical":false,"data":[["Nonsmokers","Current smokers","Ex-smokers"],[269,53,28],[115,114,118],[13.4,10.1,11.6]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Group<\/th>\n      <th>n<\/th>\n      <th>Mean<\/th>\n      <th>SD<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","ordering":false,"pageLength":3,"columnDefs":[{"className":"dt-right","targets":[1,2,3]},{"name":"Group","targets":0},{"name":"n","targets":1},{"name":"Mean","targets":2},{"name":"SD","targets":3}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[3,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-21a1aaf6f4938a538300" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-21a1aaf6f4938a538300">{"x":{"filter":"none","vertical":false,"data":[["Nonsmokers","Current smokers","Ex-smokers"],[269,53,28],[115,114,118],[13.4,10.1,11.6]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Group<\/th>\n      <th>n<\/th>\n      <th>Mean<\/th>\n      <th>SD<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","ordering":false,"pageLength":3,"columnDefs":[{"className":"dt-right","targets":[1,2,3]},{"name":"Group","targets":0},{"name":"n","targets":1},{"name":"Mean","targets":2},{"name":"SD","targets":3}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[3,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <section id="a-calculate-the-estimate-of-the-within-groups-variance" class="level4">
