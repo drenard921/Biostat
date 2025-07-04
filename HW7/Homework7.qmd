@@ -380,6 +380,21 @@ ggplot(mass_df, aes(x = Type, y = Tetrahydrocortisone, fill = Type)) +
   theme_minimal() +
   theme(legend.position = "none")
 ```
+```{r}
+ggplot(mass_df, aes(x = Type, y = Tetrahydrocortisone, fill = Type)) +
+  # Highlight rectangle from y = 5 to 15
+  annotate("rect", xmin = -Inf, xmax = Inf, ymin = 0, ymax = 20,
+           fill = "yellow", alpha = 0.2) +
+  geom_violin(trim = FALSE, color = "black", alpha = 0.7) +
+  geom_jitter(width = 0.1, size = 1.5, alpha = 0.6) +
+  labs(
+    title = "Distribution of Tetrahydrocortisone by Cushing's Syndrome Type",
+    x = "Cushing's Syndrome Type",
+    y = "Tetrahydrocortisone Excretion"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
 While the ANOVA indicated a statistically significant difference in Tetrahydrocortisone levels across Cushing's syndrome types, the pairwise comparisons did not identify specific group differences. However, the violin plots reveal meaningful differences in the **distribution shape and variability** among groups, particularly in types **c** and **u**, which show **greater spread and skew**. 
 
 This suggests that while mean differences may be subtle, **distributional differences** across syndrome types may be biologically relevant and warrant further investigation. I worry much of this confusion stems from our extremely small sample sizes in individual groups.
