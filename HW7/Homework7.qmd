@@ -337,13 +337,18 @@ None of the Holm-adjusted pairwise comparisons were statistically significant at
 ## Part 2 textbook problems from Chapter 12
 
 ## Q4 Problem 12.1:
-When you are testing the equality of several population means, what problems arise if you attempt to perform all possible pairwise tests?
+#### When you are testing the equality of several population means, what problems arise if you attempt to perform all possible pairwise tests?
+
+When testing the equality of several population means using all possible pairwise t-tests, the risk of making a Type I error increases with each additional comparison. This leads to an inflated familywise error rate — the probability of incorrectly rejecting at least one true null hypothesis. As a result, even if all population means are actually equal, performing many pairwise tests increases the chance of falsely detecting significant differences just by random chance.
 
 ## Q5 Problem 12.2:
-What is the idea behind one-wau Analysis of Variance? What two measures of variation are being compared?
+#### What is the idea behind one-wau Analysis of Variance? What two measures of variation are being compared?
+
+The idea behind one-way Analysis of Variance (ANOVA) is to determine whether there are statistically significant differences between the means of three or more independent groups. ANOVA does this by comparing two sources of variability: the between-group variation (how much the group means differ from the overall mean) and the within-group variation (how much individual observations differ from their own group mean). A large ratio of between-group to within-group variability suggests that not all group means are equal.
 
 ## Q6 Problem 12.4:
-Describe the purpose of the Bongerroni correction for multiple comparisons?
+#### Describe the purpose of the Bongerroni correction for multiple comparisons.
+The purpose of the Bonferroni correction is to control the familywise error rate when making multiple comparisons. It does this by adjusting the significance threshold to be more stringent, typically by dividing the desired alpha level (e.g., 0.05) by the number of comparisons being made. This reduces the chance of making a Type I error across the set of tests, helping to ensure that any significant result is not just due to chance.
 
 ## Q7 Problem 12.7:
 A study of patients with insulin-dependent diabetes was conducted to investigate the effects of cigarette smoking on renal and retinal complications. Before examining the results of the study, you wish to compare the systolic blood pressure across three subgroups: nonsmokers, current smokers, and ex-smokers. A sample is selected from each subgroup; the relevant data are shown below. Means and standard deviation are expressed in mm Hg. Assume that systolic blood pressure is normally distributed.
