@@ -173,6 +173,28 @@ window.Quarto = {
 <section id="q1" class="level2">
 <h2 class="anchored" data-anchor-id="q1">Q1:</h2>
 <p>Download Elisa.txt data, and test whether there are differences between Lots with respect to mean Optical Density. If appropriate, compare each pair of lots using t-tests with Holm’s adjustment. What can you say from this?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Bar plot of number of observations per Lot</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ELISA_df, <span class="fu">aes</span>(<span class="at">x =</span> Lot, <span class="at">fill =</span> Lot)) <span class="sc">+</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Number of Observations per ELISA Lot"</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Lot"</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Count"</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Sanity check to understand if our data is evenly distributed, allowing for standard ANOVA."</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Homework7_files/figure-html/q1-lot-counts-plot-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 <section id="what-is-our-hypothesis" class="level3">
 <h3 class="anchored" data-anchor-id="what-is-our-hypothesis">What is our Hypothesis?</h3>
 <p>First we define the null hypothesis (H₀) in this instance, that the mean Optical Density is the same across all ELISA lots or in other words, there is no difference between lots.</p>
@@ -195,52 +217,52 @@ window.Quarto = {
 <section id="anova-analysis-in-r" class="level3">
 <h3 class="anchored" data-anchor-id="anova-analysis-in-r">ANOVA Analysis in R</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit a one-way ANOVA model </span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># to test whether the mean Optical_Density differs across levels of Lot</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Our alpha value will be 0.05, </span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># so if the p-value is significant (&lt; 0.05) </span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># we will then move onto to compare each pair of lots</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># using t-tests with Holm's adjustment</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>anova_result <span class="ot">&lt;-</span> <span class="fu">aov</span>(Optical_Density <span class="sc">~</span> Lot, <span class="at">data =</span> ELISA_df)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract and coerce the summary to a data frame</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>anova_table <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">summary</span>(anova_result)[[<span class="dv">1</span>]])</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename columns for clarity</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(anova_table) <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Degrees of Freedom"</span>,</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sum of Squares"</span>,</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Mean Square"</span>,</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">"F Value"</span>,</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="st">"P Value"</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Round numeric values to 3 decimal places</span></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>anova_table <span class="ot">&lt;-</span> anova_table <span class="sc">%&gt;%</span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), <span class="sc">~</span> <span class="fu">round</span>(.x, <span class="dv">3</span>)))</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Display using DT with just the body</span></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>DT<span class="sc">::</span><span class="fu">datatable</span>(</span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>  anova_table,</span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">rownames =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">options =</span> <span class="fu">list</span>(</span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">dom =</span> <span class="st">'t'</span>,</span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">ordering =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">pageLength =</span> <span class="fu">nrow</span>(anova_table)</span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">callback =</span> <span class="fu">JS</span>(</span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    <span class="st">"table.columns().every(function() {</span></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="st">       $(this.header()).css('text-align', 'left');</span></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="st">     });"</span></span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>  ) <span class="co"># Helped align wonly header</span></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">formatStyle</span>(</span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">names</span>(anova_table),</span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>    <span class="st">'text-align'</span> <span class="ot">=</span> <span class="st">'left'</span></span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit a one-way ANOVA model </span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># to test whether the mean Optical_Density differs across levels of Lot</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Our alpha value will be 0.05, </span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># so if the p-value is significant (&lt; 0.05) </span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># we will then move onto to compare each pair of lots</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># using t-tests with Holm's adjustment</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>anova_result <span class="ot">&lt;-</span> <span class="fu">aov</span>(Optical_Density <span class="sc">~</span> Lot, <span class="at">data =</span> ELISA_df)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract and coerce the summary to a data frame</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>anova_table <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">summary</span>(anova_result)[[<span class="dv">1</span>]])</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename columns for clarity</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(anova_table) <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Degrees of Freedom"</span>,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sum of Squares"</span>,</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Mean Square"</span>,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">"F Value"</span>,</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="st">"P Value"</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Round numeric values to 3 decimal places</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>anova_table <span class="ot">&lt;-</span> anova_table <span class="sc">%&gt;%</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), <span class="sc">~</span> <span class="fu">round</span>(.x, <span class="dv">3</span>)))</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Display using DT with just the body</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>DT<span class="sc">::</span><span class="fu">datatable</span>(</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  anova_table,</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">rownames =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">options =</span> <span class="fu">list</span>(</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">dom =</span> <span class="st">'t'</span>,</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">ordering =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">pageLength =</span> <span class="fu">nrow</span>(anova_table)</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">callback =</span> <span class="fu">JS</span>(</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    <span class="st">"table.columns().every(function() {</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="st">       $(this.header()).css('text-align', 'left');</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="st">     });"</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>  ) <span class="co"># Helped align wonly header</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">formatStyle</span>(</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">names</span>(anova_table),</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>    <span class="st">'text-align'</span> <span class="ot">=</span> <span class="st">'left'</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-6c5cb1dcbfac12f49ba8" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-6c5cb1dcbfac12f49ba8">{"x":{"filter":"none","vertical":false,"data":[[4,70],[0.426,1.917],[0.107,0.027],[3.892,null],[0.007,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Degrees of Freedom<\/th>\n      <th>Sum of Squares<\/th>\n      <th>Mean Square<\/th>\n      <th>F Value<\/th>\n      <th>P Value<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","ordering":false,"pageLength":2,"columnDefs":[{"className":"dt-right","targets":[0,1,2,3,4]},{"name":"Degrees of Freedom","targets":0},{"name":"Sum of Squares","targets":1},{"name":"Mean Square","targets":2},{"name":"F Value","targets":3},{"name":"P Value","targets":4}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[2,10,25,50,100],"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[0]; $(this.api().cell(row, 0).node()).css({'text-align':'left'});\nvar value=data[1]; $(this.api().cell(row, 1).node()).css({'text-align':'left'});\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'text-align':'left'});\nvar value=data[3]; $(this.api().cell(row, 3).node()).css({'text-align':'left'});\nvar value=data[4]; $(this.api().cell(row, 4).node()).css({'text-align':'left'});\n}"},"callback":"function(table) {\ntable.columns().every(function() {\n       $(this.header()).css('text-align', 'left');\n     });\n}"},"evals":["options.rowCallback","callback"],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-223fa54782b51d9e095c" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-223fa54782b51d9e095c">{"x":{"filter":"none","vertical":false,"data":[[4,70],[0.426,1.917],[0.107,0.027],[3.892,null],[0.007,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Degrees of Freedom<\/th>\n      <th>Sum of Squares<\/th>\n      <th>Mean Square<\/th>\n      <th>F Value<\/th>\n      <th>P Value<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","ordering":false,"pageLength":2,"columnDefs":[{"className":"dt-right","targets":[0,1,2,3,4]},{"name":"Degrees of Freedom","targets":0},{"name":"Sum of Squares","targets":1},{"name":"Mean Square","targets":2},{"name":"F Value","targets":3},{"name":"P Value","targets":4}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[2,10,25,50,100],"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[0]; $(this.api().cell(row, 0).node()).css({'text-align':'left'});\nvar value=data[1]; $(this.api().cell(row, 1).node()).css({'text-align':'left'});\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'text-align':'left'});\nvar value=data[3]; $(this.api().cell(row, 3).node()).css({'text-align':'left'});\nvar value=data[4]; $(this.api().cell(row, 4).node()).css({'text-align':'left'});\n}"},"callback":"function(table) {\ntable.columns().every(function() {\n       $(this.header()).css('text-align', 'left');\n     });\n}"},"evals":["options.rowCallback","callback"],"jsHooks":[]}</script>
 </div>
 </div>
 </section>
@@ -252,37 +274,37 @@ window.Quarto = {
 <li><p>Since the p-value is below 0.05, we reject the null hypothesis and conclude that at least one ELISA lot has a different mean Optical Density from the others.</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Since ANOVA is significant, perform pairwise t-tests with Holm’s adjustment</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>pairwise_result <span class="ot">&lt;-</span> <span class="fu">pairwise.t.test</span>(</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> ELISA_df<span class="sc">$</span>Optical_Density,</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">g =</span> ELISA_df<span class="sc">$</span>Lot,</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">p.adjust.method =</span> <span class="st">"holm"</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract p-value matrix, replace NAs with empty string</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>pairwise_matrix <span class="ot">&lt;-</span> <span class="fu">round</span>(pairwise_result<span class="sc">$</span>p.value, <span class="dv">4</span>)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>pairwise_matrix[<span class="fu">is.na</span>(pairwise_matrix)] <span class="ot">&lt;-</span> <span class="st">""</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert matrix to data frame</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>pairwise_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(pairwise_matrix)</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Add row names as a column for clarity</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>pairwise_df <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">rownames_to_column</span>(pairwise_df, <span class="at">var =</span> <span class="st">"Comparison Lot"</span>)</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Display using DT with center-aligned columns</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>DT<span class="sc">::</span><span class="fu">datatable</span>(</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  pairwise_df,</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">rownames =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">options =</span> <span class="fu">list</span>(<span class="at">dom =</span> <span class="st">'t'</span>, <span class="at">ordering =</span> <span class="cn">FALSE</span>),</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"Holm-adjusted pairwise p-values between ELISA lots"</span></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">formatStyle</span>(</span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">names</span>(pairwise_df),</span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">text-align</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"left"</span></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Since ANOVA is significant, perform pairwise t-tests with Holm’s adjustment</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>pairwise_result <span class="ot">&lt;-</span> <span class="fu">pairwise.t.test</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> ELISA_df<span class="sc">$</span>Optical_Density,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">g =</span> ELISA_df<span class="sc">$</span>Lot,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">p.adjust.method =</span> <span class="st">"holm"</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract p-value matrix, replace NAs with empty string</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>pairwise_matrix <span class="ot">&lt;-</span> <span class="fu">round</span>(pairwise_result<span class="sc">$</span>p.value, <span class="dv">4</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>pairwise_matrix[<span class="fu">is.na</span>(pairwise_matrix)] <span class="ot">&lt;-</span> <span class="st">""</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert matrix to data frame</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>pairwise_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(pairwise_matrix)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Add row names as a column for clarity</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>pairwise_df <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">rownames_to_column</span>(pairwise_df, <span class="at">var =</span> <span class="st">"Comparison Lot"</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Display using DT with center-aligned columns</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>DT<span class="sc">::</span><span class="fu">datatable</span>(</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  pairwise_df,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">rownames =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">options =</span> <span class="fu">list</span>(<span class="at">dom =</span> <span class="st">'t'</span>, <span class="at">ordering =</span> <span class="cn">FALSE</span>),</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"Holm-adjusted pairwise p-values between ELISA lots"</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">formatStyle</span>(</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">names</span>(pairwise_df),</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">text-align</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"left"</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-eae821fb7388b28e9f19" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-eae821fb7388b28e9f19">{"x":{"filter":"none","vertical":false,"caption":"<caption>Holm-adjusted pairwise p-values between ELISA lots<\/caption>","data":[["2","3","4","5"],["0.4992","1","1","0.4001"],["","1","1","0.0044"],["","","1","0.0401"],["","","","0.1112"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Comparison Lot<\/th>\n      <th>1<\/th>\n      <th>2<\/th>\n      <th>3<\/th>\n      <th>4<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","ordering":false,"columnDefs":[{"name":"Comparison Lot","targets":0},{"name":"1","targets":1},{"name":"2","targets":2},{"name":"3","targets":3},{"name":"4","targets":4}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[0]; $(this.api().cell(row, 0).node()).css({'text-align':'left'});\nvar value=data[1]; $(this.api().cell(row, 1).node()).css({'text-align':'left'});\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'text-align':'left'});\nvar value=data[3]; $(this.api().cell(row, 3).node()).css({'text-align':'left'});\nvar value=data[4]; $(this.api().cell(row, 4).node()).css({'text-align':'left'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-96064ab630b182cf1dc6" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-96064ab630b182cf1dc6">{"x":{"filter":"none","vertical":false,"caption":"<caption>Holm-adjusted pairwise p-values between ELISA lots<\/caption>","data":[["2","3","4","5"],["0.4992","1","1","0.4001"],["","1","1","0.0044"],["","","1","0.0401"],["","","","0.1112"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Comparison Lot<\/th>\n      <th>1<\/th>\n      <th>2<\/th>\n      <th>3<\/th>\n      <th>4<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","ordering":false,"columnDefs":[{"name":"Comparison Lot","targets":0},{"name":"1","targets":1},{"name":"2","targets":2},{"name":"3","targets":3},{"name":"4","targets":4}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[0]; $(this.api().cell(row, 0).node()).css({'text-align':'left'});\nvar value=data[1]; $(this.api().cell(row, 1).node()).css({'text-align':'left'});\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'text-align':'left'});\nvar value=data[3]; $(this.api().cell(row, 3).node()).css({'text-align':'left'});\nvar value=data[4]; $(this.api().cell(row, 4).node()).css({'text-align':'left'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
 </div>
 </div>
 </section>
@@ -305,14 +327,14 @@ window.Quarto = {
 <section id="q-q-plot-for-the-plot" class="level3">
 <h3 class="anchored" data-anchor-id="q-q-plot-for-the-plot">Q-Q Plot for the ;) plot</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract residuals from the ANOVA model</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>residuals_q1 <span class="ot">&lt;-</span> <span class="fu">residuals</span>(anova_result)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate Q–Q plot to visually assess normality</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(residuals_q1,</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="st">"Q–Q Plot of ANOVA Residuals"</span>,</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"#1f77b4"</span>)</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(residuals_q1, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract residuals from the ANOVA model</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>residuals_q1 <span class="ot">&lt;-</span> <span class="fu">residuals</span>(anova_result)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate Q–Q plot to visually assess normality</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(residuals_q1,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="st">"Q–Q Plot of ANOVA Residuals"</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"#1f77b4"</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(residuals_q1, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -329,23 +351,23 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="q2">Q2:</h2>
 <p>The researcher then tells you that moving forward, they are only going to be comparing two lots at a time (new vs old), but that it will be important that if the lots are different by 0.1 or more they want to be very confident they will be able to detect that. She asks you how many samples per lot they should analyze in order to have 99% power to detect a difference of 0.1 or greater? Assume that the standard deviation within lots is 0.08 and that you will use an alpha=0.05.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Parameters</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>delta <span class="ot">&lt;-</span> <span class="fl">0.1</span>       <span class="co"># Minimum detectable difference</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>sd <span class="ot">&lt;-</span> <span class="fl">0.08</span>         <span class="co"># Standard deviation</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>power_target <span class="ot">&lt;-</span> <span class="fl">0.99</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate required sample size per group</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>sample_calc <span class="ot">&lt;-</span> <span class="fu">power.t.test</span>(</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">delta =</span> delta,</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">sd =</span> sd,</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">sig.level =</span> alpha,</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">power =</span> power_target,</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"two.sample"</span>,</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">alternative =</span> <span class="st">"two.sided"</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>sample_calc<span class="sc">$</span>n  <span class="co"># Recommended sample size per group</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Parameters</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>delta <span class="ot">&lt;-</span> <span class="fl">0.1</span>       <span class="co"># Minimum detectable difference</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>sd <span class="ot">&lt;-</span> <span class="fl">0.08</span>         <span class="co"># Standard deviation</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>power_target <span class="ot">&lt;-</span> <span class="fl">0.99</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate required sample size per group</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>sample_calc <span class="ot">&lt;-</span> <span class="fu">power.t.test</span>(</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">delta =</span> delta,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">sd =</span> sd,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">sig.level =</span> alpha,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">power =</span> power_target,</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"two.sample"</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">alternative =</span> <span class="st">"two.sided"</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>sample_calc<span class="sc">$</span>n  <span class="co"># Recommended sample size per group</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 24.52528</code></pre>
 </div>
@@ -354,17 +376,17 @@ window.Quarto = {
 <section id="if-they-instead-use-10-per-group-what-will-be-their-power-to-detect-this-difference-of-0.1-or-greater" class="level3">
 <h3 class="anchored" data-anchor-id="if-they-instead-use-10-per-group-what-will-be-their-power-to-detect-this-difference-of-0.1-or-greater">If they instead use 10 per group, what will be their power to detect this difference of 0.1 or greater?</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Power calculation for fixed sample size</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>power_calc <span class="ot">&lt;-</span> <span class="fu">power.t.test</span>(</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> <span class="dv">10</span>,</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">delta =</span> delta,</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">sd =</span> sd,</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">sig.level =</span> alpha,</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"two.sample"</span>,</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">alternative =</span> <span class="st">"two.sided"</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>power_calc<span class="sc">$</span>power  <span class="co"># Resulting power</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Power calculation for fixed sample size</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>power_calc <span class="ot">&lt;-</span> <span class="fu">power.t.test</span>(</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> <span class="dv">10</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">delta =</span> delta,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">sd =</span> sd,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">sig.level =</span> alpha,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"two.sample"</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">alternative =</span> <span class="st">"two.sided"</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>power_calc<span class="sc">$</span>power  <span class="co"># Resulting power</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.7528764</code></pre>
 </div>
@@ -377,6 +399,25 @@ window.Quarto = {
 <p>install the package MASS using the command install.package(“MASS”) followed by library(MASS). Now you will have a dataset loaded called Cushings, that contains data on the results of Diagnostic Tests of Patients with Cushing’s syndrome. Information about the dataset can be found in the help file for this dataset using the command ?Cushings</p>
 <section id="is-there-a-difference-between-average-excretion-rates-of-tetrahydrocortisone-depending-on-the-underlying-type-of-cushings-syndrome-which-groups-are-significantly-different" class="level4">
 <h4 class="anchored" data-anchor-id="is-there-a-difference-between-average-excretion-rates-of-tetrahydrocortisone-depending-on-the-underlying-type-of-cushings-syndrome-which-groups-are-significantly-different">Is there a difference between average excretion rates of Tetrahydrocortisone depending on the underlying type of Cushings syndrome? Which groups are significantly different?</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bar plot of counts by Cushing's type</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mass_df, <span class="fu">aes</span>(<span class="at">x =</span> Type, <span class="at">fill =</span> Type)) <span class="sc">+</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Number of Observations per Cushing's Syndrome Type"</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Type"</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Count"</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Homework7_files/figure-html/q3-histogram-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 <section id="hypotheses-and-anova-justification" class="level4">
 <h4 class="anchored" data-anchor-id="hypotheses-and-anova-justification">Hypotheses and ANOVA Justification</h4>
@@ -384,10 +425,10 @@ window.Quarto = {
 <li><p>The null hypothesis (H₀) is that the average excretion rates of Tetrahydrocortisone are the same across all types of Cushing’s syndrome.</p></li>
 <li><p>The alternative hypothesis (H₁) is that at least one syndrome type has a different mean excretion rate compared to the others.</p></li>
 </ul>
-<p>We can use one-way ANOVA in this analysis because the outcome variable (Tetrahydrocortisone) is continuous, the grouping variable (Cushing’s syndrome type) is categorical with more than two independent levels, and the observations are independent. Since this is a publicly curated dataset from the MASS package, we assume reasonable adherence to data quality and normality assumptions, which ANOVA is robust to—especially given the balanced structure of the dataset.</p>
+<p>We can use one-way ANOVA in this analysis because the outcome variable (Tetrahydrocortisone) is continuous, the grouping variable (Cushing’s syndrome type) is categorical with more than two independent levels, and the observations are independent. Since this is a publicly curated dataset from the MASS package, we assume reasonable adherence to data quality and normality assumptions, which ANOVA is robust to—especially given the balanced structure of the dataset. Also as a sanity check I plotted the counts of each category in the dataset and they are relatively close meaning we are ok to proceed with normal ANOVA analysis.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview the data</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mass_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview the data</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mass_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Tetrahydrocortisone Pregnanetriol Type
 a1                 3.1         11.70    a
@@ -397,51 +438,51 @@ a4                 3.8          0.04    a
 a5                 4.1          1.10    a
 a6                 1.9          0.40    a</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check structure — confirm group and response variable</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(mass_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check structure — confirm group and response variable</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(mass_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>'data.frame':   27 obs. of  3 variables:
  $ Tetrahydrocortisone: num  3.1 3 1.9 3.8 4.1 1.9 8.3 3.8 3.9 7.8 ...
  $ Pregnanetriol      : num  11.7 1.3 0.1 0.04 1.1 0.4 1 0.2 0.6 1.2 ...
  $ Type               : Factor w/ 4 levels "a","b","c","u": 1 1 1 1 1 1 2 2 2 2 ...</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run one-way ANOVA</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>cush_anova <span class="ot">&lt;-</span> <span class="fu">aov</span>(Tetrahydrocortisone <span class="sc">~</span> Type, <span class="at">data =</span> mass_df)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract and convert the summary to a data frame</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>cush_anova_table <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">summary</span>(cush_anova)[[<span class="dv">1</span>]])</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename columns for clarity</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(cush_anova_table) <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Degrees of Freedom"</span>,</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sum of Squares"</span>,</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Mean Square"</span>,</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"F Value"</span>,</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"P Value"</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Round numeric values</span></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>cush_anova_table <span class="ot">&lt;-</span> cush_anova_table <span class="sc">%&gt;%</span></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), <span class="sc">~</span> <span class="fu">round</span>(.x, <span class="dv">3</span>)))</span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Display with DT</span></span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>DT<span class="sc">::</span><span class="fu">datatable</span>(</span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>  cush_anova_table,</span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">rownames =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">options =</span> <span class="fu">list</span>(<span class="at">dom =</span> <span class="st">'t'</span>, <span class="at">ordering =</span> <span class="cn">FALSE</span>), </span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">callback =</span> <span class="fu">JS</span>(</span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">"table.columns().every(function() {</span></span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a><span class="st">       $(this.header()).css('text-align', 'left');</span></span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a><span class="st">     });"</span></span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>  ) <span class="co"># Helped align wonly header</span></span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">formatStyle</span>(</span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">names</span>(cush_anova_table),</span>
-<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>    <span class="st">'text-align'</span> <span class="ot">=</span> <span class="st">'left'</span></span>
-<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run one-way ANOVA</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>cush_anova <span class="ot">&lt;-</span> <span class="fu">aov</span>(Tetrahydrocortisone <span class="sc">~</span> Type, <span class="at">data =</span> mass_df)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract and convert the summary to a data frame</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>cush_anova_table <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">summary</span>(cush_anova)[[<span class="dv">1</span>]])</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename columns for clarity</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(cush_anova_table) <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Degrees of Freedom"</span>,</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Sum of Squares"</span>,</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Mean Square"</span>,</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"F Value"</span>,</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"P Value"</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Round numeric values</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>cush_anova_table <span class="ot">&lt;-</span> cush_anova_table <span class="sc">%&gt;%</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), <span class="sc">~</span> <span class="fu">round</span>(.x, <span class="dv">3</span>)))</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Display with DT</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>DT<span class="sc">::</span><span class="fu">datatable</span>(</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>  cush_anova_table,</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">rownames =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">options =</span> <span class="fu">list</span>(<span class="at">dom =</span> <span class="st">'t'</span>, <span class="at">ordering =</span> <span class="cn">FALSE</span>), </span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">callback =</span> <span class="fu">JS</span>(</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">"table.columns().every(function() {</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a><span class="st">       $(this.header()).css('text-align', 'left');</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a><span class="st">     });"</span></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>  ) <span class="co"># Helped align wonly header</span></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">formatStyle</span>(</span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">names</span>(cush_anova_table),</span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>    <span class="st">'text-align'</span> <span class="ot">=</span> <span class="st">'left'</span></span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-d13a8da10ddf7d619490" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-d13a8da10ddf7d619490">{"x":{"filter":"none","vertical":false,"data":[[3,23],[893.521,2123.646],[297.84,92.33199999999999],[3.226,null],[0.041,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Degrees of Freedom<\/th>\n      <th>Sum of Squares<\/th>\n      <th>Mean Square<\/th>\n      <th>F Value<\/th>\n      <th>P Value<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","ordering":false,"columnDefs":[{"className":"dt-right","targets":[0,1,2,3,4]},{"name":"Degrees of Freedom","targets":0},{"name":"Sum of Squares","targets":1},{"name":"Mean Square","targets":2},{"name":"F Value","targets":3},{"name":"P Value","targets":4}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[0]; $(this.api().cell(row, 0).node()).css({'text-align':'left'});\nvar value=data[1]; $(this.api().cell(row, 1).node()).css({'text-align':'left'});\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'text-align':'left'});\nvar value=data[3]; $(this.api().cell(row, 3).node()).css({'text-align':'left'});\nvar value=data[4]; $(this.api().cell(row, 4).node()).css({'text-align':'left'});\n}"},"callback":"function(table) {\ntable.columns().every(function() {\n       $(this.header()).css('text-align', 'left');\n     });\n}"},"evals":["options.rowCallback","callback"],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-ae3defca08d2d1ccedc4" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-ae3defca08d2d1ccedc4">{"x":{"filter":"none","vertical":false,"data":[[3,23],[893.521,2123.646],[297.84,92.33199999999999],[3.226,null],[0.041,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Degrees of Freedom<\/th>\n      <th>Sum of Squares<\/th>\n      <th>Mean Square<\/th>\n      <th>F Value<\/th>\n      <th>P Value<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","ordering":false,"columnDefs":[{"className":"dt-right","targets":[0,1,2,3,4]},{"name":"Degrees of Freedom","targets":0},{"name":"Sum of Squares","targets":1},{"name":"Mean Square","targets":2},{"name":"F Value","targets":3},{"name":"P Value","targets":4}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[0]; $(this.api().cell(row, 0).node()).css({'text-align':'left'});\nvar value=data[1]; $(this.api().cell(row, 1).node()).css({'text-align':'left'});\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'text-align':'left'});\nvar value=data[3]; $(this.api().cell(row, 3).node()).css({'text-align':'left'});\nvar value=data[4]; $(this.api().cell(row, 4).node()).css({'text-align':'left'});\n}"},"callback":"function(table) {\ntable.columns().every(function() {\n       $(this.header()).css('text-align', 'left');\n     });\n}"},"evals":["options.rowCallback","callback"],"jsHooks":[]}</script>
 </div>
 </div>
 </section>
@@ -452,35 +493,35 @@ a6                 1.9          0.40    a</code></pre>
 <section id="which-groups-are-significantly-different" class="level4">
 <h4 class="anchored" data-anchor-id="which-groups-are-significantly-different">Which groups are significantly different?</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run pairwise t-tests with Holm adjustment</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>cush_pairwise <span class="ot">&lt;-</span> <span class="fu">pairwise.t.test</span>(</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> mass_df<span class="sc">$</span>Tetrahydrocortisone,</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">g =</span> mass_df<span class="sc">$</span>Type,</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">p.adjust.method =</span> <span class="st">"holm"</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract p-value matrix</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>cush_matrix <span class="ot">&lt;-</span> <span class="fu">round</span>(cush_pairwise<span class="sc">$</span>p.value, <span class="dv">4</span>)</span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>cush_matrix[<span class="fu">is.na</span>(cush_matrix)] <span class="ot">&lt;-</span> <span class="st">""</span>  <span class="co"># Remove NAs for display</span></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert matrix to data frame</span></span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>cush_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(cush_matrix)</span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>cush_df <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">rownames_to_column</span>(cush_df, <span class="at">var =</span> <span class="st">"Comparison Group"</span>)</span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Display as DT table</span></span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>DT<span class="sc">::</span><span class="fu">datatable</span>(</span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>  cush_df,</span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">rownames =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">options =</span> <span class="fu">list</span>(<span class="at">dom =</span> <span class="st">'t'</span>, <span class="at">ordering =</span> <span class="cn">FALSE</span>),</span>
-<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"Holm-adjusted pairwise p-values for Tetrahydrocortisone by Cushing’s Syndrome Type"</span></span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">formatStyle</span>(</span>
-<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">names</span>(cush_df),</span>
-<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">'text-align'</span> <span class="ot">=</span> <span class="st">'left'</span></span>
-<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run pairwise t-tests with Holm adjustment</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>cush_pairwise <span class="ot">&lt;-</span> <span class="fu">pairwise.t.test</span>(</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> mass_df<span class="sc">$</span>Tetrahydrocortisone,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">g =</span> mass_df<span class="sc">$</span>Type,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">p.adjust.method =</span> <span class="st">"holm"</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract p-value matrix</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>cush_matrix <span class="ot">&lt;-</span> <span class="fu">round</span>(cush_pairwise<span class="sc">$</span>p.value, <span class="dv">4</span>)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>cush_matrix[<span class="fu">is.na</span>(cush_matrix)] <span class="ot">&lt;-</span> <span class="st">""</span>  <span class="co"># Remove NAs for display</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert matrix to data frame</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>cush_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(cush_matrix)</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>cush_df <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">rownames_to_column</span>(cush_df, <span class="at">var =</span> <span class="st">"Comparison Group"</span>)</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Display as DT table</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>DT<span class="sc">::</span><span class="fu">datatable</span>(</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>  cush_df,</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">rownames =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">options =</span> <span class="fu">list</span>(<span class="at">dom =</span> <span class="st">'t'</span>, <span class="at">ordering =</span> <span class="cn">FALSE</span>),</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"Holm-adjusted pairwise p-values for Tetrahydrocortisone by Cushing’s Syndrome Type"</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">formatStyle</span>(</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">names</span>(cush_df),</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">'text-align'</span> <span class="ot">=</span> <span class="st">'left'</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-75efea4b9a2849b2b24e" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-75efea4b9a2849b2b24e">{"x":{"filter":"none","vertical":false,"caption":"<caption>Holm-adjusted pairwise p-values for Tetrahydrocortisone by Cushing’s Syndrome Type<\/caption>","data":[["b","c","u"],["0.7546","0.0508","0.2336"],["","0.1936","0.7546"],["","","0.7546"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Comparison Group<\/th>\n      <th>a<\/th>\n      <th>b<\/th>\n      <th>c<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","ordering":false,"columnDefs":[{"name":"Comparison Group","targets":0},{"name":"a","targets":1},{"name":"b","targets":2},{"name":"c","targets":3}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[0]; $(this.api().cell(row, 0).node()).css({'text-align':'left'});\nvar value=data[1]; $(this.api().cell(row, 1).node()).css({'text-align':'left'});\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'text-align':'left'});\nvar value=data[3]; $(this.api().cell(row, 3).node()).css({'text-align':'left'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-da5994349686dc49a60c" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-da5994349686dc49a60c">{"x":{"filter":"none","vertical":false,"caption":"<caption>Holm-adjusted pairwise p-values for Tetrahydrocortisone by Cushing’s Syndrome Type<\/caption>","data":[["b","c","u"],["0.7546","0.0508","0.2336"],["","0.1936","0.7546"],["","","0.7546"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Comparison Group<\/th>\n      <th>a<\/th>\n      <th>b<\/th>\n      <th>c<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","ordering":false,"columnDefs":[{"name":"Comparison Group","targets":0},{"name":"a","targets":1},{"name":"b","targets":2},{"name":"c","targets":3}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[0]; $(this.api().cell(row, 0).node()).css({'text-align':'left'});\nvar value=data[1]; $(this.api().cell(row, 1).node()).css({'text-align':'left'});\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'text-align':'left'});\nvar value=data[3]; $(this.api().cell(row, 3).node()).css({'text-align':'left'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
 </div>
 </div>
 </section>
@@ -488,6 +529,20 @@ a6                 1.9          0.40    a</code></pre>
 <section id="interpretation-of-pairwise-comparisons" class="level3">
 <h3 class="anchored" data-anchor-id="interpretation-of-pairwise-comparisons">Interpretation of Pairwise Comparisons</h3>
 <p>None of the Holm-adjusted pairwise comparisons were statistically significant at the α = 0.05 level. The closest was Type a vs.&nbsp;Type c (p = 0.0508), which narrowly missed significance. Although the overall ANOVA indicated a difference between groups, no individual pairwise difference remained significant after adjusting for multiple comparisons.</p>
+</section>
+<section id="sidenote-for-curiosity" class="level3">
+<h3 class="anchored" data-anchor-id="sidenote-for-curiosity">Sidenote for curiosity</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Homework7_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>While the ANOVA indicated a statistically significant difference in Tetrahydrocortisone levels across Cushing’s syndrome types, the pairwise comparisons did not identify specific group differences. However, the violin plots reveal meaningful differences in the <strong>distribution shape and variability</strong> among groups, particularly in types <strong>c</strong> and <strong>u</strong>, which show <strong>greater spread and skew</strong>.</p>
+<p>This suggests that while mean differences may be subtle, <strong>distributional differences</strong> across syndrome types may be biologically relevant and warrant further investigation. I worry much of this confusion stems from our extremely small sample sizes in individual groups.</p>
 </section>
 </section>
 <section id="part-2-textbook-problems-from-chapter-12" class="level2">
@@ -519,8 +574,8 @@ a6                 1.9          0.40    a</code></pre>
 <p>A study of patients with insulin-dependent diabetes was conducted to investigate the effects of cigarette smoking on renal and retinal complications. Before examining the results of the study, you wish to compare the systolic blood pressure across three subgroups: nonsmokers, current smokers, and ex-smokers. A sample is selected from each subgroup; the relevant data are shown below. Means and standard deviation are expressed in mm Hg. Assume that systolic blood pressure is normally distributed.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-bb2bad87f7ba5a6559c8" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-bb2bad87f7ba5a6559c8">{"x":{"filter":"none","vertical":false,"data":[["Nonsmokers","Current smokers","Ex-smokers"],[269,53,28],[115,114,118],[13.4,10.1,11.6]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Group<\/th>\n      <th>n<\/th>\n      <th>Mean<\/th>\n      <th>SD<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","ordering":false,"pageLength":3,"columnDefs":[{"className":"dt-right","targets":[1,2,3]},{"name":"Group","targets":0},{"name":"n","targets":1},{"name":"Mean","targets":2},{"name":"SD","targets":3}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[3,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-c63f2b8d3f2852362f5f" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-c63f2b8d3f2852362f5f">{"x":{"filter":"none","vertical":false,"data":[["Nonsmokers","Current smokers","Ex-smokers"],[269,53,28],[115,114,118],[13.4,10.1,11.6]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Group<\/th>\n      <th>n<\/th>\n      <th>Mean<\/th>\n      <th>SD<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","ordering":false,"pageLength":3,"columnDefs":[{"className":"dt-right","targets":[1,2,3]},{"name":"Group","targets":0},{"name":"n","targets":1},{"name":"Mean","targets":2},{"name":"SD","targets":3}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[3,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <section id="a-calculate-the-estimate-of-the-within-groups-variance" class="level4">
@@ -584,60 +639,70 @@ s_{\text{between}}^2 = \frac{269(115 - 115.1)^2 + 53(114 - 115.1)^2 + 28(118 - 1
 </section>
 <section id="c-at-the-0.05-level-of-significance-test-the-null-hypothesis-that-the-mean-systolic-blood-pressures-of-the-3-groups-are-identical.-what-do-you-conclude" class="level4">
 <h4 class="anchored" data-anchor-id="c-at-the-0.05-level-of-significance-test-the-null-hypothesis-that-the-mean-systolic-blood-pressures-of-the-3-groups-are-identical.-what-do-you-conclude">c) At the 0.05 level of significance, test the null hypothesis that the mean systolic blood pressures of the 3 groups are identical. What do you conclude?</h4>
-<p>We use the following formula to compute the F-statistic:</p>
-<p><span class="math display">\[
-F = \frac{s_{\text{between}}^2}{s_{\text{within}}^2}
-\]</span></p>
-<p>From earlier calculations:</p>
-<ul>
-<li><span class="math inline">\(s_{\text{between}}^2 = 151.15\)</span><br>
-</li>
-<li><span class="math inline">\(s_{\text{within}}^2 = 164.15\)</span></li>
-</ul>
-<p>Substitute into the formula:</p>
-<p><span class="math display">\[
-F = \frac{151.15}{164.15} \approx \boxed{0.921}
-\]</span></p>
-<p>To evaluate the significance of this result, we compare it to the critical value from the F-distribution with degrees of freedom:</p>
-<ul>
-<li>Numerator (between groups): <span class="math inline">\(df_1 = k - 1 = 2\)</span><br>
-</li>
-<li>Denominator (within groups): <span class="math inline">\(df_2 = n - k = 347\)</span></li>
-</ul>
-<p>Using R, the critical value at α = 0.05 and <span class="math inline">\((2, 347)\)</span> degrees of freedom is approximately <strong>3.00</strong>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set significance level (alpha), numerator df (k - 1), and denominator df (n - k)</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>df1 <span class="ot">&lt;-</span> <span class="dv">2</span>         <span class="co"># Between-group degrees of freedom</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> <span class="dv">347</span>       <span class="co"># Within-group degrees of freedom</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the critical value from the F-distribution</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>f_critical <span class="ot">&lt;-</span> <span class="fu">qf</span>(<span class="dv">1</span> <span class="sc">-</span> alpha, df1, df2)</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>f_critical</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 3.021745</code></pre>
-</div>
-</div>
-<p>Since our calculated F = 0.921 is <strong>less than</strong> the critical value of 3.00, we <strong>fail to reject the null hypothesis</strong>. Additionally we can use the upper-tail p-value to see the probability of getting an F-value as large or larger than what we got.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># F-statistic from Part C</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>F_value <span class="ot">&lt;-</span> <span class="fl">0.921</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Degrees of freedom</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>df_between <span class="ot">&lt;-</span> <span class="dv">2</span>      <span class="co"># numerator (k - 1)</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>df_within <span class="ot">&lt;-</span> <span class="dv">347</span>     <span class="co"># denominator (n - k)</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the upper-tail p-value</span></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>p_value <span class="ot">&lt;-</span> <span class="fu">pf</span>(F_value, df_between, df_within, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>p_value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.3990917</code></pre>
-</div>
-</div>
 </section>
-<section id="conclusion-1" class="level3">
-<h3 class="anchored" data-anchor-id="conclusion-1">Conclusion</h3>
-<p>At the 0.05 level of significance and a p-value of 0.4, we do not find sufficient evidence to conclude that the mean systolic blood pressures differ across the three smoking groups. The observed differences in group means could reasonably be due to random variation.</p>
+<section id="why-use-welchs-anova-in-this-case" class="level3">
+<h3 class="anchored" data-anchor-id="why-use-welchs-anova-in-this-case">Why Use Welch’s ANOVA in This Case?</h3>
+<p>In this analysis, the sample sizes across the three groups are highly unequal:</p>
+<ul>
+<li>Nonsmokers: <span class="math inline">\(n = 269\)</span><br>
+</li>
+<li>Current smokers: <span class="math inline">\(n = 53\)</span><br>
+</li>
+<li>Ex-smokers: <span class="math inline">\(n = 28\)</span></li>
+</ul>
+<p>This level of imbalance can make the standard one-way ANOVA unreliable, particularly if the assumption of equal variances is violated. Welch’s ANOVA is designed to account for both unequal group sizes and unequal variances by adjusting the degrees of freedom used in the F-test.</p>
+<p>Given the large difference in group sizes, we apply <strong>Welch’s ANOVA</strong> to obtain a more robust test of whether mean systolic blood pressure differs between smoking status groups.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate SBP data based on group summaries</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>n1 <span class="ot">&lt;-</span> <span class="dv">269</span>; mean1 <span class="ot">&lt;-</span> <span class="dv">115</span>; sd1 <span class="ot">&lt;-</span> <span class="fl">13.4</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>n2 <span class="ot">&lt;-</span> <span class="dv">53</span>;  mean2 <span class="ot">&lt;-</span> <span class="dv">114</span>; sd2 <span class="ot">&lt;-</span> <span class="fl">10.1</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>n3 <span class="ot">&lt;-</span> <span class="dv">28</span>;  mean3 <span class="ot">&lt;-</span> <span class="dv">118</span>; sd3 <span class="ot">&lt;-</span> <span class="fl">11.6</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate synthetic data for each group</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>sbp_nonsmokers <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n1, <span class="at">mean =</span> mean1, <span class="at">sd =</span> sd1)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>sbp_smokers    <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n2, <span class="at">mean =</span> mean2, <span class="at">sd =</span> sd2)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>sbp_exsmokers  <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n3, <span class="at">mean =</span> mean3, <span class="at">sd =</span> sd3)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine into one dataframe</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>sbp_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">SBP =</span> <span class="fu">c</span>(sbp_nonsmokers, sbp_smokers, sbp_exsmokers),</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">Group =</span> <span class="fu">factor</span>(<span class="fu">c</span>(</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rep</span>(<span class="st">"Nonsmoker"</span>, n1),</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rep</span>(<span class="st">"Smoker"</span>, n2),</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rep</span>(<span class="st">"Ex-smoker"</span>, n3)</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Run Welch's ANOVA (does not assume equal variances)</span></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>welch_result <span class="ot">&lt;-</span> <span class="fu">oneway.test</span>(SBP <span class="sc">~</span> Group, <span class="at">data =</span> sbp_df, <span class="at">var.equal =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract test components</span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>welch_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">F Statistic</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">round</span>(welch_result<span class="sc">$</span>statistic, <span class="dv">3</span>),</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Numerator df</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">round</span>(welch_result<span class="sc">$</span>parameter[<span class="dv">1</span>], <span class="dv">1</span>),</span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Denominator df</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">round</span>(welch_result<span class="sc">$</span>parameter[<span class="dv">2</span>], <span class="dv">1</span>),</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">P Value</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">round</span>(welch_result<span class="sc">$</span>p.value, <span class="dv">4</span>)</span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Display in a DT table</span></span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>DT<span class="sc">::</span><span class="fu">datatable</span>(</span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>  welch_table,</span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">rownames =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">options =</span> <span class="fu">list</span>(<span class="at">dom =</span> <span class="st">'t'</span>, <span class="at">ordering =</span> <span class="cn">FALSE</span>),</span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"Welch’s ANOVA Test Summary"</span></span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">formatStyle</span>(</span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">names</span>(welch_table),</span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>    <span class="st">'text-align'</span> <span class="ot">=</span> <span class="st">'center'</span></span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="datatables html-widget html-fill-item" id="htmlwidget-224639fa901d0d312fbc" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-224639fa901d0d312fbc">{"x":{"filter":"none","vertical":false,"caption":"<caption>Welch’s ANOVA Test Summary<\/caption>","data":[[1.133],[2],[65.8],[0.3283]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>F.Statistic<\/th>\n      <th>Numerator.df<\/th>\n      <th>Denominator.df<\/th>\n      <th>P.Value<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","ordering":false,"columnDefs":[{"className":"dt-right","targets":[0,1,2,3]},{"name":"F.Statistic","targets":0},{"name":"Numerator.df","targets":1},{"name":"Denominator.df","targets":2},{"name":"P.Value","targets":3}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[0]; $(this.api().cell(row, 0).node()).css({'text-align':'center'});\nvar value=data[1]; $(this.api().cell(row, 1).node()).css({'text-align':'center'});\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'text-align':'center'});\nvar value=data[3]; $(this.api().cell(row, 3).node()).css({'text-align':'center'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Welch’s ANOVA was used to test for differences in mean systolic blood pressure across the three smoking status groups, accounting for unequal sample sizes and variances. The test yielded an F-statistic of 1.133 with degrees of freedom (2, 65.8) and a p-value of 0.3283.</p>
+<p>Since the p-value is greater than the significance level of 0.05, we fail to reject the null hypothesis. There is no statistically significant evidence that mean systolic blood pressure differs among nonsmokers, current smokers, and ex-smokers.</p>
 <section id="d-if-you-find-that-the-means-are-not-all-equal-use-the-fishers-lsd-multiple-comparisons-procedure-to-determine-where-the-differences-lie." class="level4">
 <h4 class="anchored" data-anchor-id="d-if-you-find-that-the-means-are-not-all-equal-use-the-fishers-lsd-multiple-comparisons-procedure-to-determine-where-the-differences-lie.">d) If you find that the means are not all equal, use the Fisher’s LSD multiple comparisons procedure to determine where the differences lie.</h4>
 <p>We do not perform Fisher’s LSD comparisons, because the ANOVA result was not statistically significant.</p>

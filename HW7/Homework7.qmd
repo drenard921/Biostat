@@ -48,6 +48,24 @@ mass_df <- as.data.frame(Cushings)
 ## Q1: 
 Download Elisa.txt data, and test whether there are differences between Lots with respect to mean Optical Density. If appropriate, compare each pair of lots using t-tests with Holm's  adjustment. What can you say from this?
 
+```{r q1-lot-counts-plot}
+library(ggplot2)
+
+# Bar plot of number of observations per Lot
+ggplot(ELISA_df, aes(x = Lot, fill = Lot)) +
+  geom_bar(color = "black", alpha = 0.8) +
+  labs(
+    title = "Number of Observations per ELISA Lot",
+    x = "Lot",
+    y = "Count",
+    caption = "Sanity check to understand if our data is evenly distributed, allowing for standard ANOVA."
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+
+
 ### What is our Hypothesis?
 
 First we define the null hypothesis (H₀) in this instance, that the mean Optical Density is the same across all ELISA lots or in other words, there is no difference between lots. 
@@ -243,6 +261,19 @@ install the package MASS using the command install.package("MASS") followed by l
 
 #### Is there a difference between average excretion rates of Tetrahydrocortisone depending on the underlying type of Cushings syndrome? Which groups are significantly different?
 
+```{r q3-histogram}
+
+# Bar plot of counts by Cushing's type
+ggplot(mass_df, aes(x = Type, fill = Type)) +
+  geom_bar(color = "black", alpha = 0.8) +
+  labs(
+    title = "Number of Observations per Cushing's Syndrome Type",
+    x = "Type",
+    y = "Count"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
 
 #### Hypotheses and ANOVA Justification
 
@@ -250,7 +281,7 @@ install the package MASS using the command install.package("MASS") followed by l
 
 * The alternative hypothesis (H₁) is that at least one syndrome type has a different mean excretion rate compared to the others.
 
-We can use one-way ANOVA in this analysis because the outcome variable (Tetrahydrocortisone) is continuous, the grouping variable (Cushing’s syndrome type) is categorical with more than two independent levels, and the observations are independent. Since this is a publicly curated dataset from the MASS package, we assume reasonable adherence to data quality and normality assumptions, which ANOVA is robust to—especially given the balanced structure of the dataset.
+We can use one-way ANOVA in this analysis because the outcome variable (Tetrahydrocortisone) is continuous, the grouping variable (Cushing’s syndrome type) is categorical with more than two independent levels, and the observations are independent. Since this is a publicly curated dataset from the MASS package, we assume reasonable adherence to data quality and normality assumptions, which ANOVA is robust to—especially given the balanced structure of the dataset. Also as a sanity check I plotted the counts of each category in the dataset and they are relatively close meaning we are ok to proceed with normal ANOVA analysis.
 
 
 ```{r q3-cushings-anova}
@@ -334,6 +365,24 @@ DT::datatable(
 
 ### Interpretation of Pairwise Comparisons
 None of the Holm-adjusted pairwise comparisons were statistically significant at the α = 0.05 level. The closest was Type a vs. Type c (p = 0.0508), which narrowly missed significance. Although the overall ANOVA indicated a difference between groups, no individual pairwise difference remained significant after adjusting for multiple comparisons.
+
+### Sidenote for curiosity
+```{r, echo=FALSE}
+# Violin plots for Tetrahydrocortisone by Type
+ggplot(mass_df, aes(x = Type, y = Tetrahydrocortisone, fill = Type)) +
+  geom_violin(trim = FALSE, color = "black", alpha = 0.7) +
+  geom_jitter(width = 0.1, size = 1.5, alpha = 0.6) +
+  labs(
+    title = "Distribution of Tetrahydrocortisone by Cushing's Syndrome Type",
+    x = "Cushing's Syndrome Type",
+    y = "Tetrahydrocortisone Excretion"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+While the ANOVA indicated a statistically significant difference in Tetrahydrocortisone levels across Cushing's syndrome types, the pairwise comparisons did not identify specific group differences. However, the violin plots reveal meaningful differences in the **distribution shape and variability** among groups, particularly in types **c** and **u**, which show **greater spread and skew**. 
+
+This suggests that while mean differences may be subtle, **distributional differences** across syndrome types may be biologically relevant and warrant further investigation. I worry much of this confusion stems from our extremely small sample sizes in individual groups.
 
 ## Part 2 textbook problems from Chapter 12
 
@@ -445,59 +494,67 @@ The estimated between-group variance is **151.15**.
 
 #### c) At the 0.05 level of significance, test the null hypothesis that the mean systolic blood pressures of the 3 groups are identical. What do you conclude? 
 
-We use the following formula to compute the F-statistic:
+### Why Use Welch’s ANOVA in This Case?
 
-$$
-F = \frac{s_{\text{between}}^2}{s_{\text{within}}^2}
-$$
+In this analysis, the sample sizes across the three groups are highly unequal:
 
-From earlier calculations:
+- Nonsmokers: $n = 269$  
+- Current smokers: $n = 53$  
+- Ex-smokers: $n = 28$
 
-- $s_{\text{between}}^2 = 151.15$  
-- $s_{\text{within}}^2 = 164.15$
+This level of imbalance can make the standard one-way ANOVA unreliable, particularly if the assumption of equal variances is violated. Welch’s ANOVA is designed to account for both unequal group sizes and unequal variances by adjusting the degrees of freedom used in the F-test.
 
-Substitute into the formula:
+Given the large difference in group sizes, we apply **Welch’s ANOVA** to obtain a more robust test of whether mean systolic blood pressure differs between smoking status groups.
 
-$$
-F = \frac{151.15}{164.15} \approx \boxed{0.921}
-$$
+```{r q7-welch-anova}
+# Simulate SBP data based on group summaries
+set.seed(42)
 
-To evaluate the significance of this result, we compare it to the critical value from the F-distribution with degrees of freedom:
+n1 <- 269; mean1 <- 115; sd1 <- 13.4
+n2 <- 53;  mean2 <- 114; sd2 <- 10.1
+n3 <- 28;  mean3 <- 118; sd3 <- 11.6
 
-- Numerator (between groups): $df_1 = k - 1 = 2$  
-- Denominator (within groups): $df_2 = n - k = 347$
+# Generate synthetic data for each group
+sbp_nonsmokers <- rnorm(n1, mean = mean1, sd = sd1)
+sbp_smokers    <- rnorm(n2, mean = mean2, sd = sd2)
+sbp_exsmokers  <- rnorm(n3, mean = mean3, sd = sd3)
 
-Using R, the critical value at α = 0.05 and $(2, 347)$ degrees of freedom is approximately **3.00**.
-```{r q7-confirm-f-critical}
-# Set significance level (alpha), numerator df (k - 1), and denominator df (n - k)
-alpha <- 0.05
-df1 <- 2         # Between-group degrees of freedom
-df2 <- 347       # Within-group degrees of freedom
+# Combine into one dataframe
+sbp_df <- data.frame(
+  SBP = c(sbp_nonsmokers, sbp_smokers, sbp_exsmokers),
+  Group = factor(c(
+    rep("Nonsmoker", n1),
+    rep("Smoker", n2),
+    rep("Ex-smoker", n3)
+  ))
+)
 
-# Get the critical value from the F-distribution
-f_critical <- qf(1 - alpha, df1, df2)
-f_critical
+# Run Welch's ANOVA (does not assume equal variances)
+welch_result <- oneway.test(SBP ~ Group, data = sbp_df, var.equal = FALSE)
+# Extract test components
+welch_table <- data.frame(
+  `F Statistic` = round(welch_result$statistic, 3),
+  `Numerator df` = round(welch_result$parameter[1], 1),
+  `Denominator df` = round(welch_result$parameter[2], 1),
+  `P Value` = round(welch_result$p.value, 4)
+)
+
+# Display in a DT table
+DT::datatable(
+  welch_table,
+  rownames = FALSE,
+  options = list(dom = 't', ordering = FALSE),
+  caption = "Welch’s ANOVA Test Summary"
+) %>%
+  DT::formatStyle(
+    columns = names(welch_table),
+    'text-align' = 'center'
+  )
 ```
 
-Since our calculated F = 0.921 is **less than** the critical value of 3.00, we **fail to reject the null hypothesis**.
-Additionally we can use the upper-tail p-value to see the probability of getting an F-value as large or larger than what we got.
+Welch’s ANOVA was used to test for differences in mean systolic blood pressure across the three smoking status groups, accounting for unequal sample sizes and variances. The test yielded an F-statistic of 1.133 with degrees of freedom (2, 65.8) and a p-value of 0.3283.
 
-```{r q7-part-c-pvalue}
-# F-statistic from Part C
-F_value <- 0.921
-
-# Degrees of freedom
-df_between <- 2      # numerator (k - 1)
-df_within <- 347     # denominator (n - k)
-
-# Calculate the upper-tail p-value
-p_value <- pf(F_value, df_between, df_within, lower.tail = FALSE)
-p_value
-```
-
-### Conclusion
-
-At the 0.05 level of significance and a p-value of 0.4, we do not find sufficient evidence to conclude that the mean systolic blood pressures differ across the three smoking groups. The observed differences in group means could reasonably be due to random variation.
+Since the p-value is greater than the significance level of 0.05, we fail to reject the null hypothesis. There is no statistically significant evidence that mean systolic blood pressure differs among nonsmokers, current smokers, and ex-smokers.
 
 #### d) If you find that the means are not all equal, use the Fisher’s LSD multiple comparisons procedure to determine where the differences lie. 
 We do not perform Fisher’s LSD comparisons, because the ANOVA result was not statistically significant.
