@@ -48,9 +48,7 @@ mass_df <- as.data.frame(Cushings)
 ## Q1: 
 Download Elisa.txt data, and test whether there are differences between Lots with respect to mean Optical Density. If appropriate, compare each pair of lots using t-tests with Holm's  adjustment. What can you say from this?
 
-```{r q1-lot-counts-plot}
-library(ggplot2)
-
+```{r q1-lot-counts-plot, echo=FALSE}
 # Bar plot of number of observations per Lot
 ggplot(ELISA_df, aes(x = Lot, fill = Lot)) +
   geom_bar(color = "black", alpha = 0.8) +
@@ -368,19 +366,6 @@ None of the Holm-adjusted pairwise comparisons were statistically significant at
 
 ### Sidenote for curiosity
 ```{r, echo=FALSE}
-# Violin plots for Tetrahydrocortisone by Type
-ggplot(mass_df, aes(x = Type, y = Tetrahydrocortisone, fill = Type)) +
-  geom_violin(trim = FALSE, color = "black", alpha = 0.7) +
-  geom_jitter(width = 0.1, size = 1.5, alpha = 0.6) +
-  labs(
-    title = "Distribution of Tetrahydrocortisone by Cushing's Syndrome Type",
-    x = "Cushing's Syndrome Type",
-    y = "Tetrahydrocortisone Excretion"
-  ) +
-  theme_minimal() +
-  theme(legend.position = "none")
-```
-```{r}
 ggplot(mass_df, aes(x = Type, y = Tetrahydrocortisone, fill = Type)) +
   # Highlight rectangle from y = 5 to 15
   annotate("rect", xmin = -Inf, xmax = Inf, ymin = 0, ymax = 20,
