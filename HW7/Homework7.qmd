@@ -181,7 +181,7 @@ All other comparisons resulted in p-values greater than 0.4, indicating no stati
 
 Although the overall ANOVA confirmed that differences exist among the lots, the Holm-adjusted pairwise *t*-tests reveal that Lot 5 differs meaningfully from Lots 2 and 3. These findings help identify specific sources of variation in Optical Density and can inform follow-up steps for quality control or experimental review.
 
-### QQ Plot for the ;) plot
+### Q-Q Plot for the ;) plot
 ```{r q1-qqplot, fig.cap="Q–Q Plot of Residuals from ANOVA Model, echo=FALSE"}
 # Extract residuals from the ANOVA model
 residuals_q1 <- residuals(anova_result)
@@ -197,12 +197,142 @@ The Q–Q plot shows how the residuals from the ANOVA model compare to a theoret
 ## Q2:
 The researcher then tells you that moving forward, they are only going to be comparing two lots at a time (new vs old), but that it will be important that if the lots are different by 0.1 or more they want to be very confident they will be able to detect that. She asks you how many samples per lot they should analyze in order to have 99% power to detect a difference of 0.1 or greater? Assume that the standard deviation within lots is 0.08 and that you will use an alpha=0.05. 
 
-If they instead use 10 per group, what will be their power to detect this difference of 0.1 or greater? 
+```{r sample-size-calc}
+# Parameters
+delta <- 0.1       # Minimum detectable difference
+sd <- 0.08         # Standard deviation
+power_target <- 0.99
+alpha <- 0.05
+
+# Calculate required sample size per group
+sample_calc <- power.t.test(
+  delta = delta,
+  sd = sd,
+  sig.level = alpha,
+  power = power_target,
+  type = "two.sample",
+  alternative = "two.sided"
+)
+
+sample_calc$n  # Recommended sample size per group
+```
+
+To detect a difference of 0.1 in Optical Density between two ELISA lots with 99% power and a standard deviation of 0.08, the researcher would need approximately **`r ceiling(sample_calc$n)` samples per group**.  
+
+### If they instead use 10 per group, what will be their power to detect this difference of 0.1 or greater? 
+
+```{r power-with-10-samples}
+# Power calculation for fixed sample size
+power_calc <- power.t.test(
+  n = 10,
+  delta = delta,
+  sd = sd,
+  sig.level = alpha,
+  type = "two.sample",
+  alternative = "two.sided"
+)
+
+power_calc$power  # Resulting power
+```
+
+If only **10 samples per group** are used, the power drops to approximately **`r round(power_calc$power, 3)`**, which may not provide sufficient confidence in detecting meaningful differences.
 
 ## Q3:
 install the package MASS using the command install.package("MASS") followed by library(MASS). Now you will have a dataset loaded called Cushings, that contains data on the results of Diagnostic Tests of Patients with Cushing’s syndrome. Information about the dataset can be found in the help file for this dataset using the command ?Cushings 
 
-Is there a difference between average excretion rates of Tetrahydrocortisone depending on the underlying type of Cushings syndrome? Which groups are significantly different?
+#### Is there a difference between average excretion rates of Tetrahydrocortisone depending on the underlying type of Cushings syndrome? Which groups are significantly different?
+
+
+#### Hypotheses and ANOVA Justification
+
+* The null hypothesis (H₀) is that the average excretion rates of Tetrahydrocortisone are the same across all types of Cushing’s syndrome.
+
+* The alternative hypothesis (H₁) is that at least one syndrome type has a different mean excretion rate compared to the others.
+
+We can use one-way ANOVA in this analysis because the outcome variable (Tetrahydrocortisone) is continuous, the grouping variable (Cushing’s syndrome type) is categorical with more than two independent levels, and the observations are independent. Since this is a publicly curated dataset from the MASS package, we assume reasonable adherence to data quality and normality assumptions, which ANOVA is robust to—especially given the balanced structure of the dataset.
+
+
+```{r q3-cushings-anova}
+# Preview the data
+head(mass_df)
+
+# Check structure — confirm group and response variable
+str(mass_df)
+
+# Run one-way ANOVA
+cush_anova <- aov(Tetrahydrocortisone ~ Type, data = mass_df)
+
+# Extract and convert the summary to a data frame
+cush_anova_table <- as.data.frame(summary(cush_anova)[[1]])
+
+# Rename columns for clarity
+colnames(cush_anova_table) <- c(
+  "Degrees of Freedom",
+  "Sum of Squares",
+  "Mean Square",
+  "F Value",
+  "P Value"
+)
+
+# Round numeric values
+cush_anova_table <- cush_anova_table %>%
+  mutate(across(where(is.numeric), ~ round(.x, 3)))
+
+# Display with DT
+DT::datatable(
+  cush_anova_table,
+  rownames = FALSE,
+  options = list(dom = 't', ordering = FALSE), 
+  callback = JS(
+    "table.columns().every(function() {
+       $(this.header()).css('text-align', 'left');
+     });"
+  ) # Helped align wonly header
+) %>%
+  DT::formatStyle(
+    columns = names(cush_anova_table),
+    'text-align' = 'left'
+  )
+
+```
+
+### Interpretation of ANOVA Results
+The one-way ANOVA tests whether the average excretion of Tetrahydrocortisone differs by type of Cushing’s syndrome. The results show a statistically significant difference among the groups, with an F-statistic of 3.226 and a p-value of 0.041.
+
+Since the p-value is less than the significance level of 0.05, we reject the null hypothesis and conclude that at least one Cushing’s syndrome type has a significantly different mean Tetrahydrocortisone excretion rate compared to the others. Post hoc pairwise comparisons are warranted to determine which groups differ specifically.
+
+#### Which groups are significantly different?
+```{r q3-cushings-posthoc-dt}
+# Run pairwise t-tests with Holm adjustment
+cush_pairwise <- pairwise.t.test(
+  x = mass_df$Tetrahydrocortisone,
+  g = mass_df$Type,
+  p.adjust.method = "holm"
+)
+
+# Extract p-value matrix
+cush_matrix <- round(cush_pairwise$p.value, 4)
+cush_matrix[is.na(cush_matrix)] <- ""  # Remove NAs for display
+
+# Convert matrix to data frame
+cush_df <- as.data.frame(cush_matrix)
+cush_df <- tibble::rownames_to_column(cush_df, var = "Comparison Group")
+
+# Display as DT table
+DT::datatable(
+  cush_df,
+  rownames = FALSE,
+  options = list(dom = 't', ordering = FALSE),
+  caption = "Holm-adjusted pairwise p-values for Tetrahydrocortisone by Cushing’s Syndrome Type"
+) %>%
+  DT::formatStyle(
+    columns = names(cush_df),
+    'text-align' = 'left'
+  )
+```
+
+### Interpretation of Pairwise Comparisons
+None of the Holm-adjusted pairwise comparisons were statistically significant at the α = 0.05 level. The closest was Type a vs. Type c (p = 0.0508), which narrowly missed significance. Although the overall ANOVA indicated a difference between groups, no individual pairwise difference remained significant after adjusting for multiple comparisons.
 
 ## Part 2 textbook problems from Chapter 12
 
