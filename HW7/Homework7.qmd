@@ -47,6 +47,7 @@ mass_df <- as.data.frame(Cushings)
 
 ## Q1: 
 Download Elisa.txt data, and test whether there are differences between Lots with respect to mean Optical Density. If appropriate, compare each pair of lots using t-tests with Holm's  adjustment. What can you say from this?
+
 ### What is our Hypothesis?
 
 First we define the null hypothesis (H₀) in this instance, that the mean Optical Density is the same across all ELISA lots or in other words, there is no difference between lots. 
@@ -376,12 +377,130 @@ datatable(
 ```
 
 #### a) Calculate the estimate of the within-groups variance 
+To estimate the within-group variance, we use the formula for pooled variance across all three groups:
+
+$$
+s_{\text{pooled}}^2 = \frac{(n_1 - 1)s_1^2 + (n_2 - 1)s_2^2 + (n_3 - 1)s_3^2}{(n_1 - 1) + (n_2 - 1) + (n_3 - 1)}
+$$
+
+Using the given group statistics:
+
+- $n_1 = 269$, $s_1 = 13.4$, so $s_1^2 = 179.56$
+- $n_2 = 53$, $s_2 = 10.1$, so $s_2^2 = 102.01$
+- $n_3 = 28$, $s_3 = 11.6$, so $s_3^2 = 134.56$
+
+Substituting into the formula:
+
+$$
+s_{\text{pooled}}^2 = \frac{(268)(179.56) + (52)(102.01) + (27)(134.56)}{268 + 52 + 27}
+$$
+
+$$
+= \frac{48023.68 + 5304.52 + 3633.12}{347}
+$$
+
+$$
+= \frac{56961.32}{347} \approx \boxed{164.15}
+$$
+
+The estimated within-group variance is **164.15**.
 
 #### b) Calculate the estimate of the between groups variance 
 
+$$
+s_{\text{between}}^2 = \frac{\sum_{i=1}^k n_i (\bar{x}_i - \bar{x})^2}{k - 1}
+$$
+
+Where:
+- $n_i$ = sample size in group $i$  
+- $\bar{x}_i$ = sample mean of group $i$  
+- $\bar{x}$ = overall mean  
+- $k$ = number of groups
+
+Using the group statistics:
+
+- $n_1 = 269$, $\bar{x}_1 = 115$  
+- $n_2 = 53$, $\bar{x}_2 = 114$  
+- $n_3 = 28$, $\bar{x}_3 = 118$  
+- Total $n = 269 + 53 + 28 = 350$  
+- Overall mean:
+  
+$$
+\bar{x} = \frac{269(115) + 53(114) + 28(118)}{350} = \frac{30935 + 6042 + 3304}{350} = \frac{40281}{350} \approx 115.1
+$$
+
+Substituting into the formula:
+
+$$
+s_{\text{between}}^2 = \frac{269(115 - 115.1)^2 + 53(114 - 115.1)^2 + 28(118 - 115.1)^2}{3 - 1}
+$$
+
+$$
+= \frac{269(0.01) + 53(1.21) + 28(8.41)}{2}
+= \frac{2.69 + 64.13 + 235.48}{2}
+= \frac{302.3}{2} = \boxed{151.15}
+$$
+
+The estimated between-group variance is **151.15**.
+
 #### c) At the 0.05 level of significance, test the null hypothesis that the mean systolic blood pressures of the 3 groups are identical. What do you conclude? 
 
+We use the following formula to compute the F-statistic:
+
+$$
+F = \frac{s_{\text{between}}^2}{s_{\text{within}}^2}
+$$
+
+From earlier calculations:
+
+- $s_{\text{between}}^2 = 151.15$  
+- $s_{\text{within}}^2 = 164.15$
+
+Substitute into the formula:
+
+$$
+F = \frac{151.15}{164.15} \approx \boxed{0.921}
+$$
+
+To evaluate the significance of this result, we compare it to the critical value from the F-distribution with degrees of freedom:
+
+- Numerator (between groups): $df_1 = k - 1 = 2$  
+- Denominator (within groups): $df_2 = n - k = 347$
+
+Using R, the critical value at α = 0.05 and $(2, 347)$ degrees of freedom is approximately **3.00**.
+```{r q7-confirm-f-critical}
+# Set significance level (alpha), numerator df (k - 1), and denominator df (n - k)
+alpha <- 0.05
+df1 <- 2         # Between-group degrees of freedom
+df2 <- 347       # Within-group degrees of freedom
+
+# Get the critical value from the F-distribution
+f_critical <- qf(1 - alpha, df1, df2)
+f_critical
+```
+
+Since our calculated F = 0.921 is **less than** the critical value of 3.00, we **fail to reject the null hypothesis**.
+Additionally we can use the upper-tail p-value to see the probability of getting an F-value as large or larger than what we got.
+
+```{r q7-part-c-pvalue}
+# F-statistic from Part C
+F_value <- 0.921
+
+# Degrees of freedom
+df_between <- 2      # numerator (k - 1)
+df_within <- 347     # denominator (n - k)
+
+# Calculate the upper-tail p-value
+p_value <- pf(F_value, df_between, df_within, lower.tail = FALSE)
+p_value
+```
+
+### Conclusion
+
+At the 0.05 level of significance and a p-value of 0.4, we do not find sufficient evidence to conclude that the mean systolic blood pressures differ across the three smoking groups. The observed differences in group means could reasonably be due to random variation.
+
 #### d) If you find that the means are not all equal, use the Fisher’s LSD multiple comparisons procedure to determine where the differences lie. 
+We do not perform Fisher’s LSD comparisons, because the ANOVA result was not statistically significant.
 
 ## Q8 Problem 12.11:
 Use the same lowbwt dataset as before, focusing on sbp and gender this time.
