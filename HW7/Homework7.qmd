@@ -7,7 +7,7 @@ output: pdf_document
 #### Dylan Renard
 #### Professor Proschan & Professor Nason
 #### JHU Biostatistics
-#### July 3rd, 2025
+#### July 6th, 2025
 
 # Homework 7
 In this homework, we use ANOVA to test whether Optical Density values differ across ELISA lots and appply Holm's method for pairwise comparisons. We also calculate the sample size needed to detect a meaningful difference with high power, and assess power given a fixed group size. Finally, we explore real-world datasets (Cushings, low birth weight infants) to apply t-tests and ANOVA, reinforcing concepts around multiple comparisons and variance analysis.
@@ -15,6 +15,9 @@ In this homework, we use ANOVA to test whether Optical Density values differ acr
 
 ## Part 1 Coding Questions
 ```{r setup, include=FALSE}
+# Set CRAN mirror explicitly
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+
 
 # List of required packages
 required_pkgs <- c("dplyr","ggplot2", "readr", "DT", "MASS", "pwr")
@@ -81,9 +84,9 @@ The assumption of independence holds because each sample was drawn from a separa
 
 The assumption of equal variance (homogeneity of variance) can be considered reasonable here by prior validation of lab protocol or can be assessed using a diagnostic Q-Q plot or Levene's test.
 
-The Q-Q plot visually compairs the distribution of residuals to a normal distribution, helping identify deviations such as skewness or heavy tails that may affect variance. 
+The Q-Q plot visually compairs the distribution of residuals to a normal distribution, helping identify deviations such as skewness or heavy tails that may affect variance (Pleil 2016). 
 
-Levene's test provides a statistical method to assess whether variances are equal across groups, regardless of normality, making it especially useful in real-world data. 
+Levene's test provides a statistical method to assess whether variances are equal across groups, regardless of normality, making it especially useful in real-world data (Deng 2014). 
 
 While these tools were not covered in lecture, they represent important extensions for validating assumptions and ensuring the reliablilty of lab data prior to downstream statistical analysis. Links to relevant articles on this subject can be found in the sources section.
 
@@ -563,15 +566,150 @@ We do not perform Fisher’s LSD comparisons, because the ANOVA result was not s
 Use the same lowbwt dataset as before, focusing on sbp and gender this time.
 
 #### a) Assuming equal variances for males and females, use the two-sample t-test to evaluate the null hypothesis that among low birth weight infants, the mean systolic blood pressure for girls is identical to that for boys. 
+**Null hypothesis (H₀):**  
+
+```{r q8-gender-histogram}
+
+# Bar plot of gender counts
+ggplot(lowbwt_df, aes(x = factor(sex), fill = factor(sex))) +
+  geom_bar(color = "black", alpha = 0.8) +
+  scale_x_discrete(labels = c("0" = "Female", "1" = "Male")) +
+  labs(
+    title = "Number of Male and Female Infants",
+    x = "Gender",
+    y = "Count",
+    caption = "The study population is roughly balanced across gender groups."
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none",
+  plot.caption = element_text(hjust = 0, face = "italic", size = 9)
+  )
+```
+
+
+  The mean systolic blood pressure (SBP) among low birth weight male infants is equal to that of female infants.  
+
+  $$
+  H_0: \mu_{\text{male}} = \mu_{\text{female}}
+  $$
+
+ **Alternative hypothesis (H₁):**  
+  The mean systolic blood pressure differs between male and female low birth weight infants.  
+
+  $$
+  H_1: \mu_{\text{male}} \ne \mu_{\text{female}}
+  $$
+
+
+```{r q8a-t-test}
+
+# Recode and rename for clarity
+lowbwt_df <- lowbwt_df %>%
+  mutate(
+    gender = factor(sex, levels = c(0, 1), labels = c("Female", "Male"))
+  )
+
+# Run two-sample t-test assuming equal variances
+t_test_result <- t.test(
+  sbp ~ gender,
+  data = lowbwt_df,
+  var.equal = TRUE,
+  alternative = "two.sided"
+)
+
+# Extract relevant results into a data frame
+t_test_table <- data.frame(
+  `Female` = round(unname(t_test_result$estimate[1]), 2),
+  `Male` = round(unname(t_test_result$estimate[2]), 2),
+  `t-value` = round(t_test_result$statistic, 3),
+  `df` = round(t_test_result$parameter, 1),
+  `p-value` = round(t_test_result$p.value, 4),
+  `CI Lower` = round(t_test_result$conf.int[1], 2),
+  `CI Upper` = round(t_test_result$conf.int[2], 2)
+)
+# Display as a DT table
+datatable(
+  t_test_table,
+  rownames = FALSE,
+  options = list(dom = 't',
+                 scrollX = FALSE,
+                 autoWidth = TRUE,
+                 columnDefs = list(list(width = '100px', targets = "_all"))),
+  caption = "Two-Sample t-test Results (Equal Variances Assumed)"
+) %>%
+  formatStyle(
+    columns = names(t_test_table),
+    `text-align` = "left"
+  )
+```
+
+##### Conclusion:
+The two-sample t-test assuming equal variances compared systolic blood pressure between male and female low birth weight infants.
+Since our p-value is much greater than the significance level of 0.05, we fail to reject the null hypothesis. There is no statisticaally significant evidence of a difference in mean systolic blood pressure between male and female infants in this dataset.
 
 #### b) Test the same null hypothesis using ANOVA. 
+```{r q8b-anova-dt-comparison}
+library(DT)
+
+# Run standard ANOVA
+anova_result <- aov(sbp ~ gender, data = lowbwt_df)
+anova_summary <- summary(anova_result)[[1]]
+
+# Run Welch's ANOVA
+welch_result <- oneway.test(sbp ~ gender, data = lowbwt_df, var.equal = FALSE)
+
+# Create shared summary table
+anova_comparison <- data.frame(
+  Method = c("Standard ANOVA", "Welch's ANOVA"),
+  `F Statistic` = c(
+    round(anova_summary$`F value`[1], 3),
+    round(welch_result$statistic, 3)
+  ),
+  `Numerat df` = c(
+    anova_summary$Df[1],
+    round(welch_result$parameter[1], 1)
+  ),
+  `Denom df` = c(
+    anova_summary$Df[2],
+    round(welch_result$parameter[2], 1)
+  ),
+  `p-value` = c(
+    round(anova_summary$`Pr(>F)`[1], 4),
+    round(welch_result$p.value, 4)
+  )
+)
+
+# Display as a DT table
+datatable(
+  anova_comparison,
+  rownames = FALSE,
+  options = list(dom = 't'),
+  caption = "Comparison of Standard ANOVA and Welch's ANOVA Results"
+) %>%
+  formatStyle(
+    columns = names(anova_comparison),
+    `text-align` = "center"
+  )
+  ```
 
 #### c) Do you get the same answer? Why or why not? 
+All three statistical methods — two-sample t-test, standard ANOVA, and Welch’s ANOVA — were used to test whether the mean systolic blood pressure differs between male and female low birth weight infants.
 
+All tests returned **p-values greater than 0.05:**
+
+* t-test: 0.5451
+* standard ANOVA: 0.5451
+* Welch’s ANOVA: 0.5480
+
+This consistent result supports the conclusion that there is **no statistically significant difference** in mean SBP between male and female infants in this dataset. Welch’s ANOVA additionally confirms that the result is robust even without assuming equal variances.
 
 ## Sources: 
 
+Deng, W. Q., Asma, S., & Paré, G. (2014). Meta-analysis of SNPs involved in variance heterogeneity using Levene's test for equal variances. European journal of human genetics : EJHG, 22(3), 427–430. https://doi.org/10.1038/ejhg.2013.166
+
 Pagano, M., & Gauvreau, K. (2018). Principles of biostatistics / Marcello Pagano, Kimberlee Gauvreau. Duxbury Press.
+
+Pleil J. D. (2016). QQ-plots for assessing distributions of biomarker measurements and generating defensible summary statistics. Journal of breath research, 10(3), 035001. https://doi.org/10.1088/1752-7155/10/3/035001
 
 #### Thank you for reviewing and making it to the end of my work, in this assignment's signature end off I'd like to share some bioinformatics pipeline resources I've been learning through Internship work with the Iowa State Hygienic Laboratory. 
 
@@ -580,3 +718,9 @@ Pagano, M., & Gauvreau, K. (2018). Principles of biostatistics / Marcello Pagano
 #### Additionally a website on Seqera to allow for custom Docker/Singularity Image generation. Both links are attached, these resources are important for public health bioinformatics helping answering the question of how DNA/RNA lab generated sequence data is processed to provide meaningful reports (anything from waste water bacteria identification, to identifying viral strains). 
 
 #### Wish me luck, never done this before and hope to deliver for the state of Iowa! 
+
+### Helpful Links
+
+- [Hello Nextflow Tutorial (Nextflow Training 2.1)](https://training.nextflow.io/2.1/hello_nextflow/)
+- [Containers Overview (Seqera Labs)](https://seqera.io/containers/)
+
