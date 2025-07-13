@@ -1,0 +1,219 @@
+---
+title: "Midterm Scratch Work - Biostatistics"
+Author: "Dylan Renard"
+output: pdf_document
+---
+
+#### Dylan Renard
+#### Professor Proschan & Professor Nason
+#### JHU Biostatistics
+#### July 13th, 2025
+
+```{r}
+
+# Q7 part a
+# Calculate the probability of getting between 3 and 6 successes 
+# in a binomial distribution with n = 10 trials and p = 0.5 success probability
+
+# P(3 ≤ X ≤ 6) = P(X ≤ 6) - P(X ≤ 2)
+pbinom(6, size = 10, prob = 0.5) - pbinom(2, size = 10, prob = 0.5)
+```
+
+### Question 3(b)
+
+**Sample size calculation for a follow-up trial:**  
+You want to detect a **0.5-unit difference** in mean antibody response with a **standard deviation of 1.5**, **90% power**, and a **two-sided test**.
+
+We use the sample size formula for comparing two independent means:
+
+$$
+n = \left( \frac{Z_{1 - \alpha/2} + Z_{1 - \beta}}{\Delta / \sigma} \right)^2
+$$
+
+**Where:**
+
+- $$\Delta = 0.5$$ (effect size to detect)  
+- $$\sigma = 1.5$$ (standard deviation)  
+- $$\alpha = 0.05$$ (significance level for a two-sided test ⇒ 95% confidence)  
+- $$\text{Power} = 90\% \Rightarrow \beta = 0.10$$
+
+Although the study is powered at **90%**, we still use a **95% confidence level** for hypothesis testing (i.e., $$\alpha = 0.05$$), which is standard practice in clinical trials and reflected in the formula above.
+
+**From the standard normal table (using R):**
+
+```{r}
+# Z-score for 95% confidence level (two-sided test)
+qnorm(1 - 0.05 / 2)  # 1.959964
+
+# Z-score for 90% power
+qnorm(0.90)  # 1.281552
+```
+
+**Plugging into the formula:**
+
+We substitute the values into the formula for sample size:
+
+$$
+n = \left( \frac{1.96 + 1.28}{0.5 / 1.5} \right)^2
+= \left( \frac{3.24}{0.333} \right)^2
+= (9.72)^2
+\approx 94.5
+$$
+
+**Checking work with R** 
+```{r}
+# Z-scores
+Z_alpha_2 <- qnorm(1 - 0.05 / 2)  # ≈ 1.96
+Z_beta <- qnorm(0.90)            # ≈ 1.28
+
+# Inputs
+delta <- 0.5
+sigma <- 1.5
+Z_total <- Z_alpha_2 + Z_beta
+
+# Sample size calculation
+n <- (Z_total / (delta / sigma))^2
+n  # ≈ 94.5
+```
+
+**Answer:**  
+You would need approximately **95 participants per group** to detect a 0.5-unit difference in mean antibody response with **90% power**, using a **two-sided test** at the **0.05 significance level**.
+
+### Question 6(b)
+
+**Calculate the p-value for the paired t-test:**
+
+```{r}
+# Define test scores for each twin
+traditional <- c(78, 85, 67, 93, 72, 60, 71, 49, 75)
+montessori  <- c(81, 83, 71, 90, 73, 58, 75, 52, 75)
+
+# Run paired t-test
+t_test_result <- t.test(traditional, montessori, paired = TRUE)
+
+# Output t-statistic and p-value
+t_test_result$statistic  # t-value
+t_test_result$p.value    # p-value
+```
+
+### Q6 part d
+```{r}
+t_test_result$conf.int
+```
+
+```{r}
+# Required packages
+library(ggplot2)
+
+
+# Extract CI values and degrees of freedom
+ci_low <- t_test_result$conf.int[1]
+ci_high <- t_test_result$conf.int[2]
+mean_diff <- t_test_result$estimate  # mean of the differences
+df <- t_test_result$parameter        # degrees of freedom
+t_crit <- qt(0.975, df)
+
+# Estimate standard error from CI width and t critical value
+std_err <- (ci_high - mean_diff) / t_crit
+
+# Generate t-distribution
+x_vals <- seq(mean_diff - 4*std_err, mean_diff + 4*std_err, length.out = 500)
+y_vals <- dt((x_vals - mean_diff) / std_err, df)
+
+# Normalize y for aesthetics
+y_vals <- y_vals / max(y_vals)
+
+# Create data frame
+plot_data <- data.frame(x = x_vals, y = y_vals)
+
+# Plot with labeled CI and mean
+ggplot(plot_data, aes(x = x, y = y)) +
+  geom_line(color = "steelblue", linewidth = 1) +
+  geom_vline(xintercept = mean_diff, 
+             color = "navy", linetype = "solid", linewidth = 1) +
+  geom_vline(xintercept = ci_low, 
+             color = "red", linetype = "dashed", linewidth = 1) +
+  geom_vline(xintercept = ci_high, 
+             color = "red", linetype = "dashed", linewidth = 1) +
+  geom_vline(xintercept = 0, 
+             color = "gray", linetype = "dotted", linewidth = 1) +
+  annotate("text", x = mean_diff, 
+                   y = 0.9, 
+                   label = paste0("Mean = ", round(mean_diff, 2)), 
+                   color = "navy", vjust = -1) +
+  annotate("text", x = ci_low, 
+                   y = 0.7, 
+                   label = paste0("CI Lower = ", round(ci_low, 2)), 
+                   color = "red", angle = 90, vjust = -0.5) +
+  annotate("text", x = ci_high, 
+                   y = 0.7, 
+                   label = paste0("CI Upper = ", round(ci_high, 2)), 
+                   color = "red", angle = 90, vjust = -0.5) +
+  labs(
+    title = "95% Confidence Interval on t-distribution\n(Traditional - Montessori)",
+    x = "Difference in Means",
+    y = "Relative Density"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    legend.position = "none"
+  )
+```
+
+### Question 4
+
+We tested whether mean weight loss differed across the three diet groups using **Welch’s ANOVA**, which adjusts for unequal variances between groups.
+
+```{r}
+# Load dataset using base R
+diet_data <- read.csv("diet.csv")
+
+# Calculate weight loss
+diet_data$weight_loss <- diet_data$initial.weight - diet_data$final.weight
+
+# Perform Welch’s ANOVA
+welch_result <- oneway.test(weight_loss ~ diet.type, data = diet_data, var.equal = FALSE)
+
+# Display the result
+welch_result
+```
+
+---
+
+```{r}
+# Load required package
+library(ggplot2)
+
+# Load the dataset
+diet_data <- read.csv("diet.csv")
+
+# Calculate weight loss
+diet_data$weight_loss <- diet_data$initial.weight - diet_data$final.weight
+
+# Calculate mean weight loss by diet group
+mean_table <- aggregate(weight_loss ~ diet.type, data = diet_data, FUN = mean)
+
+# Rename columns for clarity
+colnames(mean_table) <- c("Diet Type", "Mean Weight Loss (kg)")
+
+# Display the table
+mean_table
+```
+
+```{r}
+# Plot with colored bars and labels
+ggplot(mean_table, aes(x = `Diet Type`, y = `Mean Weight Loss (kg)`, fill = `Diet Type`)) +
+  geom_bar(stat = "identity", width = 0.6, show.legend = FALSE) +
+  geom_text(aes(label = round(`Mean Weight Loss (kg)`, 2)),
+            vjust = -0.5, size = 4, color = "black") +
+  scale_fill_manual(values = c("A" = "#66c2a5", "B" = "#fc8d62", "C" = "#8da0cb")) +
+  labs(
+    title = "Mean Weight Loss by Diet Group",
+    x = "Diet Type",
+    y = "Mean Weight Loss (kg)"
+  ) +
+  theme_minimal() +
+  ylim(0, max(mean_table$`Mean Weight Loss (kg)`) + 1)
+```
+
