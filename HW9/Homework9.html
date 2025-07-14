@@ -271,8 +271,8 @@ window.Quarto = {
 <span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>          <span class="at">options =</span> <span class="fu">list</span>(<span class="at">dom =</span> <span class="st">'t'</span>, <span class="at">ordering =</span> <span class="cn">FALSE</span>),</span>
 <span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>          <span class="at">caption =</span> <span class="st">"2×2 Table: Sex vs Aortic Stenosis"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-05b82626f584cd622a77" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-05b82626f584cd622a77">{"x":{"filter":"none","vertical":false,"caption":"<caption>2×2 Table: Sex vs Aortic Stenosis<\/caption>","data":[["Female","Male"],[66,44],[43,62]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Sex<\/th>\n      <th>No Aortic Stenosis<\/th>\n      <th>Aortic Stenosis<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","ordering":false,"columnDefs":[{"className":"dt-right","targets":[1,2]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-069de5eee0218ce819a1" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-069de5eee0218ce819a1">{"x":{"filter":"none","vertical":false,"caption":"<caption>2×2 Table: Sex vs Aortic Stenosis<\/caption>","data":[["Female","Male"],[66,44],[43,62]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Sex<\/th>\n      <th>No Aortic Stenosis<\/th>\n      <th>Aortic Stenosis<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","ordering":false,"columnDefs":[{"className":"dt-right","targets":[1,2]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <section id="a.-conduct-a-fishers-exact-test-on-the-2x2-table-to-test-the-null-hypothesis-that-there-is-no-association-between-gender-and-aortic-stenosis-against-the-alternative-hypothesis-that-there-is-an-association.-write-one-full-sentence-giving-your-conclusions." class="level4">
@@ -305,55 +305,193 @@ odds ratio
 <section id="b.-conduct-a-chi-square-test-on-the-same-table.-do-you-get-the-same-results-as-the-fisher-exact-test-any-guess-why-or-why-not" class="level4">
 <h4 class="anchored" data-anchor-id="b.-conduct-a-chi-square-test-on-the-same-table.-do-you-get-the-same-results-as-the-fisher-exact-test-any-guess-why-or-why-not">b. Conduct a Chi-square test on the same table. Do you get the same results as the fisher exact test? Any guess why or why not?</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">#enter R code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the same contingency table from Q3a</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>table_sex_disease <span class="ot">&lt;-</span> <span class="fu">table</span>(st_data<span class="sc">$</span>sex, st_data<span class="sc">$</span>disease)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Run Chi-square test of independence</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>chisq_result <span class="ot">&lt;-</span> <span class="fu">chisq.test</span>(table_sex_disease, <span class="at">correct =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># View result</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>chisq_result</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's Chi-squared test
+
+data:  table_sex_disease
+X-squared = 7.7978, df = 1, p-value = 0.005231</code></pre>
 </div>
+</div>
+</section>
+<section id="b-conclusion" class="level4">
+<h4 class="anchored" data-anchor-id="b-conclusion">3b Conclusion:</h4>
+<p>A Chi-square test of independence on the 2×2 table of sex and aortic stenosis yielded a p-value less than 0.05 at 0.005231, consistent with the result from the Fisher’s Exact Test. Both tests lead us to reject the null hypothesis that sex and aortic stenosis are independent. This agreement is expected because our sample size is large enough for the Chi-square approximation to be valid. Fisher’s Exact Test is more accurate for small sample sizes or sparse tables, but in this case, both tests give similar results.</p>
 </section>
 </section>
 <section id="pretend-the-people-with-aortic-stenosis-are-a-random-sample-of-all-people-with-this-disease.-test-the-hypothesis-that-among-the-people-with-aortic-stenosis-the-proportion-of-women-is-0.5.-give-the-estimated-proportion-and-a-95-ci-along-with-the-test." class="level3">
 <h3 class="anchored" data-anchor-id="pretend-the-people-with-aortic-stenosis-are-a-random-sample-of-all-people-with-this-disease.-test-the-hypothesis-that-among-the-people-with-aortic-stenosis-the-proportion-of-women-is-0.5.-give-the-estimated-proportion-and-a-95-ci-along-with-the-test.">4. Pretend the people with aortic stenosis are a random sample of all people with this disease. Test the hypothesis that among the people with aortic stenosis, the proportion of women is 0.5. Give the estimated proportion and a 95% CI along with the test.</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">#enter R code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset to only people with aortic stenosis</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>stenosis_disease <span class="ot">&lt;-</span> <span class="fu">subset</span>(st_data, disease <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of people with aortic stenosis</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(stenosis_disease)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of women: sex = 0</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">sum</span>(stenosis_disease<span class="sc">$</span>sex <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample proportion</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>p_hat <span class="ot">&lt;-</span> x <span class="sc">/</span> n</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Null hypothesis value</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>p0 <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Standard error under null</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>se_null <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(p0 <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p0) <span class="sc">/</span> n)</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Z-statistic</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> (p_hat <span class="sc">-</span> p0) <span class="sc">/</span> se_null</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Two-tailed p-value</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>p_value <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="fu">abs</span>(z)))</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a><span class="co"># 95% confidence interval (based on sample)</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>se_sample <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(p_hat <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_hat) <span class="sc">/</span> n)</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>z_star <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>)</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>ci_lower <span class="ot">&lt;-</span> p_hat <span class="sc">-</span> z_star <span class="sc">*</span> se_sample</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>ci_upper <span class="ot">&lt;-</span> p_hat <span class="sc">+</span> z_star <span class="sc">*</span> se_sample</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Output</span></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Proportion of women among patients with aortic stenosis:"</span>, <span class="fu">round</span>(p_hat, <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Proportion of women among patients with aortic stenosis: 0.4095 </code></pre>
 </div>
-<pre><code>Sample Code: 
-stenosis &lt;- read.csv("stenosis.txt")
-table(stenosis$disease)
-binom.test(table(stenosis$disease))
-binom.test(table(stenosis$disease),p=.4)
-table(stenosis$disease,stenosis$sex..male)
-fisher.test(table(stenosis$disease,stenosis$sex..male))
-chisq.test(table(stenosis$disease,stenosis$sex..male))</code></pre>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"95% CI: ["</span>, <span class="fu">round</span>(ci_lower, <span class="dv">4</span>), <span class="st">","</span>, <span class="fu">round</span>(ci_upper, <span class="dv">4</span>), <span class="st">"]</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>95% CI: [ 0.3155 , 0.5036 ]</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Z-statistic:"</span>, <span class="fu">round</span>(z, <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Z-statistic: -1.8542 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"P-value:"</span>, <span class="fu">round</span>(p_value, <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>P-value: 0.0637 </code></pre>
+</div>
+</div>
+<section id="q4-conclusion" class="level4">
+<h4 class="anchored" data-anchor-id="q4-conclusion">Q4 Conclusion:</h4>
+<p>Among patients with aortic stenosis, the estimated proportion of women was 40.95%, with a 95% confidence interval of [31.55%, 50.36%]. A two-sided test of <span class="math inline">\(H_0: p = 0.5\)</span> resulted in a p-value of 0.0637, so we fail to reject the null hypothesis at the 0.05 significance level.</p>
+</section>
 </section>
 <section id="in-a-study-of-maternal-smoking-and-congenital-malformations-consider-children-born-with-an-oral-cleft.-in-a-random-sample-of-27-such-infants-15-have-mothers-who-smoked-during-pregnancy." class="level3">
 <h3 class="anchored" data-anchor-id="in-a-study-of-maternal-smoking-and-congenital-malformations-consider-children-born-with-an-oral-cleft.-in-a-random-sample-of-27-such-infants-15-have-mothers-who-smoked-during-pregnancy.">5. In a study of maternal smoking and congenital malformations, consider children born with an oral cleft. In a random sample of 27 such infants, 15 have mothers who smoked during pregnancy.</h3>
 <section id="a.-what-is-the-point-estimate-for-p-construct-a-95-confidence-interval-for-the-population-proportion." class="level4">
 <h4 class="anchored" data-anchor-id="a.-what-is-the-point-estimate-for-p-construct-a-95-confidence-interval-for-the-population-proportion.">a. What is the point estimate for p? Construct a 95% confidence interval for the population proportion.</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Given data</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>x_5 <span class="ot">&lt;-</span> <span class="dv">15</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>n_5 <span class="ot">&lt;-</span> <span class="dv">27</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>p_hat_5 <span class="ot">&lt;-</span> x_5 <span class="sc">/</span> n_5</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Standard error</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>se_5 <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(p_hat_5 <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_hat_5) <span class="sc">/</span> n_5)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="co"># z* for 95% CI</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>z_star <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>)</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Confidence interval</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>ci_lower_5 <span class="ot">&lt;-</span> p_hat_5 <span class="sc">-</span> z_star <span class="sc">*</span> se_5</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>ci_upper_5 <span class="ot">&lt;-</span> p_hat_5 <span class="sc">+</span> z_star <span class="sc">*</span> se_5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The point estimate of the proportion of mothers who smoked is 55.56%. The 95% confidence interval for the population proportion is [36.81%, 74.3%].</p>
 </section>
 <section id="b.-you-would-like-to-know-whether-the-proportion-of-mothers-who-smoked-during-pregnancy-for-children-with-an-oral-cleft-is-identical-to-the-proportion-of-mothers-who-smoked-for-children-with-other-types-of-malformations-which-is-32.8.-what-is-the-null-hypothesis-of-the-appropriate-test" class="level4">
 <h4 class="anchored" data-anchor-id="b.-you-would-like-to-know-whether-the-proportion-of-mothers-who-smoked-during-pregnancy-for-children-with-an-oral-cleft-is-identical-to-the-proportion-of-mothers-who-smoked-for-children-with-other-types-of-malformations-which-is-32.8.-what-is-the-null-hypothesis-of-the-appropriate-test">b. You would like to know whether the proportion of mothers who smoked during pregnancy for children with an oral cleft is identical to the proportion of mothers who smoked for children with other types of malformations, which is 32.8%. What is the null hypothesis of the appropriate test?</h4>
+<p><strong>Null hypothesis (<span class="math inline">\(H_0\)</span>):</strong> The proportion of mothers who smoked during pregnancy for children with an oral cleft is equal to the proportion for children with other types of malformations; that is, <span class="math inline">\(p = 0.328\)</span>.</p>
 </section>
 <section id="c.-what-is-the-alternative-hypothesis" class="level4">
 <h4 class="anchored" data-anchor-id="c.-what-is-the-alternative-hypothesis">c.&nbsp;What is the alternative hypothesis?</h4>
+<p><strong>Alternative hypothesis (<span class="math inline">\(H_A\)</span>):</strong> The proportion of mothers who smoked during pregnancy for children with an oral cleft is different from the proportion for other malformations; that is, <span class="math inline">\(p \neq 0.328\)</span>.</p>
 </section>
 <section id="d.-conduct-the-test-at-the-.01-level-of-significance" class="level4">
 <h4 class="anchored" data-anchor-id="d.-conduct-the-test-at-the-.01-level-of-significance">d.&nbsp;Conduct the test at the .01 level of significance</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Values from earlier</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>x_5 <span class="ot">&lt;-</span> <span class="dv">15</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>n_5 <span class="ot">&lt;-</span> <span class="dv">27</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>p_hat_5 <span class="ot">&lt;-</span> x_5 <span class="sc">/</span> n_5</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>p0_5 <span class="ot">&lt;-</span> <span class="fl">0.328</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Standard error under null</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>se_null_5 <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(p0_5 <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p0_5) <span class="sc">/</span> n_5)</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Z-score</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>z_5 <span class="ot">&lt;-</span> (p_hat_5 <span class="sc">-</span> p0_5) <span class="sc">/</span> se_null_5</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Two-sided p-value</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>p_value_5 <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="fu">abs</span>(z_5)))</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Output</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Z-statistic:"</span>, <span class="fu">round</span>(z_5, <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Z-statistic: 2.5185 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"P-value:"</span>, <span class="fu">round</span>(p_value_5, <span class="dv">4</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>P-value: 0.0118 </code></pre>
+</div>
+</div>
+<p>At the 0.01 level of significance, a two-sided z-test of <span class="math inline">\(H_0: p = 0.328\)</span> yielded a z-statistic of 2.5185 and a p-value of 0.0118.</p>
 </section>
 <section id="e.-what-do-you-conclude" class="level4">
 <h4 class="anchored" data-anchor-id="e.-what-do-you-conclude">e. What do you conclude?</h4>
+<p>Since the p-value of 0.0118 is greater than the 0.01 significance level, we fail to reject the null hypothesis. Therefore, we do not have sufficient evidence to conclude a difference in maternal smoking rates between oral cleft cases and other malformations.</p>
 </section>
 </section>
 <section id="suppose-you-are-interested-in-investigating-the-factors-that-affect-the-prevalence-of-tuberculosis-among-intravenous-drug-users.-in-a-group-of-97-individuals-who-admit-to-sharing-needles-24.7-had-a-positive-tuberculin-skin-test-result-among-161-drug-users-who-deny-sharing-needles-17.4-had-a-positive-test-result." class="level3">
 <h3 class="anchored" data-anchor-id="suppose-you-are-interested-in-investigating-the-factors-that-affect-the-prevalence-of-tuberculosis-among-intravenous-drug-users.-in-a-group-of-97-individuals-who-admit-to-sharing-needles-24.7-had-a-positive-tuberculin-skin-test-result-among-161-drug-users-who-deny-sharing-needles-17.4-had-a-positive-test-result.">6. Suppose you are interested in investigating the factors that affect the prevalence of tuberculosis among intravenous drug users. In a group of 97 individuals who admit to sharing needles, 24.7% had a positive tuberculin skin test result; among 161 drug users who deny sharing needles, 17.4% had a positive test result.</h3>
 <section id="a.-assuming-that-the-population-proportions-of-positive-skin-test-reuslts-are-in-fact-equal-estimate-the-common-value-p." class="level4">
 <h4 class="anchored" data-anchor-id="a.-assuming-that-the-population-proportions-of-positive-skin-test-reuslts-are-in-fact-equal-estimate-the-common-value-p.">a. Assuming that the population proportions of positive skin test reuslts are in fact equal, estimate the common value p.</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Group sizes and positives</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>n1 <span class="ot">&lt;-</span> <span class="dv">97</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fl">0.247</span> <span class="sc">*</span> n1)  <span class="co"># 24</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>n2 <span class="ot">&lt;-</span> <span class="dv">161</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fl">0.174</span> <span class="sc">*</span> n2)  <span class="co"># 28</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Pooled proportion under H0</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>p_pooled <span class="ot">&lt;-</span> (x1 <span class="sc">+</span> x2) <span class="sc">/</span> (n1 <span class="sc">+</span> n2)</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>p_pooled</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2015504</code></pre>
+</div>
+</div>
 </section>
 <section id="b.-test-ths-null-hypothesis-that-the-proportions-of-intravenous-drug-users-who-have-a-positive-tuberculin-skin-test-result-are-identicla-for-those-who-share-needles-and-those-who-do-not." class="level4">
 <h4 class="anchored" data-anchor-id="b.-test-ths-null-hypothesis-that-the-proportions-of-intravenous-drug-users-who-have-a-positive-tuberculin-skin-test-result-are-identicla-for-those-who-share-needles-and-those-who-do-not.">b. Test ths null hypothesis that the proportions of intravenous drug users who have a positive tuberculin skin test result are identicla for those who share needles and those who do not.</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>p1_hat <span class="ot">&lt;-</span> x1 <span class="sc">/</span> n1</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>p2_hat <span class="ot">&lt;-</span> x2 <span class="sc">/</span> n2</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>se_pooled <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(p_pooled <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_pooled) <span class="sc">*</span> (<span class="dv">1</span><span class="sc">/</span>n1 <span class="sc">+</span> <span class="dv">1</span><span class="sc">/</span>n2))</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>z6 <span class="ot">&lt;-</span> (p1_hat <span class="sc">-</span> p2_hat) <span class="sc">/</span> se_pooled</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>pval6 <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="fu">abs</span>(z6)))  <span class="co"># two-sided</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The z-statistic for the difference in proportions was 1.4257 with a p-value of 0.154.</p>
 </section>
 <section id="c.-what-do-you-conclude" class="level4">
 <h4 class="anchored" data-anchor-id="c.-what-do-you-conclude">c.&nbsp;What do you conclude?</h4>
+<p>Since the p-value of 0.154 is greater than 0.05, we fail to reject the null hypothesis that the proportions of tuberculin-positive results are equal between the two groups.</p>
 </section>
 <section id="d.-construct-a-95-confidence-interval-for-the-true-difference-in-proportions" class="level4">
 <h4 class="anchored" data-anchor-id="d.-construct-a-95-confidence-interval-for-the-true-difference-in-proportions">d.&nbsp;Construct a 95% confidence interval for the true difference in proportions</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>se_unpooled <span class="ot">&lt;-</span> <span class="fu">sqrt</span>((p1_hat <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p1_hat)) <span class="sc">/</span> n1 <span class="sc">+</span> (p2_hat <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p2_hat)) <span class="sc">/</span> n2)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>ci_lower_6 <span class="ot">&lt;-</span> (p1_hat <span class="sc">-</span> p2_hat) <span class="sc">-</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>) <span class="sc">*</span> se_unpooled</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>ci_upper_6 <span class="ot">&lt;-</span> (p1_hat <span class="sc">-</span> p2_hat) <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>) <span class="sc">*</span> se_unpooled</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The 95% confidence interval for the true difference in proportions is [-3.04%, 17.74%], comparing those who share needles to those who do not.</p>
 </section>
 </section>
 <section id="in-a-study-of-intra-observer-variability-in-the-assessment-of-cervical-smears-3325-slides-were-screened-for-the-presence-or-absence-of-abnormal-squamous-cells.-each-slide-was-screened-by-a-particular-observer-and-then-rescreened-six-months-later-by-the-same-observer.-the-results-of-this-study-are-shown-below" class="level3">

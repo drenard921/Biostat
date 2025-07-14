@@ -135,51 +135,164 @@ A Fisher’s Exact Test found a p-value of `r signif(fisher_result$p.value, 3)`,
 #### b.	Conduct a Chi-square test on the same table. Do you get the same results as the fisher exact test? Any guess why or why not?
 
 ```{r}
-  #enter R code here
+# Use the same contingency table from Q3a
+table_sex_disease <- table(st_data$sex, st_data$disease)
+
+# Run Chi-square test of independence
+chisq_result <- chisq.test(table_sex_disease, correct = FALSE)
+
+# View result
+chisq_result
 ```
+
+#### 3b Conclusion:
+A Chi-square test of independence on the 2×2 table of sex and aortic stenosis yielded a p-value less than 0.05 at 0.005231, consistent with the result from the Fisher’s Exact Test. Both tests lead us to reject the null hypothesis that sex and aortic stenosis are independent. This agreement is expected because our sample size is large enough for the Chi-square approximation to be valid. Fisher’s Exact Test is more accurate for small sample sizes or sparse tables, but in this case, both tests give similar results.
 
 
 
 ### 4.   Pretend the people with aortic stenosis are a random sample of all people with this disease. Test the hypothesis that among the people with aortic stenosis, the proportion of women is 0.5. Give the estimated proportion and a 95% CI along with the test. 
 
 ```{r}
-  #enter R code here
+# Subset to only people with aortic stenosis
+stenosis_disease <- subset(st_data, disease == 1)
+
+# Number of people with aortic stenosis
+n <- nrow(stenosis_disease)
+
+# Number of women: sex = 0
+x <- sum(stenosis_disease$sex == 0)
+
+# Sample proportion
+p_hat <- x / n
+
+# Null hypothesis value
+p0 <- 0.5
+
+# Standard error under null
+se_null <- sqrt(p0 * (1 - p0) / n)
+
+# Z-statistic
+z <- (p_hat - p0) / se_null
+
+# Two-tailed p-value
+p_value <- 2 * (1 - pnorm(abs(z)))
+
+# 95% confidence interval (based on sample)
+se_sample <- sqrt(p_hat * (1 - p_hat) / n)
+z_star <- qnorm(0.975)
+ci_lower <- p_hat - z_star * se_sample
+ci_upper <- p_hat + z_star * se_sample
+
+# Output
+cat("Proportion of women among patients with aortic stenosis:", round(p_hat, 4), "\n")
+cat("95% CI: [", round(ci_lower, 4), ",", round(ci_upper, 4), "]\n")
+cat("Z-statistic:", round(z, 4), "\n")
+cat("P-value:", round(p_value, 4), "\n") 
 ```
 
-```
-Sample Code: 
-stenosis <- read.csv("stenosis.txt")
-table(stenosis$disease)
-binom.test(table(stenosis$disease))
-binom.test(table(stenosis$disease),p=.4)
-table(stenosis$disease,stenosis$sex..male)
-fisher.test(table(stenosis$disease,stenosis$sex..male))
-chisq.test(table(stenosis$disease,stenosis$sex..male))
-```
+#### Q4 Conclusion:
+Among patients with aortic stenosis, the estimated proportion of women was `r round(p_hat * 100, 2)`%, with a 95% confidence interval of [`r round(ci_lower * 100, 2)`%, `r round(ci_upper * 100, 2)`%]. A two-sided test of $H_0: p = 0.5$ resulted in a p-value of `r signif(p_value, 3)`, so we `r if (p_value < 0.05) "reject" else "fail to reject"` the null hypothesis at the 0.05 significance level.
 
 ### 5. In a study of maternal smoking and congenital malformations, consider children born with an oral cleft.  In a random sample of 27 such infants, 15 have mothers who smoked during pregnancy. 
 
 #### a. What is the point estimate for p? Construct a 95% confidence interval for the population proportion.
 
+```{r}
+# Given data
+x_5 <- 15
+n_5 <- 27
+p_hat_5 <- x_5 / n_5
+
+# Standard error
+se_5 <- sqrt(p_hat_5 * (1 - p_hat_5) / n_5)
+
+# z* for 95% CI
+z_star <- qnorm(0.975)
+
+# Confidence interval
+ci_lower_5 <- p_hat_5 - z_star * se_5
+ci_upper_5 <- p_hat_5 + z_star * se_5
+```
+
+The point estimate of the proportion of mothers who smoked is `r round(p_hat_5 * 100, 2)`%. The 95% confidence interval for the population proportion is [`r round(ci_lower_5 * 100, 2)`%, `r round(ci_upper_5 * 100, 2)`%].
+
 #### b.	You would like to know whether the proportion of mothers who smoked during pregnancy for children with an oral cleft is identical to the proportion of mothers who smoked for children with other types of malformations, which is 32.8%. What is the null hypothesis of the appropriate test?
 
+**Null hypothesis ($H_0$):** The proportion of mothers who smoked during pregnancy for children with an oral cleft is equal to the proportion for children with other types of malformations; that is, $p = 0.328$.
+
 #### c.	What is the alternative hypothesis?
+**Alternative hypothesis ($H_A$):** The proportion of mothers who smoked during pregnancy for children with an oral cleft is different from the proportion for other malformations; that is, $p \neq 0.328$.
+
 
 #### d.	Conduct the test at the .01 level of significance
+```{r}
+# Values from earlier
+x_5 <- 15
+n_5 <- 27
+p_hat_5 <- x_5 / n_5
+p0_5 <- 0.328
+
+# Standard error under null
+se_null_5 <- sqrt(p0_5 * (1 - p0_5) / n_5)
+
+# Z-score
+z_5 <- (p_hat_5 - p0_5) / se_null_5
+
+# Two-sided p-value
+p_value_5 <- 2 * (1 - pnorm(abs(z_5)))
+
+# Output
+cat("Z-statistic:", round(z_5, 4), "\n")
+cat("P-value:", round(p_value_5, 4), "\n")
+```
+
+At the 0.01 level of significance, a two-sided z-test of $H_0: p = 0.328$ yielded a z-statistic of `r round(z_5, 4)` and a p-value of `r signif(p_value_5, 3)`.
 
 #### e.	What do you conclude?
+Since the p-value of `r signif(p_value_5, 3)` is `r if (p_value_5 < 0.01) "less" else "greater"` than the 0.01 significance level, we `r if (p_value_5 < 0.01) "reject" else "fail to reject"` the null hypothesis. Therefore, we `r if (p_value_5 < 0.01) "conclude that the proportion of maternal smokers among oral cleft cases is statistically different from the proportion among other types of malformations." else "do not have sufficient evidence to conclude a difference in maternal smoking rates between oral cleft cases and other malformations."`
 
 
 ### 6. Suppose you are interested in investigating the factors that affect the prevalence of tuberculosis among intravenous drug users. In a group of 97 individuals who admit to sharing needles, 24.7% had a positive tuberculin skin test result; among 161 drug users who deny sharing needles, 17.4% had a positive test result. 
 
 #### a. Assuming that the population proportions of positive skin test reuslts are in fact equal, estimate the common value p.
 
+```{r}
+# Group sizes and positives
+n1 <- 97
+x1 <- round(0.247 * n1)  # 24
+
+n2 <- 161
+x2 <- round(0.174 * n2)  # 28
+
+# Pooled proportion under H0
+p_pooled <- (x1 + x2) / (n1 + n2)
+p_pooled
+```
+
 #### b. Test ths null hypothesis that the proportions of intravenous drug users who have a positive tuberculin skin test result are identicla for those who share needles and those who do not.
+```{r}
+p1_hat <- x1 / n1
+p2_hat <- x2 / n2
+
+se_pooled <- sqrt(p_pooled * (1 - p_pooled) * (1/n1 + 1/n2))
+z6 <- (p1_hat - p2_hat) / se_pooled
+pval6 <- 2 * (1 - pnorm(abs(z6)))  # two-sided
+```
+
+The z-statistic for the difference in proportions was `r round(z6, 4)` with a p-value of `r signif(pval6, 3)`.  
 
 #### c.	What do you conclude?
+Since the p-value of `r signif(pval6, 3)` is `r if (pval6 < 0.05) "less" else "greater"` than 0.05, we `r if (pval6 < 0.05) "reject" else "fail to reject"` the null hypothesis that the proportions of tuberculin-positive results are equal between the two groups.
 
 #### d.	Construct a 95% confidence interval for the true difference in proportions
 
+```{r}
+se_unpooled <- sqrt((p1_hat * (1 - p1_hat)) / n1 + (p2_hat * (1 - p2_hat)) / n2)
+ci_lower_6 <- (p1_hat - p2_hat) - qnorm(0.975) * se_unpooled
+ci_upper_6 <- (p1_hat - p2_hat) + qnorm(0.975) * se_unpooled
+```
+
+The 95% confidence interval for the true difference in proportions is [`r round(ci_lower_6 * 100, 2)`%, `r round(ci_upper_6 * 100, 2)`%], comparing those who share needles to those who do not.
 
  
 ### 7.	In a study of intra-observer variability in the assessment of cervical smears, 3325 slides were screened for the presence or absence of abnormal squamous cells. Each slide was screened by a particular observer and then rescreened six months later by the same observer. The results of this study are shown below:
