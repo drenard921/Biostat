@@ -1,0 +1,121 @@
+---
+title: "Homework 9 - Biostatistics"
+Author: "Dylan Renard"
+output: pdf_document
+---
+
+#### Dylan Renard
+#### Professor Proschan & Professor Nason
+#### JHU Biostatistics
+#### July 14th, 2025
+
+# Assignment for Biostatistics Week 9:
+
+Download and open the “Stenosis” data from the class webpage.  Assume this is a random sample from some population. Answer the following questions referring to this dataset.
+```{r}
+  #enter R code here
+```
+
+### In class:
+
+### 1.	What proportion of this sample has aortic stenosis (disease)? Give a 95% CI for the proportion of the population that this sample came from that have aortic stenosis.
+
+```{r}
+  #enter R code here
+```
+
+### 2.	Test the null hypothesis that 40% of this population has aortic stenosis. Write a one-sentence conclusion.
+
+```{r}
+  #enter R code here
+```
+
+
+
+### 3.	Make a 2x2 table showing the association between gender and aortic stenosis.  
+
+```{r}
+  #enter R code here
+```
+
+#### a.	Conduct a Fisher’s Exact Test on the 2x2 table to test the null hypothesis that there is no association between gender and aortic stenosis against the alternative hypothesis that there is an association. Write one (full) sentence giving your conclusions.  
+
+```{r}
+  #enter R code here
+```
+
+
+#### b.	Conduct a Chi-square test on the same table. Do you get the same results as the fisher exact test? Any guess why or why not?
+
+```{r}
+  #enter R code here
+```
+
+
+
+### 4.   Pretend the people with aortic stenosis are a random sample of all people with this disease. Test the hypothesis that among the people with aortic stenosis, the proportion of women is 0.5. Give the estimated proportion and a 95% CI along with the test. 
+
+```{r}
+  #enter R code here
+```
+
+```
+Sample Code: 
+stenosis <- read.csv("stenosis.txt")
+table(stenosis$disease)
+binom.test(table(stenosis$disease))
+binom.test(table(stenosis$disease),p=.4)
+table(stenosis$disease,stenosis$sex..male)
+fisher.test(table(stenosis$disease,stenosis$sex..male))
+chisq.test(table(stenosis$disease,stenosis$sex..male))
+```
+
+### 5. In a study of maternal smoking and congenital malformations, consider children born with an oral cleft.  In a random sample of 27 such infants, 15 have mothers who smoked during pregnancy. 
+
+#### a. What is the point estimate for p? Construct a 95% confidence interval for the population proportion.
+
+#### b.	You would like to know whether the proportion of mothers who smoked during pregnancy for children with an oral cleft is identical to the proportion of mothers who smoked for children with other types of malformations, which is 32.8%. What is the null hypothesis of the appropriate test?
+
+#### c.	What is the alternative hypothesis?
+
+#### d.	Conduct the test at the .01 level of significance
+
+#### e.	What do you conclude?
+
+
+### 6. Suppose you are interested in investigating the factors that affect the prevalence of tuberculosis among intravenous drug users. In a group of 97 individuals who admit to sharing needles, 24.7% had a positive tuberculin skin test result; among 161 drug users who deny sharing needles, 17.4% had a positive test result. 
+
+#### a. Assuming that the population proportions of positive skin test reuslts are in fact equal, estimate the common value p.
+
+#### b. Test ths null hypothesis that the proportions of intravenous drug users who have a positive tuberculin skin test result are identicla for those who share needles and those who do not.
+
+#### c.	What do you conclude?
+
+#### d.	Construct a 95% confidence interval for the true difference in proportions
+
+
+ 
+### 7.	In a study of intra-observer variability in the assessment of cervical smears, 3325 slides were screened for the presence or absence of abnormal squamous cells. Each slide was screened by a particular observer and then rescreened six months later by the same observer. The results of this study are shown below:
+
+First Screening	| 2nd: present	| 2nd: absent	| Total
+----------|---------|---------|--------
+Present |	1763 |	489 |	2252
+Absent |	403 |	670 |	1073
+Total	 | 2166 |	1159 |	3325
+
+#### a.	Do these data support the null hypothesis that here is no association between time of screening and diagnosis?
+
+
+The data could also be displayed in the following manner:
+
+Abnormal cells |	1st screen |	2nd screen |	Total
+----------|---------|---------|--------
+Present	 | 2252	 | 2166 |	4418
+Absent |	1073 |	1159 |	2232
+Total |	3325 |	3325 |	6650
+
+#### b.	Is there anything wrong with this presentation? How would you analyze these data?
+
+ 
+
+
