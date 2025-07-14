@@ -58,9 +58,10 @@ ggplot(df, aes(x = x, y = y)) +
   annotate("text", x = ci_upper, y = y_max * 0.8, label = paste0("Upper CI = ", round(ci_upper, 4)), color = "darkgreen", angle = 90, vjust = -0.5) +
   labs(
     title = "95% Confidence Interval of Proportion of Stenosis Patients",
-    subtitle = paste0("95% CI: [", round(ci_lower, 4), ", ", round(ci_upper, 4), "]"),
     x = "Proportion with Disease",
-    y = "Density"
+    y = "Density",
+    subtitle = "Note: This is a theoretical distribution to illustrate the 95% CI of the sample proportion.",
+    caption = paste0("95% CI: [", round(ci_lower, 4), ", ", round(ci_upper, 4), "]", "p-hat:", round(p_hat)),
   ) +
   theme_minimal() +
   theme(plot.title = element_text(size = 16, face = "bold"))
@@ -70,22 +71,65 @@ ggplot(df, aes(x = x, y = y)) +
 ### 2.	Test the null hypothesis that 40% of this population has aortic stenosis. Write a one-sentence conclusion.
 
 ```{r}
-  #enter R code here
+  # proportion to test against 40% of this population has aortic stenosis.
+  p0 <- 0.4
+
+  # Standard error under null hypothesis
+  se_null <- sqrt(p0 * (1- p0) / n)
+
+  # z-score 
+  z <- (p_hat - p0) / se_null
+
+  # two-tailed p-value
+  p_value <- 2 * (1 - pnorm(abs(z)))
+
+  # Output results
+  cat("Sample proportion:", round(p_hat, 4), "\n")
+  cat("Z statistic:", round(z, 4), "\n")
+  cat("P-value:", round(p_value, 4), "\n")
+
 ```
 
-
+#### Q2 Conclusion:
+The sample proportion of individuals with aortic stenosis was `r round(p_hat * 100, 2)`%, and a two-sided test of $H_0: p = 0.40$ resulted in a p-value of `r signif(p_value, 3)`, so we `r if (p_value < 0.05) "reject" else "fail to reject"` the null hypothesis at the 0.05 significance level.
 
 ### 3.	Make a 2x2 table showing the association between gender and aortic stenosis.  
 
 ```{r}
-  #enter R code here
+# Load libraries
+library(DT)
+
+# Create a labeled 2x2 matrix
+contingency <- table(st_data$sex, st_data$disease)
+
+# Make it a proper data frame with custom column names
+contingency_df <- as.data.frame.matrix(contingency)
+colnames(contingency_df) <- c("No Aortic Stenosis", "Aortic Stenosis")
+
+# Convert rownames (sex) into a column
+contingency_df$Sex <- c("Female", "Male")
+
+# Reorder columns for display
+contingency_df <- contingency_df[, c("Sex", "No Aortic Stenosis", "Aortic Stenosis")]
+
+# Display table with DT
+datatable(contingency_df, rownames = FALSE,
+          options = list(dom = 't', ordering = FALSE),
+          caption = "2×2 Table: Sex vs Aortic Stenosis")
 ```
 
 #### a.	Conduct a Fisher’s Exact Test on the 2x2 table to test the null hypothesis that there is no association between gender and aortic stenosis against the alternative hypothesis that there is an association. Write one (full) sentence giving your conclusions.  
 
 ```{r}
-  #enter R code here
+ # Run Fisher's Exact Test
+fisher_result <- fisher.test(table(st_data$sex, st_data$disease))
+
+# View the p-value
+fisher_result
 ```
+
+#### Q3a Conclusion:
+A Fisher’s Exact Test found a p-value of `r signif(fisher_result$p.value, 3)`, so we `r if (fisher_result$p.value < 0.05) "reject" else "fail to reject"` the null hypothesis that sex and aortic stenosis are independent at the 0.05 significance level.
 
 
 #### b.	Conduct a Chi-square test on the same table. Do you get the same results as the fisher exact test? Any guess why or why not?
