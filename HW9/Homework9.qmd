@@ -305,6 +305,27 @@ Total	 | 2166 |	1159 |	3325
 
 #### a.	Do these data support the null hypothesis that here is no association between time of screening and diagnosis?
 
+**Null hypothesis ($H_0$):** The diagnosis is independent of the time of screening (basically no association between first and second results).
+
+#### R Code to run Chi-Square Test of Independence:
+```{r}
+# Create the 2x2 table
+smear_table <- matrix(c(1763, 489, 403, 670), 
+                      nrow = 2, byrow = TRUE,
+                      dimnames = list(
+                        `First Screening` = c("Present", "Absent"),
+                        `Second Screening` = c("Present", "Absent")
+                      ))
+
+# Run chi-square test
+chisq_result_7 <- chisq.test(smear_table, correct = FALSE)
+chisq_result_7
+```
+
+A chi-square test of independence was conducted to test whether the results of the first and second screenings were associated. The test yielded a chi-square statistic of `r round(chisq_result_7$statistic, 2)` with a p-value of 2.2e-16.  
+Since the p-value of 2.2e-16 is `r if (chisq_result_7$p.value < 0.05) "less" else "greater"` than the 0.05 significance level, we `r if (chisq_result_7$p.value < 0.05) "reject" else "fail to reject"` the null hypothesis.  
+Therefore, we `r if (chisq_result_7$p.value < 0.05) "conclude that there is a statistically significant association between the time of screening and diagnosis." else "do not find sufficient evidence to conclude an association between screening time and diagnosis."`
+
 
 The data could also be displayed in the following manner:
 
@@ -316,6 +337,8 @@ Total |	3325 |	3325 |	6650
 
 #### b.	Is there anything wrong with this presentation? How would you analyze these data?
 
- 
+Yes, the second presentation of the data is misleading. It treats the first and second screenings as if they were conducted on different slides, doubling the total sample size from 3325 to 6650. This falsely implies independent observations when, in fact, the data are paired — each slide was screened twice by the same observer.  
+To properly analyze the data, we should use the 2×2 contingency table showing the cross-tabulation of first and second screening results and apply a chi-square test of independence (or McNemar’s test if focusing on disagreement between screenings).
+
 
 

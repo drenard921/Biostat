@@ -271,8 +271,8 @@ window.Quarto = {
 <span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>          <span class="at">options =</span> <span class="fu">list</span>(<span class="at">dom =</span> <span class="st">'t'</span>, <span class="at">ordering =</span> <span class="cn">FALSE</span>),</span>
 <span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>          <span class="at">caption =</span> <span class="st">"2×2 Table: Sex vs Aortic Stenosis"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-069de5eee0218ce819a1" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-069de5eee0218ce819a1">{"x":{"filter":"none","vertical":false,"caption":"<caption>2×2 Table: Sex vs Aortic Stenosis<\/caption>","data":[["Female","Male"],[66,44],[43,62]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Sex<\/th>\n      <th>No Aortic Stenosis<\/th>\n      <th>Aortic Stenosis<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","ordering":false,"columnDefs":[{"className":"dt-right","targets":[1,2]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-4ad3b93c78f657c0bd8a" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-4ad3b93c78f657c0bd8a">{"x":{"filter":"none","vertical":false,"caption":"<caption>2×2 Table: Sex vs Aortic Stenosis<\/caption>","data":[["Female","Male"],[66,44],[43,62]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Sex<\/th>\n      <th>No Aortic Stenosis<\/th>\n      <th>Aortic Stenosis<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","ordering":false,"columnDefs":[{"className":"dt-right","targets":[1,2]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <section id="a.-conduct-a-fishers-exact-test-on-the-2x2-table-to-test-the-null-hypothesis-that-there-is-no-association-between-gender-and-aortic-stenosis-against-the-alternative-hypothesis-that-there-is-an-association.-write-one-full-sentence-giving-your-conclusions." class="level4">
@@ -528,6 +528,33 @@ X-squared = 7.7978, df = 1, p-value = 0.005231</code></pre>
 </table>
 <section id="a.-do-these-data-support-the-null-hypothesis-that-here-is-no-association-between-time-of-screening-and-diagnosis" class="level4">
 <h4 class="anchored" data-anchor-id="a.-do-these-data-support-the-null-hypothesis-that-here-is-no-association-between-time-of-screening-and-diagnosis">a. Do these data support the null hypothesis that here is no association between time of screening and diagnosis?</h4>
+<p><strong>Null hypothesis (<span class="math inline">\(H_0\)</span>):</strong> The diagnosis is independent of the time of screening (basically no association between first and second results).</p>
+</section>
+<section id="r-code-to-run-chi-square-test-of-independence" class="level4">
+<h4 class="anchored" data-anchor-id="r-code-to-run-chi-square-test-of-independence">R Code to run Chi-Square Test of Independence:</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the 2x2 table</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>smear_table <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1763</span>, <span class="dv">489</span>, <span class="dv">403</span>, <span class="dv">670</span>), </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">dimnames =</span> <span class="fu">list</span>(</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>                        <span class="st">`</span><span class="at">First Screening</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Present"</span>, <span class="st">"Absent"</span>),</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>                        <span class="st">`</span><span class="at">Second Screening</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Present"</span>, <span class="st">"Absent"</span>)</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>                      ))</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Run chi-square test</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>chisq_result_7 <span class="ot">&lt;-</span> <span class="fu">chisq.test</span>(smear_table, <span class="at">correct =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>chisq_result_7</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's Chi-squared test
+
+data:  smear_table
+X-squared = 530.88, df = 1, p-value &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>A chi-square test of independence was conducted to test whether the results of the first and second screenings were associated. The test yielded a chi-square statistic of 530.88 with a p-value of 2.2e-16.<br>
+Since the p-value of 2.2e-16 is less than the 0.05 significance level, we reject the null hypothesis.<br>
+Therefore, we conclude that there is a statistically significant association between the time of screening and diagnosis.</p>
 <p>The data could also be displayed in the following manner:</p>
 <table class="caption-top table">
 <thead>
@@ -562,6 +589,8 @@ X-squared = 7.7978, df = 1, p-value = 0.005231</code></pre>
 </section>
 <section id="b.-is-there-anything-wrong-with-this-presentation-how-would-you-analyze-these-data" class="level4">
 <h4 class="anchored" data-anchor-id="b.-is-there-anything-wrong-with-this-presentation-how-would-you-analyze-these-data">b. Is there anything wrong with this presentation? How would you analyze these data?</h4>
+<p>Yes, the second presentation of the data is misleading. It treats the first and second screenings as if they were conducted on different slides, doubling the total sample size from 3325 to 6650. This falsely implies independent observations when, in fact, the data are paired — each slide was screened twice by the same observer.<br>
+To properly analyze the data, we should use the 2×2 contingency table showing the cross-tabulation of first and second screening results and apply a chi-square test of independence (or McNemar’s test if focusing on disagreement between screenings).</p>
 </section>
 </section>
 </section>
