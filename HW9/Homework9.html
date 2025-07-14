@@ -119,59 +119,88 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="in-class" class="level3">
 <h3 class="anchored" data-anchor-id="in-class">In class:</h3>
 </section>
-<section id="what-proportion-of-this-sample-has-aortic-stenosis-disease-give-a-95-ci-for-the-proportion-of-the-population-that-this-sample-came-from-that-have-aortic-stenosis." class="level3">
-<h3 class="anchored" data-anchor-id="what-proportion-of-this-sample-has-aortic-stenosis-disease-give-a-95-ci-for-the-proportion-of-the-population-that-this-sample-came-from-that-have-aortic-stenosis.">1. What proportion of this sample has aortic stenosis (disease)? Give a 95% CI for the proportion of the population that this sample came from that have aortic stenosis.</h3>
+<section id="what-proportion-of-this-sample-has-aortic-stenosis-disease-give-a-95-ci-for-the-proportion-of-the-population-in-this-sample-who-have-aortic-stenosis." class="level3">
+<h3 class="anchored" data-anchor-id="what-proportion-of-this-sample-has-aortic-stenosis-disease-give-a-95-ci-for-the-proportion-of-the-population-in-this-sample-who-have-aortic-stenosis.">1. What proportion of this sample has aortic stenosis (disease)? Give a 95% CI for the proportion of the population in this sample who have aortic stenosis.</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Calculate the number with the disease</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">sum</span>(st_data<span class="sc">$</span>disease <span class="sc">==</span> <span class="dv">1</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(st_data)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>p_hat <span class="ot">&lt;-</span> x <span class="sc">/</span> n</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#cofidnence interval (normal approximation)</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.test</span>(x,n,<span class="at">conf.level =</span> <span class="fl">0.95</span>, <span class="at">correct =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    1-sample proportions test without continuity correction
-
-data:  x out of n, null probability 0.5
-X-squared = 0.11628, df = 1, p-value = 0.7331
-alternative hypothesis: true p is not equal to 0.5
-95 percent confidence interval:
- 0.4223488 0.5548036
-sample estimates:
-        p 
-0.4883721 </code></pre>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Calculate the number with the disease</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">sum</span>(st_data<span class="sc">$</span>disease <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(st_data)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>p_hat <span class="ot">&lt;-</span> x <span class="sc">/</span> n</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># standard error and z* for 95% CI</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>se <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(p_hat <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_hat) <span class="sc">/</span> n)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>z_star <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>ci_lower <span class="ot">&lt;-</span> p_hat <span class="sc">-</span> z_star <span class="sc">*</span> se</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>ci_upper <span class="ot">&lt;-</span> p_hat <span class="sc">+</span> z_star <span class="sc">*</span> se</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a data frame for the normal curve</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>x_vals <span class="ot">&lt;-</span> <span class="fu">seq</span>(p_hat <span class="sc">-</span> <span class="dv">4</span><span class="sc">*</span>se, p_hat <span class="sc">+</span> <span class="dv">4</span><span class="sc">*</span>se, <span class="at">length.out =</span> <span class="dv">1000</span>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>y_vals <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(x_vals, <span class="at">mean =</span> p_hat, <span class="at">sd =</span> se)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x_vals, <span class="at">y =</span> y_vals)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Annotating position (at top of curve)</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>y_max <span class="ot">&lt;-</span> <span class="fu">max</span>(y_vals)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot with ggplot2</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> p_hat, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">linewidth =</span> <span class="fl">1.1</span>) <span class="sc">+</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> ci_lower, <span class="at">color =</span> <span class="st">"darkgreen"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">linewidth =</span> <span class="fl">1.1</span>) <span class="sc">+</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> ci_upper, <span class="at">color =</span> <span class="st">"darkgreen"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">linewidth =</span> <span class="fl">1.1</span>) <span class="sc">+</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="at">data =</span> <span class="fu">subset</span>(df, x <span class="sc">&gt;=</span> ci_lower <span class="sc">&amp;</span> x <span class="sc">&lt;=</span> ci_upper), <span class="fu">aes</span>(<span class="at">y =</span> y), <span class="at">fill =</span> <span class="st">"green"</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Annotations</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> p_hat, <span class="at">y =</span> y_max <span class="sc">*</span> <span class="fl">0.8</span>, <span class="at">label =</span> <span class="fu">paste0</span>(<span class="st">"p̂ = "</span>, <span class="fu">round</span>(p_hat, <span class="dv">4</span>)), <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> ci_lower, <span class="at">y =</span> y_max <span class="sc">*</span> <span class="fl">0.8</span>, <span class="at">label =</span> <span class="fu">paste0</span>(<span class="st">"Lower CI = "</span>, <span class="fu">round</span>(ci_lower, <span class="dv">4</span>)), <span class="at">color =</span> <span class="st">"darkgreen"</span>, <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> ci_upper, <span class="at">y =</span> y_max <span class="sc">*</span> <span class="fl">0.8</span>, <span class="at">label =</span> <span class="fu">paste0</span>(<span class="st">"Upper CI = "</span>, <span class="fu">round</span>(ci_upper, <span class="dv">4</span>)), <span class="at">color =</span> <span class="st">"darkgreen"</span>, <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"95% Confidence Interval of Proportion of Stenosis Patients"</span>,</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">paste0</span>(<span class="st">"95% CI: ["</span>, <span class="fu">round</span>(ci_lower, <span class="dv">4</span>), <span class="st">", "</span>, <span class="fu">round</span>(ci_upper, <span class="dv">4</span>), <span class="st">"]"</span>),</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Proportion with Disease"</span>,</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Density"</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Homework9_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
 <section id="test-the-null-hypothesis-that-40-of-this-population-has-aortic-stenosis.-write-a-one-sentence-conclusion." class="level3">
 <h3 class="anchored" data-anchor-id="test-the-null-hypothesis-that-40-of-this-population-has-aortic-stenosis.-write-a-one-sentence-conclusion.">2. Test the null hypothesis that 40% of this population has aortic stenosis. Write a one-sentence conclusion.</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">#enter R code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">#enter R code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="make-a-2x2-table-showing-the-association-between-gender-and-aortic-stenosis." class="level3">
 <h3 class="anchored" data-anchor-id="make-a-2x2-table-showing-the-association-between-gender-and-aortic-stenosis.">3. Make a 2x2 table showing the association between gender and aortic stenosis.</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">#enter R code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">#enter R code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="a.-conduct-a-fishers-exact-test-on-the-2x2-table-to-test-the-null-hypothesis-that-there-is-no-association-between-gender-and-aortic-stenosis-against-the-alternative-hypothesis-that-there-is-an-association.-write-one-full-sentence-giving-your-conclusions." class="level4">
 <h4 class="anchored" data-anchor-id="a.-conduct-a-fishers-exact-test-on-the-2x2-table-to-test-the-null-hypothesis-that-there-is-no-association-between-gender-and-aortic-stenosis-against-the-alternative-hypothesis-that-there-is-an-association.-write-one-full-sentence-giving-your-conclusions.">a. Conduct a Fisher’s Exact Test on the 2x2 table to test the null hypothesis that there is no association between gender and aortic stenosis against the alternative hypothesis that there is an association. Write one (full) sentence giving your conclusions.</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">#enter R code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">#enter R code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="b.-conduct-a-chi-square-test-on-the-same-table.-do-you-get-the-same-results-as-the-fisher-exact-test-any-guess-why-or-why-not" class="level4">
 <h4 class="anchored" data-anchor-id="b.-conduct-a-chi-square-test-on-the-same-table.-do-you-get-the-same-results-as-the-fisher-exact-test-any-guess-why-or-why-not">b. Conduct a Chi-square test on the same table. Do you get the same results as the fisher exact test? Any guess why or why not?</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">#enter R code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">#enter R code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
 <section id="pretend-the-people-with-aortic-stenosis-are-a-random-sample-of-all-people-with-this-disease.-test-the-hypothesis-that-among-the-people-with-aortic-stenosis-the-proportion-of-women-is-0.5.-give-the-estimated-proportion-and-a-95-ci-along-with-the-test." class="level3">
 <h3 class="anchored" data-anchor-id="pretend-the-people-with-aortic-stenosis-are-a-random-sample-of-all-people-with-this-disease.-test-the-hypothesis-that-among-the-people-with-aortic-stenosis-the-proportion-of-women-is-0.5.-give-the-estimated-proportion-and-a-95-ci-along-with-the-test.">4. Pretend the people with aortic stenosis are a random sample of all people with this disease. Test the hypothesis that among the people with aortic stenosis, the proportion of women is 0.5. Give the estimated proportion and a 95% CI along with the test.</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">#enter R code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">#enter R code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <pre><code>Sample Code: 
 stenosis &lt;- read.csv("stenosis.txt")
