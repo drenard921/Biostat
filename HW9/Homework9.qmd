@@ -13,7 +13,8 @@ output: pdf_document
 
 Download and open the “Stenosis” data from the class webpage.  Assume this is a random sample from some population. Answer the following questions referring to this dataset.
 ```{r}
-  #enter R code here
+ st_data <- read.csv("stenosis.txt", header = TRUE)
+ 
 ```
 
 ### In class:
