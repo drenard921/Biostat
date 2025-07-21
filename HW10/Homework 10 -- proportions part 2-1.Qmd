@@ -447,11 +447,153 @@ Total	| 2120	| 193	| 2313
 
 ##### A.  Within each category of age, are the odds of suffering from coronary artery disease greater or smaller for individuals with hypertension?
 
+```{r}
+### 16.7(A) Odds Ratios for Each Age Group
+
+# 35–49 years of age table
+age1 <- matrix(c(552, 212,
+                 941, 495),
+               nrow = 2, byrow = TRUE)
+colnames(age1) <- c("CAD Yes", "CAD No")
+rownames(age1) <- c("Hypertension Yes", "Hypertension No")
+age1
+
+# Over 65 years of age table
+age2 <- matrix(c(1102, 87,
+                 1018, 106),
+               nrow = 2, byrow = TRUE)
+colnames(age2) <- c("CAD Yes", "CAD No")
+rownames(age2) <- c("Hypertension Yes", "Hypertension No")
+age2
+
+# Function to compute odds ratio
+odds_ratio <- function(tab) {
+  a <- tab[1, 1]
+  b <- tab[1, 2]
+  c <- tab[2, 1]
+  d <- tab[2, 2]
+  OR <- (a * d) / (b * c)
+  return(OR)
+}
+
+# Calculate ORs
+OR_age1 <- odds_ratio(age1)
+OR_age2 <- odds_ratio(age2)
+
+OR_age1
+OR_age2
+```
+
+##### 16.7(A) Conclusion
+
+- **Ages 35–49:**  
+  The odds ratio is approximately **1.36**, indicating that individuals with hypertension have **1.36 times the odds** of having coronary artery disease (CAD) compared to those without hypertension.
+
+- **Ages over 65:**  
+  The odds ratio is approximately **1.31**, indicating that individuals with hypertension have **1.31 times the odds** of having CAD compared to those without hypertension.
+
 ##### B. Do you feel that it is appropriate to combine the information in these two tables to make a single unifying statement about the relationship between hypertension and coronary artery disease? Why or why not?
+
+Yes, it is reasonable to combine the information from the two tables to make a single unifying statement about the relationship between hypertension and coronary artery disease (CAD).
+
+**Why?**
+- The odds ratios for the two age groups are very similar (1.36 for ages 35–49 and 1.31 for ages over 65).
+- This suggests that the association between hypertension and CAD is consistent (homogeneous) across the age strata.
+- When the effect size is similar across groups, a stratified analysis (e.g., using the Mantel–Haenszel method) provides a valid summary measure that accounts for age while estimating the overall relationship.
+
+**However:**
+If the odds ratios were very different between age groups, it would not be appropriate to combine the tables because the association would depend on age (effect modification).
 
 ##### C.  Compute a Mantel -Haenszel estimate of the summary odds ratio.
 
+Using the formula:
+
+$$
+\hat{\theta}_{MH} = \frac{\sum_i \frac{a_i d_i}{n_i}}{\sum_i \frac{b_i c_i}{n_i}},
+$$
+
+we compute:
+
+- For ages 35–49:  
+  $$ \frac{a_1 d_1}{n_1} \approx 124.2, \quad \frac{b_1 c_1}{n_1} \approx 90.6. $$
+
+- For ages >65:  
+  $$ \frac{a_2 d_2}{n_2} \approx 50.5, \quad \frac{b_2 c_2}{n_2} \approx 38.3. $$
+
+Thus:
+
+$$
+\hat{\theta}_{MH} = \frac{124.2 + 50.5}{90.6 + 38.3} \approx 1.36.
+$$
+
+#### R Code to check work:
+
+
+```{r}
+# Construct the 2x2 tables for each stratum
+age1 <- matrix(c(552, 212,
+                 941, 495),
+               nrow = 2, byrow = TRUE,
+               dimnames = list(Hypertension = c("Yes", "No"),
+                               CAD = c("Yes", "No")))
+
+age2 <- matrix(c(1102, 87,
+                 1018, 106),
+               nrow = 2, byrow = TRUE,
+               dimnames = list(Hypertension = c("Yes", "No"),
+                               CAD = c("Yes", "No")))
+
+# Combine into an array for mantelhaen.test
+tables <- array(c(age1, age2), dim = c(2, 2, 2),
+                dimnames = list(
+                  Hypertension = c("Yes", "No"),
+                  CAD = c("Yes", "No"),
+                  AgeGroup = c("35-49", "Over65")
+                ))
+
+# Mantel-Haenszel test
+mh_test <- mantelhaen.test(tables)
+mh_test
+```
+
+**Conclusion:**  
+The Mantel–Haenszel estimate of the summary odds ratio is approximately **1.36**.
+
 ##### D. Construct a 95% confidence interval for the summary odds ratio.
+
+From `mantelhaen.test`, the Mantel–Haenszel summary odds ratio is:
+
+$$
+\hat{\theta}_{MH} = 1.36,
+$$
+
+with a 95% confidence interval of:
+
+$$
+[1.153, 1.591].
+$$
+
+**Conclusion:** We are 95% confident that the odds of CAD are between **1.15 and 1.59** times higher for individuals with hypertension, after adjusting for age.
 
 ##### E. At the alpha= .05 level of significance, Test the null hypothesis that there is no association between hypertension and coronary artery disease. What do you conclude? 
 
+
+**Null hypothesis $H_0$:**  
+There is no association between hypertension and coronary artery disease (CAD), i.e., the common odds ratio $\theta_{MH} = 1$.
+
+**Alternative hypothesis $H_A$:**  
+There is an association between hypertension and CAD ($\theta_{MH} \neq 1$)).
+
+---
+
+### Mantel–Haenszel Test
+Using the `mantelhaen.test` function in R:
+
+```{r}
+mh_test <- mantelhaen.test(tables)
+mh_test
+```
+
+## Conclusion for 16.7(E)
+The Mantel–Haenszel test shows a summary odds ratio of approximately **1.36** with a 95% confidence interval of **[1.153, 1.591]** and a p-value less than **0.05**.  
+Since $p < 0.05$, we **reject $H_0$** and conclude that there is a statistically significant association between hypertension and coronary artery disease, after adjusting for age.
