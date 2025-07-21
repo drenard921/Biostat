@@ -359,7 +359,7 @@ The **odds ratio (OR)** remains valid because:
 - OR is a ratio of odds, which is invariant to the way we sample cases and controls.
 - When the disease is rare, $OR \approx RR$, so OR provides a good approximation of RR in the population.
 
-**Conclusion:**  
+**In Conclusion:**  
 This is a **case-control study**, and RR cannot be meaningfully calculated from this data. The **OR is the appropriate measure of association**.
 
 
@@ -368,7 +368,27 @@ A study was conducted to determine whether geographic variations in the use of m
 
 ##### A.	At the 0.05 level of significance, test the null hypothesis that there is no association between geographic region and the appropriateness of use of coronary angiography.
 
+```{r}
+angio <- read.table("angio.txt", header = TRUE)
+
+# Contingency table
+table_angio <- table(angio$site, angio$appropro)
+table_angio
+
+# Chi-square test
+chisq.test(table_angio, correct = FALSE)
+```
+
 ##### B.	What do you conclude?
+
+The chi-square test of independence between **geographic site** and **appropriateness of coronary angiography** returned:
+
+- Test statistic: (20.056)
+- Degrees of freedom: (4)
+- p-value: **0.00049**
+
+Since the p-value is much smaller than 0.05, we **reject \(H_0\)**.  
+**Conclusion:** There is strong evidence that the appropriateness of coronary angiography **varies significantly across the three geographic regions**.
 
 ##### C. What is your estimate of the odds ratio for having an inappropriate use of Angiography, comparing the high use urban site to the rural site? 
 

@@ -419,8 +419,8 @@ With only 45 subjects, random variation and sampling error are large, reducing t
 <span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-5d8f8cdd8b07af808282" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-5d8f8cdd8b07af808282">{"x":{"filter":"none","vertical":false,"data":[["Ectopic Pregnancy","No Ectopic Pregnancy"],[28,6],[251,273]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Row<\/th>\n      <th>PID (Yes)<\/th>\n      <th>PID (No)<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","paging":false,"ordering":false,"columnDefs":[{"className":"dt-right","targets":[1,2]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-69a6693eb0479776ee50" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-69a6693eb0479776ee50">{"x":{"filter":"none","vertical":false,"data":[["Ectopic Pregnancy","No Ectopic Pregnancy"],[28,6],[251,273]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Row<\/th>\n      <th>PID (Yes)<\/th>\n      <th>PID (No)<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","paging":false,"ordering":false,"columnDefs":[{"className":"dt-right","targets":[1,2]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </section>
@@ -542,16 +542,47 @@ RR = \frac{P(\text{disease} \mid \text{exposed})}{P(\text{disease} \mid \text{no
 <section id="what-can-we-use-instead" class="level3">
 <h3 class="anchored" data-anchor-id="what-can-we-use-instead">What Can We Use Instead?</h3>
 <p>The <strong>odds ratio (OR)</strong> remains valid because: - OR is a ratio of odds, which is invariant to the way we sample cases and controls. - When the disease is rare, <span class="math inline">\(OR \approx RR\)</span>, so OR provides a good approximation of RR in the population.</p>
-<p><strong>Conclusion:</strong><br>
+<p><strong>In Conclusion:</strong><br>
 This is a <strong>case-control study</strong>, and RR cannot be meaningfully calculated from this data. The <strong>OR is the appropriate measure of association</strong>.</p>
 <section id="section-3" class="level4">
 <h4 class="anchored" data-anchor-id="section-3">20.</h4>
 <p>A study was conducted to determine whether geographic variations in the use of medical and surgical services could be explained in part by differences in the appropriateness with which physicians use these services. One concern might be that a high rate of inappropriate use of a service is associated with high overall use within a particular region. For the procedure coronary angiography, three geographic areas were studied: a high-use site (site 1), a low use urban site (site 2), and a low use rural site (site 3). Within each geographical region, each use of this procedure was classified as appropriate, equivocal, or inappropriate by a panel of expert physicians. These data are saved in the data set <em>angio</em>. Site number is saved under the variable name <em>site</em>, and level of appropriateness under <em>appropro</em>.</p>
 <section id="a.-at-the-0.05-level-of-significance-test-the-null-hypothesis-that-there-is-no-association-between-geographic-region-and-the-appropriateness-of-use-of-coronary-angiography." class="level5">
 <h5 class="anchored" data-anchor-id="a.-at-the-0.05-level-of-significance-test-the-null-hypothesis-that-there-is-no-association-between-geographic-region-and-the-appropriateness-of-use-of-coronary-angiography.">A. At the 0.05 level of significance, test the null hypothesis that there is no association between geographic region and the appropriateness of use of coronary angiography.</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>angio <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"angio.txt"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Contingency table</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>table_angio <span class="ot">&lt;-</span> <span class="fu">table</span>(angio<span class="sc">$</span>site, angio<span class="sc">$</span>appropro)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>table_angio</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       
+        appropr equiv inappro
+  site1     452    63     113
+  site2     394    35      85
+  site3     434    21      80</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Chi-square test</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(table_angio, <span class="at">correct =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's Chi-squared test
+
+data:  table_angio
+X-squared = 20.056, df = 4, p-value = 0.0004868</code></pre>
+</div>
+</div>
 </section>
 <section id="b.-what-do-you-conclude-1" class="level5">
 <h5 class="anchored" data-anchor-id="b.-what-do-you-conclude-1">B. What do you conclude?</h5>
+<p>The chi-square test of independence between <strong>geographic site</strong> and <strong>appropriateness of coronary angiography</strong> returned:</p>
+<ul>
+<li>Test statistic: (20.056)</li>
+<li>Degrees of freedom: (4)</li>
+<li>p-value: <strong>0.00049</strong></li>
+</ul>
+<p>Since the p-value is much smaller than 0.05, we <strong>reject (H_0)</strong>.<br>
+<strong>Conclusion:</strong> There is strong evidence that the appropriateness of coronary angiography <strong>varies significantly across the three geographic regions</strong>.</p>
 </section>
 <section id="c.-what-is-your-estimate-of-the-odds-ratio-for-having-an-inappropriate-use-of-angiography-comparing-the-high-use-urban-site-to-the-rural-site" class="level5">
 <h5 class="anchored" data-anchor-id="c.-what-is-your-estimate-of-the-odds-ratio-for-having-an-inappropriate-use-of-angiography-comparing-the-high-use-urban-site-to-the-rural-site">C. What is your estimate of the odds ratio for having an inappropriate use of Angiography, comparing the high use urban site to the rural site?</h5>
