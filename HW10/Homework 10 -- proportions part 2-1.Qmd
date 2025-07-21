@@ -1,0 +1,243 @@
+---
+title: "Homework 10 - Biostatistics"
+Author: "Dylan Renard"
+output: pdf_document
+---
+#### Dylan Renard
+#### Professor Proschan & Professor Nason
+#### JHU Biostatistics
+#### July 21st, 2025
+
+#### 12. 
+In a study of intra-observer variability in the assessment of cervical smears, 3325 slides were screened for the presence or absence of abnormal squamous cells. Each slide was screened by a particular observer and then rescreened six months later by the same observer. The results of this study are shown below:
+
+First Screening	| 2nd: present	| 2nd: absent	| Total
+----------|---------|---------|--------
+Present |	1763 |	489 |	2252
+Absent |	403 |	670 |	1073
+Total	 | 2166 |	1159 |	3325
+
+Last week I asked you if	these data support the null hypothesis that here is no association between time of screening and diagnosis. This would be a test of independence, such as a chi-square test.
+
+This week we learned about the McNemar's Test for paired data. McNemar's tests a somewhat different null hypothesis: that the true proportion of slides that observer 1 would call positive is the same as the true proportion of slides that observer 2 would call positive.  Use McNemar's to see if there is a significant difference in the proportion that the two observers call positive.
+
+
+## McNemar's Test for Paired Data
+
+We are analyzing paired binary data where the same slides were assessed twice by the same observer. Our null hypothesis is:
+
+$$
+H_0: p_b = p_c
+$$
+
+##### where  
+- $p_b$ = probability a slide is classified as *present* in the first screening but *absent* in the second,  
+- $p_c$ = probability a slide is classified as *absent* in the first screening but *present* in the second.
+
+The McNemar test focuses only on these **discordant pairs**, because the slides that were classified the same way both times (the diagonal cells of the 2×2 table) do not provide evidence about disagreement.
+
+From the data:
+
+|                | 2nd: present | 2nd: absent |
+|----------------|--------------|-------------|
+| **1st: present** | 1763         | **489**     |
+| **1st: absent**  | **403**      | 670         |
+
+We have:
+- $b = 489$ (present → absent),
+- $c = 403$ (absent → present).
+
+### Test Statistic
+
+For large samples, the McNemar statistic with continuity correction is:
+
+$$
+\chi^2 = \frac{(|b - c| - 1)^2}{b + c}
+$$
+
+Substituting \( b = 489 \) and \( c = 403 \):
+
+$$
+\chi^2 = \frac{(|489 - 403| - 1)^2}{489 + 403}
+= \frac{(86 - 1)^2}{892}
+= \frac{85^2}{892}
+= 8.10
+$$
+
+This follows a chi-square distribution with 1 degree of freedom.
+
+### P-value
+
+$$
+p = 1 - P(\chi^2_{(1)} \le 8.10) \approx 0.0044
+$$
+
+### Conclusion
+
+Since $p < 0.05$ , we reject $H_0$. There is significant evidence that the proportion of slides classified as positive differs between the first and second screening.
+
+### R Code to check work
+
+```{r}
+b <- 489
+c <- 403
+chi_sq <- (abs(b - c) - 1)^2 / (b + c)
+p_value <- 1 - pchisq(chi_sq, df = 1)
+
+chi_sq
+p_value
+```
+
+#### 15. 
+In an effort to evaluate the health effects of air pollutants containing sulphur, individuals living near a pulp mill in Finland were questioned about various symptoms following a strong emissions released in September 1987.  The same subjects were questioned again 4 months later, during a low-exposure period. A summary of the responses related to the occurrence of headaches is presented below. 
+
+
+Low Exposure| High Exposure Yes| High Exposure No |	Total
+----------|---------|---------|--------
+Yes	| 2	| 2	| 4
+No	| 8	| 33	| 41
+Total	| 10	| 35	| 45
+
+
+##### a.  Test the null hypothesis that there is no association between exposure to air pollutants containing sulphur and the occurrence of headaches.
+
+Since the **same subjects** were questioned during high exposure and again during low exposure, this is **paired binary data**.  
+To test whether the proportion of people reporting headaches differs between exposure levels, we use **McNemar’s Test**.
+
+---
+
+### Data
+For McNemar's test, we focus on the **discordant pairs**:
+- $b = 2$: Headache during **high exposure** but **not** during low exposure.
+- $c = 8$: Headache during **low exposure** but **not** during high exposure.
+
+---
+
+### Hypotheses
+
+$$
+H_0: p_b = p_c
+$$
+
+The null hypothesis states that the probability of reporting a headache is the same during high exposure as during low exposure.
+
+---
+
+### Test Statistic
+
+For large samples, McNemar's statistic with continuity correction is:
+
+$$
+\chi^2 = \frac{(|b - c| - 1)^2}{b + c}.
+$$
+
+Substituting $b = 2$ and $c = 8$:
+
+$$
+\chi^2 = \frac{(|2 - 8| - 1)^2}{2 + 8}
+= \frac{(6 - 1)^2}{10}
+= \frac{5^2}{10}
+= 2.5.
+$$
+
+---
+
+### P-value
+
+With $df = 1$:
+
+$$
+p = 1 - P(\chi^2_{(1)} \le 2.5) \approx 0.114.
+$$
+
+---
+
+### R Code to check work
+
+```{r}
+b <- 2
+c <- 8
+chi_sq <- (abs(b - c) - 1)^2 / (b + c)
+p_value <- 1 - pchisq(chi_sq, df = 1)
+
+chi_sq
+p_value
+```
+
+
+##### b. What do you conclude? 
+The McNemar’s test yielded $\chi^2 = 2.5$ with $p \approx 0.114$.  
+Since $p > 0.05$, we **fail to reject $H_0$**.
+
+**Interpretation:** There is insufficient evidence to conclude that the probability of reporting headaches differs between the high- and low-exposure periods for the same subjects.
+
+##### c.  If you found a significant association, what limitations of this study would affect your ability to conclude that pollution caused headaches? 
+
+Even if we had found a significant association between sulphur pollution exposure and headaches, the study design has several limitations that would affect our ability to conclude that pollution caused the headaches:
+
+1. **Observational Study Design:**  
+   There was no random assignment of exposure levels. Without randomization, other factors (e.g., stress, seasonal differences, or concurrent illnesses) could confound the results.
+
+2. **Self-Reported Symptoms:**  
+   Headache data are based on self-reports, which can be subjective and prone to recall bias.
+
+3. **Temporal Changes:**  
+   The second survey was conducted four months later during a different season, and seasonal factors (such as weather or allergens) might influence headaches.
+
+4. **No Control Group:**  
+   The same subjects were measured twice, but there was no group of individuals unexposed to sulphur pollution over the same period to serve as a control.
+
+5. **Small Sample Size:**  
+   With only 45 subjects, random variation and sampling error are large, reducing the reliability of the observed association.
+
+**Conclusion:** Even with a statistically significant result, these limitations mean we could not infer a causal relationship between pollution exposure and headaches.
+
+#### 17. 
+In France, a study was conducted to investigate potential risk factors for ectopic pregnancy. Of the 279 women who had experienced ectopic pregnancy, 28 had suffered from pelvic inflammatory disease.  Of the 279 women who had not, 6 had suffered from pelvic inflammatory disease. 
+
+##### a. Construct a 2x2 contingency table
+
+##### b. Estimate the odds ratio of suffering ectopic pregnancy for women who had pelvic inflammatory disease vs women who have not. 
+
+##### c. Find a 99% confidence interval for the population odds ratio. 
+
+##### d. Assuming the women were chosen to have equal numbers who had and had not experienced an ectopic pregnancy, what kind of study is this?  Is the relative risk that you can calculate from this table meaningful? 
+
+####  20. 
+A study was conducted to determine whether geographic variations in the use of medical and surgical services could be explained in part by differences in the appropriateness with which physicians use these services. One concern might be that a high rate of inappropriate use of a service is associated with high overall use within a particular region. For the procedure coronary angiography, three geographic areas were studied: a high-use site (site 1),  a low use urban site (site 2), and a low use rural site (site 3).  Within each geographical region, each use of this procedure was classified as appropriate, equivocal, or inappropriate by a panel of expert physicians. These data are saved in the data set *angio*. Site number is saved under the variable name *site*, and level of appropriateness under *appropro*. 
+
+##### A.	At the 0.05 level of significance, test the null hypothesis that there is no association between geographic region and the appropriateness of use of coronary angiography.
+
+##### B.	What do you conclude?
+
+##### C. What is your estimate of the odds ratio for having an inappropriate use of Angiography, comparing the high use urban site to the rural site? 
+
+#### 16.7.  
+In a study investigating various risk factors for heart disease, the relationship between hypertension and coronary artery disease (CAD) was examined for individuals in two different age groups. (see tables below)
+
+
+### 35-49 Years of Age
+|CAD	Yes	| CAD No	|Total
+---|------|------|------
+Hypertension Yes	| 552	| 212	| 764
+Hypertension No	| 941	| 495	| 1436
+Total	| 1493	| 707	| 2200
+
+### Over 65 Years of Age
+|CAD	Yes	| CAD No	|Total
+---|------|------|------
+Yes	| 1102	| 87	| 1189
+No	| 1018	| 106	| 1124
+Total	| 2120	| 193	| 2313
+
+
+##### A.  Within each category of age, are the odds of suffering from coronary artery disease greater or smaller for individuals with hypertension?
+
+##### B. Do you feel that it is appropriate to combine the information in these two tables to make a single unifying statement about the relationship between hypertension and coronary artery disease? Why or why not?
+
+##### C.  Compute a Mantel -Haenszel estimate of the summary odds ratio.
+
+##### D. Construct a 95% confidence interval for the summary odds ratio.
+
+##### E. At the alpha= .05 level of significance, Test the null hypothesis that there is no association between hypertension and coronary artery disease. What do you conclude? 
+
