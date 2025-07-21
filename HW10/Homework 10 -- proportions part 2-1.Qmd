@@ -197,11 +197,171 @@ In France, a study was conducted to investigate potential risk factors for ectop
 
 ##### a. Construct a 2x2 contingency table
 
+```{r}
+# Load the DT package
+library(DT)
+
+# Data values
+a <- 28   # Ectopic & PID
+b <- 251  # Ectopic & no PID
+c <- 6    # No Ectopic & PID
+d <- 273  # No Ectopic & no PID
+
+# Create the 2x2 contingency table
+contingency_table <- matrix(c(a, b, c, d), nrow = 2, byrow = TRUE)
+
+# Add row and column names
+rownames(contingency_table) <- c("Ectopic Pregnancy", "No Ectopic Pregnancy")
+colnames(contingency_table) <- c("PID (Yes)", "PID (No)")
+
+# Convert to data frame for better formatting
+contingency_df <- as.data.frame(contingency_table)
+contingency_df <- cbind(Row = rownames(contingency_table), contingency_df)
+
+# Display interactive table
+datatable(
+  contingency_df,
+  rownames = FALSE,
+  options = list(
+    dom = 't',
+    paging = FALSE,
+    ordering = FALSE
+  )
+)
+```
+
 ##### b. Estimate the odds ratio of suffering ectopic pregnancy for women who had pelvic inflammatory disease vs women who have not. 
 
-##### c. Find a 99% confidence interval for the population odds ratio. 
+The odds ratio (OR) for ectopic pregnancy comparing women with pelvic inflammatory disease (PID) to those without PID is calculated as:
 
-##### d. Assuming the women were chosen to have equal numbers who had and had not experienced an ectopic pregnancy, what kind of study is this?  Is the relative risk that you can calculate from this table meaningful? 
+$$
+\text{OR} = \frac{a \cdot d}{b \cdot c},
+$$
+
+where:
+
+- $a = 28$ (Ectopic & PID),
+- $b = 251$ (Ectopic & No PID),
+- $c = 6$ (No Ectopic & PID),
+- $d = 273$ (No Ectopic & No PID).
+
+Substituting the values:
+
+$$
+\text{OR} = \frac{28 \cdot 273}{251 \cdot 6}
+= \frac{7644}{1506} \approx 5.07.
+$$
+
+### R Code to check work
+```{r}
+# Data values
+a <- 28
+b <- 251
+c <- 6
+d <- 273
+
+# Odds Ratio
+OR <- (a * d) / (b * c)
+OR
+```
+
+**Interpretation:**  
+Women with pelvic inflammatory disease are estimated to have approximately **5 times the odds** of ectopic pregnancy compared to women without PID.
+
+##### c. Find a 99% confidence interval for the population odds ratio.
+
+##### 17(c) 99% Confidence Interval for the Population Odds Ratio
+
+To find the confidence interval (CI) for the population odds ratio (OR), we use the log transformation:
+
+1. **Log of the OR:**
+$$
+\ln(\text{OR}) = \ln\left(\frac{a \cdot d}{b \cdot c}\right)
+$$
+
+2. **Standard Error (SE):**
+$$
+SE = \sqrt{\frac{1}{a} + \frac{1}{b} + \frac{1}{c} + \frac{1}{d}}
+$$
+
+3. **99% CI for log(OR):**
+$$
+\ln(\text{OR}) \pm z_{0.005} \cdot SE
+$$
+where $$z_{0.005} = 2.576$$ for a 99% confidence interval.
+
+4. **Exponentiate the bounds** to obtain the CI for OR.
+
+---
+
+### Step-by-Step Calculation
+
+Given:
+$$a = 28, \, b = 251, \, c = 6, \, d = 273, \, \text{OR} = 5.07.$$
+
+- **Log(OR):**
+$$
+\ln(\text{OR}) = \ln(5.07) \approx 1.622
+$$
+
+- **Standard Error:**
+$$
+SE = \sqrt{\frac{1}{28} + \frac{1}{251} + \frac{1}{6} + \frac{1}{273}}
+= \sqrt{0.0357 + 0.0040 + 0.1667 + 0.0037}
+= \sqrt{0.2101} \approx 0.458
+$$
+
+- **Confidence Limits (log scale):**
+$$
+1.622 \pm 2.576 \cdot 0.458 = 1.622 \pm 1.18
+$$
+which gives:
+$$
+[0.442, \, 2.802]
+$$
+
+- **Confidence Limits (OR scale):**
+$$
+[ e^{0.442}, \, e^{2.802} ] \approx [1.55, \, 16.47]
+$$
+
+**Interpretation:** We are 99% confident that the population odds ratio lies between **1.55** and **16.47**.
+
+
+##### d. Assuming the women were chosen to have equal numbers who had and had not experienced an ectopic pregnancy, what kind of study is this?  Is the relative risk that you can calculate from this table meaningful?
+
+Since the study deliberately selected **equal numbers of women with ectopic pregnancy (cases) and women without ectopic pregnancy (controls)**, this is a **case-control study**.
+
+##### In a case-control study:
+- The number of cases and controls is **fixed by design**, not by the natural frequency of the disease in the population.
+- The marginal totals of the table (i.e., the row sums) **do not represent population prevalence** or risk.
+
+### Why Relative Risk is Not Meaningful Here
+
+The **relative risk (RR)** is defined as:
+$$
+RR = \frac{P(\text{disease} \mid \text{exposed})}{P(\text{disease} \mid \text{not exposed})}.
+$$
+
+To compute this, we need the **true probabilities** of disease in exposed and unexposed groups, which requires the sample to reflect population proportions.  
+
+##### However, in a case-control design:
+- The sampling artificially forces the number of cases (279) and non-cases (279) to be equal.
+- This means $P(\text{disease})$ in this sample is not the true population probability.
+
+##### As a result, **RR calculated from this table would be biased and meaningless** because:
+1. The probability of disease is **overrepresented** (50% in the table vs. a much smaller rate in the real population).
+2. The exposure distribution among controls might not reflect that in the overall population.
+
+### What Can We Use Instead?
+
+The **odds ratio (OR)** remains valid because:
+- OR is a ratio of odds, which is invariant to the way we sample cases and controls.
+- When the disease is rare, $OR \approx RR$, so OR provides a good approximation of RR in the population.
+
+**Conclusion:**  
+This is a **case-control study**, and RR cannot be meaningfully calculated from this data. The **OR is the appropriate measure of association**.
+
 
 ####  20. 
 A study was conducted to determine whether geographic variations in the use of medical and surgical services could be explained in part by differences in the appropriateness with which physicians use these services. One concern might be that a high rate of inappropriate use of a service is associated with high overall use within a particular region. For the procedure coronary angiography, three geographic areas were studied: a high-use site (site 1),  a low use urban site (site 2), and a low use rural site (site 3).  Within each geographical region, each use of this procedure was classified as appropriate, equivocal, or inappropriate by a panel of expert physicians. These data are saved in the data set *angio*. Site number is saved under the variable name *site*, and level of appropriateness under *appropro*. 

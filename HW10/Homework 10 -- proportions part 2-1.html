@@ -69,6 +69,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="Homework 10 -- proportions part 2-1_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="Homework 10 -- proportions part 2-1_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="Homework 10 -- proportions part 2-1_files/libs/bootstrap/bootstrap-81267100e462c21b3d6c0d5bf76a3417.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="Homework 10 -- proportions part 2-1_files/libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="Homework 10 -- proportions part 2-1_files/libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="Homework 10 -- proportions part 2-1_files/libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+<script src="Homework 10 -- proportions part 2-1_files/libs/datatables-binding-0.28/datatables.js"></script>
+<script src="Homework 10 -- proportions part 2-1_files/libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="Homework 10 -- proportions part 2-1_files/libs/dt-core-1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="Homework 10 -- proportions part 2-1_files/libs/dt-core-1.13.4/css/jquery.dataTables.extra.css" rel="stylesheet">
+<script src="Homework 10 -- proportions part 2-1_files/libs/dt-core-1.13.4/js/jquery.dataTables.min.js"></script>
+<link href="Homework 10 -- proportions part 2-1_files/libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet">
+<script src="Homework 10 -- proportions part 2-1_files/libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -377,17 +387,163 @@ With only 45 subjects, random variation and sampling error are large, reducing t
 <p>In France, a study was conducted to investigate potential risk factors for ectopic pregnancy. Of the 279 women who had experienced ectopic pregnancy, 28 had suffered from pelvic inflammatory disease. Of the 279 women who had not, 6 had suffered from pelvic inflammatory disease.</p>
 <section id="a.-construct-a-2x2-contingency-table" class="level5">
 <h5 class="anchored" data-anchor-id="a.-construct-a-2x2-contingency-table">a. Construct a 2x2 contingency table</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the DT package</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DT)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Data values</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">28</span>   <span class="co"># Ectopic &amp; PID</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">251</span>  <span class="co"># Ectopic &amp; no PID</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="dv">6</span>    <span class="co"># No Ectopic &amp; PID</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="dv">273</span>  <span class="co"># No Ectopic &amp; no PID</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the 2x2 contingency table</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>contingency_table <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(a, b, c, d), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Add row and column names</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(contingency_table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Ectopic Pregnancy"</span>, <span class="st">"No Ectopic Pregnancy"</span>)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(contingency_table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"PID (Yes)"</span>, <span class="st">"PID (No)"</span>)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to data frame for better formatting</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>contingency_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(contingency_table)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>contingency_df <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="at">Row =</span> <span class="fu">rownames</span>(contingency_table), contingency_df)</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Display interactive table</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="fu">datatable</span>(</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>  contingency_df,</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">rownames =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">options =</span> <span class="fu">list</span>(</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">dom =</span> <span class="st">'t'</span>,</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">paging =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">ordering =</span> <span class="cn">FALSE</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="datatables html-widget html-fill-item" id="htmlwidget-5d8f8cdd8b07af808282" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-5d8f8cdd8b07af808282">{"x":{"filter":"none","vertical":false,"data":[["Ectopic Pregnancy","No Ectopic Pregnancy"],[28,6],[251,273]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Row<\/th>\n      <th>PID (Yes)<\/th>\n      <th>PID (No)<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","paging":false,"ordering":false,"columnDefs":[{"className":"dt-right","targets":[1,2]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
 </section>
 <section id="b.-estimate-the-odds-ratio-of-suffering-ectopic-pregnancy-for-women-who-had-pelvic-inflammatory-disease-vs-women-who-have-not." class="level5">
 <h5 class="anchored" data-anchor-id="b.-estimate-the-odds-ratio-of-suffering-ectopic-pregnancy-for-women-who-had-pelvic-inflammatory-disease-vs-women-who-have-not.">b. Estimate the odds ratio of suffering ectopic pregnancy for women who had pelvic inflammatory disease vs women who have not.</h5>
+<p>The odds ratio (OR) for ectopic pregnancy comparing women with pelvic inflammatory disease (PID) to those without PID is calculated as:</p>
+<p><span class="math display">\[
+\text{OR} = \frac{a \cdot d}{b \cdot c},
+\]</span></p>
+<p>where:</p>
+<ul>
+<li><span class="math inline">\(a = 28\)</span> (Ectopic &amp; PID),</li>
+<li><span class="math inline">\(b = 251\)</span> (Ectopic &amp; No PID),</li>
+<li><span class="math inline">\(c = 6\)</span> (No Ectopic &amp; PID),</li>
+<li><span class="math inline">\(d = 273\)</span> (No Ectopic &amp; No PID).</li>
+</ul>
+<p>Substituting the values:</p>
+<p><span class="math display">\[
+\text{OR} = \frac{28 \cdot 273}{251 \cdot 6}
+= \frac{7644}{1506} \approx 5.07.
+\]</span></p>
 </section>
+</section>
+</section>
+<section id="r-code-to-check-work-2" class="level3">
+<h3 class="anchored" data-anchor-id="r-code-to-check-work-2">R Code to check work</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data values</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">28</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">251</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="dv">6</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="dv">273</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Odds Ratio</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>OR <span class="ot">&lt;-</span> (a <span class="sc">*</span> d) <span class="sc">/</span> (b <span class="sc">*</span> c)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>OR</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5.075697</code></pre>
+</div>
+</div>
+<p><strong>Interpretation:</strong><br>
+Women with pelvic inflammatory disease are estimated to have approximately <strong>5 times the odds</strong> of ectopic pregnancy compared to women without PID.</p>
 <section id="c.-find-a-99-confidence-interval-for-the-population-odds-ratio." class="level5">
 <h5 class="anchored" data-anchor-id="c.-find-a-99-confidence-interval-for-the-population-odds-ratio.">c.&nbsp;Find a 99% confidence interval for the population odds ratio.</h5>
 </section>
+<section id="c-99-confidence-interval-for-the-population-odds-ratio" class="level5">
+<h5 class="anchored" data-anchor-id="c-99-confidence-interval-for-the-population-odds-ratio">17(c) 99% Confidence Interval for the Population Odds Ratio</h5>
+<p>To find the confidence interval (CI) for the population odds ratio (OR), we use the log transformation:</p>
+<ol type="1">
+<li><p><strong>Log of the OR:</strong> <span class="math display">\[
+\ln(\text{OR}) = \ln\left(\frac{a \cdot d}{b \cdot c}\right)
+\]</span></p></li>
+<li><p><strong>Standard Error (SE):</strong> <span class="math display">\[
+SE = \sqrt{\frac{1}{a} + \frac{1}{b} + \frac{1}{c} + \frac{1}{d}}
+\]</span></p></li>
+<li><p><strong>99% CI for log(OR):</strong> <span class="math display">\[
+\ln(\text{OR}) \pm z_{0.005} \cdot SE
+\]</span> where <span class="math display">\[z_{0.005} = 2.576\]</span> for a 99% confidence interval.</p></li>
+<li><p><strong>Exponentiate the bounds</strong> to obtain the CI for OR.</p></li>
+</ol>
+<hr>
+</section>
+</section>
+<section id="step-by-step-calculation" class="level3">
+<h3 class="anchored" data-anchor-id="step-by-step-calculation">Step-by-Step Calculation</h3>
+<p>Given: <span class="math display">\[a = 28, \, b = 251, \, c = 6, \, d = 273, \, \text{OR} = 5.07.\]</span></p>
+<ul>
+<li><p><strong>Log(OR):</strong> <span class="math display">\[
+\ln(\text{OR}) = \ln(5.07) \approx 1.622
+\]</span></p></li>
+<li><p><strong>Standard Error:</strong> <span class="math display">\[
+SE = \sqrt{\frac{1}{28} + \frac{1}{251} + \frac{1}{6} + \frac{1}{273}}
+= \sqrt{0.0357 + 0.0040 + 0.1667 + 0.0037}
+= \sqrt{0.2101} \approx 0.458
+\]</span></p></li>
+<li><p><strong>Confidence Limits (log scale):</strong> <span class="math display">\[
+1.622 \pm 2.576 \cdot 0.458 = 1.622 \pm 1.18
+\]</span> which gives: <span class="math display">\[
+[0.442, \, 2.802]
+\]</span></p></li>
+<li><p><strong>Confidence Limits (OR scale):</strong> <span class="math display">\[
+[ e^{0.442}, \, e^{2.802} ] \approx [1.55, \, 16.47]
+\]</span></p></li>
+</ul>
+<p><strong>Interpretation:</strong> We are 99% confident that the population odds ratio lies between <strong>1.55</strong> and <strong>16.47</strong>.</p>
 <section id="d.-assuming-the-women-were-chosen-to-have-equal-numbers-who-had-and-had-not-experienced-an-ectopic-pregnancy-what-kind-of-study-is-this-is-the-relative-risk-that-you-can-calculate-from-this-table-meaningful" class="level5">
 <h5 class="anchored" data-anchor-id="d.-assuming-the-women-were-chosen-to-have-equal-numbers-who-had-and-had-not-experienced-an-ectopic-pregnancy-what-kind-of-study-is-this-is-the-relative-risk-that-you-can-calculate-from-this-table-meaningful">d.&nbsp;Assuming the women were chosen to have equal numbers who had and had not experienced an ectopic pregnancy, what kind of study is this? Is the relative risk that you can calculate from this table meaningful?</h5>
+<p>Since the study deliberately selected <strong>equal numbers of women with ectopic pregnancy (cases) and women without ectopic pregnancy (controls)</strong>, this is a <strong>case-control study</strong>.</p>
+</section>
+<section id="in-a-case-control-study" class="level5">
+<h5 class="anchored" data-anchor-id="in-a-case-control-study">In a case-control study:</h5>
+<ul>
+<li>The number of cases and controls is <strong>fixed by design</strong>, not by the natural frequency of the disease in the population.</li>
+<li>The marginal totals of the table (i.e., the row sums) <strong>do not represent population prevalence</strong> or risk.</li>
+</ul>
 </section>
 </section>
+<section id="why-relative-risk-is-not-meaningful-here" class="level3">
+<h3 class="anchored" data-anchor-id="why-relative-risk-is-not-meaningful-here">Why Relative Risk is Not Meaningful Here</h3>
+<p>The <strong>relative risk (RR)</strong> is defined as: <span class="math display">\[
+RR = \frac{P(\text{disease} \mid \text{exposed})}{P(\text{disease} \mid \text{not exposed})}.
+\]</span></p>
+<p>To compute this, we need the <strong>true probabilities</strong> of disease in exposed and unexposed groups, which requires the sample to reflect population proportions.</p>
+<section id="however-in-a-case-control-design" class="level5">
+<h5 class="anchored" data-anchor-id="however-in-a-case-control-design">However, in a case-control design:</h5>
+<ul>
+<li>The sampling artificially forces the number of cases (279) and non-cases (279) to be equal.</li>
+<li>This means <span class="math inline">\(P(\text{disease})\)</span> in this sample is not the true population probability.</li>
+</ul>
+</section>
+<section id="as-a-result-rr-calculated-from-this-table-would-be-biased-and-meaningless-because" class="level5">
+<h5 class="anchored" data-anchor-id="as-a-result-rr-calculated-from-this-table-would-be-biased-and-meaningless-because">As a result, <strong>RR calculated from this table would be biased and meaningless</strong> because:</h5>
+<ol type="1">
+<li>The probability of disease is <strong>overrepresented</strong> (50% in the table vs.&nbsp;a much smaller rate in the real population).</li>
+<li>The exposure distribution among controls might not reflect that in the overall population.</li>
+</ol>
+</section>
+</section>
+<section id="what-can-we-use-instead" class="level3">
+<h3 class="anchored" data-anchor-id="what-can-we-use-instead">What Can We Use Instead?</h3>
+<p>The <strong>odds ratio (OR)</strong> remains valid because: - OR is a ratio of odds, which is invariant to the way we sample cases and controls. - When the disease is rare, <span class="math inline">\(OR \approx RR\)</span>, so OR provides a good approximation of RR in the population.</p>
+<p><strong>Conclusion:</strong><br>
+This is a <strong>case-control study</strong>, and RR cannot be meaningfully calculated from this data. The <strong>OR is the appropriate measure of association</strong>.</p>
 <section id="section-3" class="level4">
 <h4 class="anchored" data-anchor-id="section-3">20.</h4>
 <p>A study was conducted to determine whether geographic variations in the use of medical and surgical services could be explained in part by differences in the appropriateness with which physicians use these services. One concern might be that a high rate of inappropriate use of a service is associated with high overall use within a particular region. For the procedure coronary angiography, three geographic areas were studied: a high-use site (site 1), a low use urban site (site 2), and a low use rural site (site 3). Within each geographical region, each use of this procedure was classified as appropriate, equivocal, or inappropriate by a panel of expert physicians. These data are saved in the data set <em>angio</em>. Site number is saved under the variable name <em>site</em>, and level of appropriateness under <em>appropro</em>.</p>
