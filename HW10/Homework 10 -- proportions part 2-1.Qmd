@@ -387,10 +387,44 @@ The chi-square test of independence between **geographic site** and **appropriat
 - Degrees of freedom: (4)
 - p-value: **0.00049**
 
-Since the p-value is much smaller than 0.05, we **reject \(H_0\)**.  
-**Conclusion:** There is strong evidence that the appropriateness of coronary angiography **varies significantly across the three geographic regions**.
+Since the p-value is much smaller than 0.05, we **reject $H_0$**.  
+Overall, There is strong evidence that the appropriateness of coronary angiography **varies significantly across the three geographic regions**.
 
 ##### C. What is your estimate of the odds ratio for having an inappropriate use of Angiography, comparing the high use urban site to the rural site? 
+
+```{r}
+# Filter only sites 2 and 3
+urban_vs_rural <- table_angio[c("site2", "site3"), ]
+
+# Get counts
+inappropriate <- urban_vs_rural[, "inappro"]   # corrected spelling
+not_inappropriate <- rowSums(urban_vs_rural[, c("appropr", "equiv")])
+
+# Construct 2x2 table
+odds_table <- matrix(c(inappropriate["site2"], not_inappropriate["site2"],
+                       inappropriate["site3"], not_inappropriate["site3"]),
+                     nrow = 2, byrow = TRUE)
+colnames(odds_table) <- c("Inappropriate", "Not_Inappropriate")
+rownames(odds_table) <- c("Urban (2)", "Rural (3)")
+odds_table
+
+# Odds ratio
+a <- odds_table[1,1]
+b <- odds_table[1,2]
+c <- odds_table[2,1]
+d <- odds_table[2,2]
+OR <- (a * d) / (b * c)
+OR
+```
+
+Using the data, we obtained:
+
+$$
+OR \approx 1.1269.
+$$
+
+**Interpretation:**  
+The odds of inappropriate use at the high-use urban site are about **1.13 times** those at the rural site, indicating only a slight difference.
 
 #### 16.7.  
 In a study investigating various risk factors for heart disease, the relationship between hypertension and coronary artery disease (CAD) was examined for individuals in two different age groups. (see tables below)

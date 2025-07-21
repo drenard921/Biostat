@@ -419,8 +419,8 @@ With only 45 subjects, random variation and sampling error are large, reducing t
 <span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-69a6693eb0479776ee50" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-69a6693eb0479776ee50">{"x":{"filter":"none","vertical":false,"data":[["Ectopic Pregnancy","No Ectopic Pregnancy"],[28,6],[251,273]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Row<\/th>\n      <th>PID (Yes)<\/th>\n      <th>PID (No)<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","paging":false,"ordering":false,"columnDefs":[{"className":"dt-right","targets":[1,2]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-ead6046066c0847e9a2f" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-ead6046066c0847e9a2f">{"x":{"filter":"none","vertical":false,"data":[["Ectopic Pregnancy","No Ectopic Pregnancy"],[28,6],[251,273]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Row<\/th>\n      <th>PID (Yes)<\/th>\n      <th>PID (No)<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","paging":false,"ordering":false,"columnDefs":[{"className":"dt-right","targets":[1,2]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </section>
@@ -581,11 +581,48 @@ X-squared = 20.056, df = 4, p-value = 0.0004868</code></pre>
 <li>Degrees of freedom: (4)</li>
 <li>p-value: <strong>0.00049</strong></li>
 </ul>
-<p>Since the p-value is much smaller than 0.05, we <strong>reject (H_0)</strong>.<br>
-<strong>Conclusion:</strong> There is strong evidence that the appropriateness of coronary angiography <strong>varies significantly across the three geographic regions</strong>.</p>
+<p>Since the p-value is much smaller than 0.05, we <strong>reject <span class="math inline">\(H_0\)</span></strong>.<br>
+Overall, There is strong evidence that the appropriateness of coronary angiography <strong>varies significantly across the three geographic regions</strong>.</p>
 </section>
 <section id="c.-what-is-your-estimate-of-the-odds-ratio-for-having-an-inappropriate-use-of-angiography-comparing-the-high-use-urban-site-to-the-rural-site" class="level5">
 <h5 class="anchored" data-anchor-id="c.-what-is-your-estimate-of-the-odds-ratio-for-having-an-inappropriate-use-of-angiography-comparing-the-high-use-urban-site-to-the-rural-site">C. What is your estimate of the odds ratio for having an inappropriate use of Angiography, comparing the high use urban site to the rural site?</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter only sites 2 and 3</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>urban_vs_rural <span class="ot">&lt;-</span> table_angio[<span class="fu">c</span>(<span class="st">"site2"</span>, <span class="st">"site3"</span>), ]</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get counts</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>inappropriate <span class="ot">&lt;-</span> urban_vs_rural[, <span class="st">"inappro"</span>]   <span class="co"># corrected spelling</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>not_inappropriate <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(urban_vs_rural[, <span class="fu">c</span>(<span class="st">"appropr"</span>, <span class="st">"equiv"</span>)])</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Construct 2x2 table</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>odds_table <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(inappropriate[<span class="st">"site2"</span>], not_inappropriate[<span class="st">"site2"</span>],</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>                       inappropriate[<span class="st">"site3"</span>], not_inappropriate[<span class="st">"site3"</span>]),</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(odds_table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Inappropriate"</span>, <span class="st">"Not_Inappropriate"</span>)</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(odds_table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Urban (2)"</span>, <span class="st">"Rural (3)"</span>)</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>odds_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          Inappropriate Not_Inappropriate
+Urban (2)            85               429
+Rural (3)            80               455</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Odds ratio</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> odds_table[<span class="dv">1</span>,<span class="dv">1</span>]</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> odds_table[<span class="dv">1</span>,<span class="dv">2</span>]</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> odds_table[<span class="dv">2</span>,<span class="dv">1</span>]</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> odds_table[<span class="dv">2</span>,<span class="dv">2</span>]</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>OR <span class="ot">&lt;-</span> (a <span class="sc">*</span> d) <span class="sc">/</span> (b <span class="sc">*</span> c)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>OR</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.126894</code></pre>
+</div>
+</div>
+<p>Using the data, we obtained:</p>
+<p><span class="math display">\[
+OR \approx 1.1269.
+\]</span></p>
+<p><strong>Interpretation:</strong><br>
+The odds of inappropriate use at the high-use urban site are about <strong>1.13 times</strong> those at the rural site, indicating only a slight difference.</p>
 </section>
 </section>
 <section id="section-4" class="level4">
