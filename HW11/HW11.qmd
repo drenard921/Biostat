@@ -1,0 +1,215 @@
+---
+title: "Homework 11 - Biostatistics"
+Author: "Dylan Renard"
+output: pdf_document
+---
+#### Dylan Renard
+#### Professor Proschan & Professor Nason
+#### JHU Biostatistics
+#### July 30th, 2025
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Assignment for Biostatistics Week 11:
+
+Download and open the “apoptosis” data from the class webpage Answer the following questions referring to this dataset.
+
+This data summarizes an in vitro study of patients with HIV taking IL-7. The main measurement of interest was the percent of cells undergoing apoptosis (cell death), over time. That measurement has been summarized in two ways: betahat6, a measure of the trend of the change over time for each person, and avdiff6, a measure of the average change over time.
+
+```{r}
+library(DT)
+# Load the dataset
+data <- read.csv("apoptosis.csv")
+
+# Display only the head in a DT table, body only
+datatable(head(data), options = list(dom = 't', ordering = FALSE))
+```
+
+1.	Make a scatterplot of betahat6 against CD4 using plot( )
+
+```{r}
+#Enter code here
+# Scatterplot of betahat6 vs CD4
+plot(data$CD4, data$betahat6,
+     xlab = "CD4",
+     ylab = "betahat6",
+     main = "Scatterplot of betahat6 vs CD4",
+     pch = 19, col = "blue")
+
+```
+
+a.	Compute the value of the Pearson Correlation Coefficient and test whether this is =0 using cor.test( ). What is your p-value? What can you say? 
+
+```{r}
+#Enter code here
+# Perform Pearson correlation test
+cor_test_result <- cor.test(data$betahat6, data$CD4, method = "pearson")
+
+# Show the full result
+cor_test_result
+
+```
+
+The Pearson correlation coefficient was `r round(cor_test_result$estimate, 3)` with a p-value of `r signif(cor_test_result$p.value, 3)`.
+
+#### Interpretation
+
+Since the p-value is `r ifelse(cor_test_result$p.value < 0.05, "< 0.05", "≥ 0.05")`, we `r ifelse(cor_test_result$p.value < 0.05, "reject", "fail to reject")` the null hypothesis that the true correlation is 0. This suggests that there **is `r ifelse(cor_test_result$p.value < 0.05, "", "not")` a statistically significant linear association** between `betahat6` and `CD4` in this sample.
+
+
+b.	Now find the Spearman Correlation Coefficient based on the ranks, using the same function but specifying method= “spearman”.   What is the value of Spearman’s ρ? What is your p-value? Using this, are these variables significantly correlated? 
+
+```{r}
+#Enter code here
+spearman_test_result <- cor.test(data$betahat6, data$CD4, method = "spearman")
+spearman_test_result
+```
+
+The Spearman correlation coefficient was `r round(spearman_test_result$estimate, 3)` with a p-value of `r signif(spearman_test_result$p.value, 3)`.
+
+#### Interpretation
+
+Since the p-value is `r ifelse(spearman_test_result$p.value < 0.05, "< 0.05", "≥ 0.05")`, we `r ifelse(spearman_test_result$p.value < 0.05, "reject", "fail to reject")` the null hypothesis that the rank-based correlation is 0. This indicates that there **is `r ifelse(spearman_test_result$p.value < 0.05, "", "not")` a statistically significant monotonic association** between `betahat6` and `CD4`.
+
+Spearman's correlation is more robust to outliers and non-linear patterns compared to Pearson’s, so this result confirms whether the association holds when considering ranks rather than raw values.
+
+c.	Use lm( ) to fit a regression line to betahat6 predicted by CD4. Write down the regression equation for this fit line:
+
+```{r}
+#Enter code here
+# Fit the model
+model <- lm(betahat6 ~ CD4, data = data)
+
+# Display the summary
+summary(model)
+```
+
+The estimated regression coefficients are:
+- Intercept (α̂) = `r round(coef(model)[1], 3)`
+- Slope (β̂) = `r round(coef(model)[2], 3)`
+
+#### Regression Equation
+
+The fitted regression equation is:
+
+$$
+\widehat{\text{betahat6}} = `r round(coef(model)[1], 3)` + `r round(coef(model)[2], 3)` \times \text{CD4}
+$$
+
+d.	Is the slope of the line significantly different than 0? What is your p-value?
+
+The p-value for the slope is `r signif(summary(model)$coefficients["CD4", "Pr(>|t|)"], 3)`.
+
+#### Interpretation
+
+Since the p-value is `r ifelse(summary(model)$coefficients["CD4", "Pr(>|t|)"] < 0.05, "< 0.05", "≥ 0.05")`, we `r ifelse(summary(model)$coefficients["CD4", "Pr(>|t|)"] < 0.05, "reject", "fail to reject")` the null hypothesis that the slope is 0. This means the slope is **`r ifelse(summary(model)$coefficients["CD4", "Pr(>|t|)"] < 0.05, "significantly", "not")` different from zero**, indicating that `CD4` is a `r ifelse(summary(model)$coefficients["CD4", "Pr(>|t|)"] < 0.05, "significant", "non-significant")` predictor of `betahat6`.
+
+
+e.	Plot the residuals versus fitted values. Describe what you see. Does the line seem to fit well, based on this? 
+
+```{r}
+#Enter code here
+
+
+```
+
+f.	Find the R2  using the output of the linear regression.  If you square root this, what number do you get? 
+
+
+
+
+
+
+
+
+2.	Notice that there is one large outlier, with the highest CD4 count in the data. Exclude that one value, and recompute:
+a.	The Pearson Correlation coefficient and p-value.
+
+```{r}
+#Enter code here
+
+
+```
+
+b.	The Spearman Correlation coefficient and p-value.
+
+```{r}
+#Enter code here
+
+
+```
+
+c.	the regression equation and p-value. 
+
+```{r}
+#Enter code here
+
+
+```
+
+d.	The plot of residuals versus fitted values
+
+```{r}
+#Enter code here
+
+
+```
+
+
+Which of these changed substantially? Why?
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+ 
+Other Homework: Chapter 17 #1, 3,7, Chapter 18 #4, #9, 
+
+17.1 When you are investigating the relationship between two continuous random variables, why is it important to create a scatter plot of the data?
+
+17.3  How does Spearman's rank correlation differ from the Pearson correlation?
+
+17.7. The data set lowbwt contains information collected for a sample of 100 low birth weight infants born in two teaching hospitals in Boston, Massachusetts [5] (Appendix B, Table B.7). Measurements of systolic blood pressure are saved under the variable name sbp, and values of the Apgar score recorded five minutes after birth-an index of neonatal asphyxia or oxygen deprivation-are saved under the name apgar5. The Apgar score is an ordinal random variable that takes values between 0 and 10.
+
+(a) Estimate the correlation of the random variables systolic blood pressure and five-minute Apgar score for this population of low birth weight infants.
+
+(b) Does Apgar score tend to increase or decrease as systolic blood pressure increases?
+
+(c) Test the null hypothesis  H0 : ρ = 0.  What do you conclude?
+
+
+18.4 Why is it dangerous to extrapolate an estimated linear regression line outside the range of the observed data values?
+
+18.9. The data set lowbwt contains information for the sample of 100 low birth weight infants born in Boston, Massachusetts. Measurements of systolic blood pressure are saved under the variable name sbp, and values of gestational age under the name *gestage*. 
+
+(a) Construct a two-way scatter plot of systolic blood pressure versus gestational age. Does the graph suggest anything about the nature of the relationship between these variables?
+
+(b) Using systolic blood pressure as the response and gestational age as the explanatory variable, compute the  least-squares regression line. Interpret the estimated slope andy-intercept of the line; what do they mean in words?
+
+(c) At the 0.05 level of significance, test the null hypothesis that the true population slope β is equal to 0. What do you conclude?
+
+(d) What is the estimated mean systolic blood pressure for the population of low birth weight infants whose gestational age is 31 weeks?
+
+(e) Construct a 95% confidence interval for the true mean value of systolic blood pressure when x = 31 weeks.
+
+(f) Suppose that you randomly select a new child from the population of low birth weight infants with gestational age 31 weeks. What is the predicted systolic blood pressure for this child?
+
+(g) Construct a 95% prediction interval for this new value of systolic blood pressure.
+
+(h) Does the least-squares regression model seem to fit the observed data? Comment on the coefficient of determination and a plot of the residuals versus the fitted values of systolic blood pressure.
+

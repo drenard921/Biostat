@@ -1,0 +1,90 @@
+---
+title: "Project Proposal: Coke vs. Pepsi Sugar Prediction Survey"
+author: "Dylan Renard"
+date: "July 27th 2025"
+format: pdf
+---
+
+## Project Overview
+
+This project aims to conduct a survey to explore two key questions:  
+1. **Which soda do people prefer: Coke or Pepsi?**  
+2. **How accurately can people predict the sugar content in these beverages?**
+
+The survey will collect data on participant preferences and their estimates of sugar content in a standard 12 oz can of Coke and Pepsi. Actual sugar values are **39g for Coke** and **41g for Pepsi**.
+
+The survey will be open to participants from **work colleagues, classmates, and LinkedIn connections** to obtain a diverse dataset.
+
+---
+
+## Incentive and Engagement
+
+To encourage participation, respondents will be entered into a **movie ticket giveaway** where the drawing will be randomized:
+
+- **1st Place Winner:** 4 AMC movie tickets.  
+- **2nd Place Winners:** 2 participants, each receiving 2 AMC tickets.  
+- **3rd Place Winners:** 2 participants, each receiving 1 AMC ticket.  
+
+---
+
+## Survey Design
+
+**Proposed Questions:**
+
+1. Which do you prefer: Coke or Pepsi? (Coke, Pepsi)  
+2. How many grams of sugar are in a standard 12 oz can of Coke?  
+3. How many grams of sugar are in a standard 12 oz can of Pepsi?  
+4. Which do you think has more sugar? (Coke, Pepsi, Unsure)  
+
+The survey will be hosted via **Google Forms** or a similar platform.
+
+---
+
+## Hypotheses
+
+We will test whether soda preference (Coke vs. Pepsi) impacts predictive ability.
+
+- **Null Hypothesis (H₀):** There is **no difference** in prediction accuracy between participants who prefer Coke and those who prefer Pepsi.  
+- **Alternative Hypothesis (H₁):** There is a **difference** in prediction accuracy between participants who prefer Coke and those who prefer Pepsi.  
+
+We will compare the **mean absolute prediction errors** across preference groups using t-tests or non-parametric equivalents.
+
+---
+
+## Data Analysis Plan
+
+Collected data will be analyzed in R and summarized using:
+
+- **Preference Analysis:**  
+  Bar charts and pie charts of Coke vs. Pepsi preference.  
+  Chi-square test to check if preferences differ significantly from 50/50.
+  
+- **Prediction Accuracy:**  
+  Calculate the absolute error for each participant and overall ranking.  
+  Test predictive ability differences between preference groups (t-test or Wilcoxon).  
+  Boxplots showing distribution of prediction errors.
+  
+- **Insights:**  
+  Analyze whether preference correlates with better predictions for one soda over the other.
+
+---
+
+## Deliverables
+
+1. **Survey Design:** Google Form with integrated incentive announcement.  
+2. **Data Analysis:** R script to:
+   - Rank participants and identify winners.
+   - Produce visualizations (bar charts, boxplots).
+   - Run statistical tests (Chi-square, t-tests).
+3. **Report:** A Quarto document summarizing survey findings, visuals, and winner rankings.
+
+---
+
+## Timeline
+
+- **Week 1:** Finalize survey questions and launch survey on LinkedIn, with colleagues, and in class.  
+- **Week 2:** Collect responses.  
+- **Week 3:** Analyze data and determine winners. Prepare a report and share results.
+
+---
+

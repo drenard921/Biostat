@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Homework 10 - Biostatistics</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Homework10_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Homework10_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="Homework10_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="Homework10_files/libs/quarto-html/popper.min.js"></script>
+<script src="Homework10_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Homework10_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Homework10_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Homework10_files/libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Homework10_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Homework10_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Homework10_files/libs/bootstrap/bootstrap-81267100e462c21b3d6c0d5bf76a3417.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="Homework10_files/libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="Homework10_files/libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="Homework10_files/libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+<script src="Homework10_files/libs/datatables-binding-0.28/datatables.js"></script>
+<script src="Homework10_files/libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="Homework10_files/libs/dt-core-1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="Homework10_files/libs/dt-core-1.13.4/css/jquery.dataTables.extra.css" rel="stylesheet">
+<script src="Homework10_files/libs/dt-core-1.13.4/js/jquery.dataTables.min.js"></script>
+<link href="Homework10_files/libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet">
+<script src="Homework10_files/libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Homework 10 - Biostatistics</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="dylan-renard" class="level4">
+<h4 class="anchored" data-anchor-id="dylan-renard">Dylan Renard</h4>
+</section>
+<section id="professor-proschan-professor-nason" class="level4">
+<h4 class="anchored" data-anchor-id="professor-proschan-professor-nason">Professor Proschan &amp; Professor Nason</h4>
+</section>
+<section id="jhu-biostatistics" class="level4">
+<h4 class="anchored" data-anchor-id="jhu-biostatistics">JHU Biostatistics</h4>
+</section>
+<section id="july-21st-2025" class="level4">
+<h4 class="anchored" data-anchor-id="july-21st-2025">July 21st, 2025</h4>
+</section>
+<section id="section" class="level4">
+<h4 class="anchored" data-anchor-id="section">12.</h4>
+<p>In a study of intra-observer variability in the assessment of cervical smears, 3325 slides were screened for the presence or absence of abnormal squamous cells. Each slide was screened by a particular observer and then rescreened six months later by the same observer. The results of this study are shown below:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>First Screening</th>
+<th>2nd: present</th>
+<th>2nd: absent</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Present</td>
+<td>1763</td>
+<td>489</td>
+<td>2252</td>
+</tr>
+<tr class="even">
+<td>Absent</td>
+<td>403</td>
+<td>670</td>
+<td>1073</td>
+</tr>
+<tr class="odd">
+<td>Total</td>
+<td>2166</td>
+<td>1159</td>
+<td>3325</td>
+</tr>
+</tbody>
+</table>
+<p>Last week I asked you if these data support the null hypothesis that here is no association between time of screening and diagnosis. This would be a test of independence, such as a chi-square test.</p>
+<p>This week we learned about the McNemar’s Test for paired data. McNemar’s tests a somewhat different null hypothesis: that the true proportion of slides that observer 1 would call positive is the same as the true proportion of slides that observer 2 would call positive. Use McNemar’s to see if there is a significant difference in the proportion that the two observers call positive.</p>
+</section>
+<section id="mcnemars-test-for-paired-data" class="level2">
+<h2 class="anchored" data-anchor-id="mcnemars-test-for-paired-data">McNemar’s Test for Paired Data</h2>
+<p>We are analyzing paired binary data where the same slides were assessed twice by the same observer. Our null hypothesis is:</p>
+<p><span class="math display">\[
+H_0: p_b = p_c
+\]</span></p>
+<section id="where" class="level5">
+<h5 class="anchored" data-anchor-id="where">where</h5>
+<ul>
+<li><span class="math inline">\(p_b\)</span> = probability a slide is classified as <em>present</em> in the first screening but <em>absent</em> in the second,<br>
+</li>
+<li><span class="math inline">\(p_c\)</span> = probability a slide is classified as <em>absent</em> in the first screening but <em>present</em> in the second.</li>
+</ul>
+<p>The McNemar test focuses only on these <strong>discordant pairs</strong>, because the slides that were classified the same way both times (the diagonal cells of the 2×2 table) do not provide evidence about disagreement.</p>
+<p>From the data:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th>2nd: present</th>
+<th>2nd: absent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>1st: present</strong></td>
+<td>1763</td>
+<td><strong>489</strong></td>
+</tr>
+<tr class="even">
+<td><strong>1st: absent</strong></td>
+<td><strong>403</strong></td>
+<td>670</td>
+</tr>
+</tbody>
+</table>
+<p>We have: - <span class="math inline">\(b = 489\)</span> (present → absent), - <span class="math inline">\(c = 403\)</span> (absent → present).</p>
+</section>
+<section id="test-statistic" class="level3">
+<h3 class="anchored" data-anchor-id="test-statistic">Test Statistic</h3>
+<p>For large samples, the McNemar statistic with continuity correction is:</p>
+<p><span class="math display">\[
+\chi^2 = \frac{(|b - c| - 1)^2}{b + c}
+\]</span></p>
+<p>Substituting ( b = 489 ) and ( c = 403 ):</p>
+<p><span class="math display">\[
+\chi^2 = \frac{(|489 - 403| - 1)^2}{489 + 403}
+= \frac{(86 - 1)^2}{892}
+= \frac{85^2}{892}
+= 8.10
+\]</span></p>
+<p>This follows a chi-square distribution with 1 degree of freedom.</p>
+</section>
+<section id="p-value" class="level3">
+<h3 class="anchored" data-anchor-id="p-value">P-value</h3>
+<p><span class="math display">\[
+p = 1 - P(\chi^2_{(1)} \le 8.10) \approx 0.0044
+\]</span></p>
+</section>
+<section id="conclusion" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
+<p>Since <span class="math inline">\(p &lt; 0.05\)</span> , we reject <span class="math inline">\(H_0\)</span>. There is significant evidence that the proportion of slides classified as positive differs between the first and second screening.</p>
+</section>
+<section id="r-code-to-check-work" class="level3">
+<h3 class="anchored" data-anchor-id="r-code-to-check-work">R Code to check work</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">489</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="dv">403</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>chi_sq <span class="ot">&lt;-</span> (<span class="fu">abs</span>(b <span class="sc">-</span> c) <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> (b <span class="sc">+</span> c)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>p_value <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pchisq</span>(chi_sq, <span class="at">df =</span> <span class="dv">1</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>chi_sq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 8.099776</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>p_value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.004427073</code></pre>
+</div>
+</div>
+<section id="section-1" class="level4">
+<h4 class="anchored" data-anchor-id="section-1">15.</h4>
+<p>In an effort to evaluate the health effects of air pollutants containing sulphur, individuals living near a pulp mill in Finland were questioned about various symptoms following a strong emissions released in September 1987. The same subjects were questioned again 4 months later, during a low-exposure period. A summary of the responses related to the occurrence of headaches is presented below.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Low Exposure</th>
+<th>High Exposure Yes</th>
+<th>High Exposure No</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Yes</td>
+<td>2</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr class="even">
+<td>No</td>
+<td>8</td>
+<td>33</td>
+<td>41</td>
+</tr>
+<tr class="odd">
+<td>Total</td>
+<td>10</td>
+<td>35</td>
+<td>45</td>
+</tr>
+</tbody>
+</table>
+<section id="a.-test-the-null-hypothesis-that-there-is-no-association-between-exposure-to-air-pollutants-containing-sulphur-and-the-occurrence-of-headaches." class="level5">
+<h5 class="anchored" data-anchor-id="a.-test-the-null-hypothesis-that-there-is-no-association-between-exposure-to-air-pollutants-containing-sulphur-and-the-occurrence-of-headaches.">a. Test the null hypothesis that there is no association between exposure to air pollutants containing sulphur and the occurrence of headaches.</h5>
+<p>Since the <strong>same subjects</strong> were questioned during high exposure and again during low exposure, this is <strong>paired binary data</strong>.<br>
+To test whether the proportion of people reporting headaches differs between exposure levels, we use <strong>McNemar’s Test</strong>.</p>
+<hr>
+</section>
+</section>
+</section>
+<section id="data" class="level3">
+<h3 class="anchored" data-anchor-id="data">Data</h3>
+<p>For McNemar’s test, we focus on the <strong>discordant pairs</strong>: - <span class="math inline">\(b = 2\)</span>: Headache during <strong>high exposure</strong> but <strong>not</strong> during low exposure. - <span class="math inline">\(c = 8\)</span>: Headache during <strong>low exposure</strong> but <strong>not</strong> during high exposure.</p>
+<hr>
+</section>
+<section id="hypotheses" class="level3">
+<h3 class="anchored" data-anchor-id="hypotheses">Hypotheses</h3>
+<p><span class="math display">\[
+H_0: p_b = p_c
+\]</span></p>
+<p>The null hypothesis states that the probability of reporting a headache is the same during high exposure as during low exposure.</p>
+<hr>
+</section>
+<section id="test-statistic-1" class="level3">
+<h3 class="anchored" data-anchor-id="test-statistic-1">Test Statistic</h3>
+<p>For large samples, McNemar’s statistic with continuity correction is:</p>
+<p><span class="math display">\[
+\chi^2 = \frac{(|b - c| - 1)^2}{b + c}.
+\]</span></p>
+<p>Substituting <span class="math inline">\(b = 2\)</span> and <span class="math inline">\(c = 8\)</span>:</p>
+<p><span class="math display">\[
+\chi^2 = \frac{(|2 - 8| - 1)^2}{2 + 8}
+= \frac{(6 - 1)^2}{10}
+= \frac{5^2}{10}
+= 2.5.
+\]</span></p>
+<hr>
+</section>
+<section id="p-value-1" class="level3">
+<h3 class="anchored" data-anchor-id="p-value-1">P-value</h3>
+<p>With <span class="math inline">\(df = 1\)</span>:</p>
+<p><span class="math display">\[
+p = 1 - P(\chi^2_{(1)} \le 2.5) \approx 0.114.
+\]</span></p>
+<hr>
+</section>
+<section id="r-code-to-check-work-1" class="level3">
+<h3 class="anchored" data-anchor-id="r-code-to-check-work-1">R Code to check work</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>chi_sq <span class="ot">&lt;-</span> (<span class="fu">abs</span>(b <span class="sc">-</span> c) <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> (b <span class="sc">+</span> c)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>p_value <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pchisq</span>(chi_sq, <span class="at">df =</span> <span class="dv">1</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>chi_sq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>p_value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1138463</code></pre>
+</div>
+</div>
+<section id="b.-what-do-you-conclude" class="level5">
+<h5 class="anchored" data-anchor-id="b.-what-do-you-conclude">b. What do you conclude?</h5>
+<p>The McNemar’s test yielded <span class="math inline">\(\chi^2 = 2.5\)</span> with <span class="math inline">\(p \approx 0.114\)</span>.<br>
+Since <span class="math inline">\(p &gt; 0.05\)</span>, we <strong>fail to reject <span class="math inline">\(H_0\)</span></strong>.</p>
+<p><strong>Interpretation:</strong> There is insufficient evidence to conclude that the probability of reporting headaches differs between the high- and low-exposure periods for the same subjects.</p>
+</section>
+<section id="c.-if-you-found-a-significant-association-what-limitations-of-this-study-would-affect-your-ability-to-conclude-that-pollution-caused-headaches" class="level5">
+<h5 class="anchored" data-anchor-id="c.-if-you-found-a-significant-association-what-limitations-of-this-study-would-affect-your-ability-to-conclude-that-pollution-caused-headaches">c.&nbsp;If you found a significant association, what limitations of this study would affect your ability to conclude that pollution caused headaches?</h5>
+<p>Even if we had found a significant association between sulphur pollution exposure and headaches, the study design has several limitations that would affect our ability to conclude that pollution caused the headaches:</p>
+<ol type="1">
+<li><p><strong>Observational Study Design:</strong><br>
+There was no random assignment of exposure levels. Without randomization, other factors (e.g., stress, seasonal differences, or concurrent illnesses) could confound the results.</p></li>
+<li><p><strong>Self-Reported Symptoms:</strong><br>
+Headache data are based on self-reports, which can be subjective and prone to recall bias.</p></li>
+<li><p><strong>Temporal Changes:</strong><br>
+The second survey was conducted four months later during a different season, and seasonal factors (such as weather or allergens) might influence headaches.</p></li>
+<li><p><strong>No Control Group:</strong><br>
+The same subjects were measured twice, but there was no group of individuals unexposed to sulphur pollution over the same period to serve as a control.</p></li>
+<li><p><strong>Small Sample Size:</strong><br>
+With only 45 subjects, random variation and sampling error are large, reducing the reliability of the observed association.</p></li>
+</ol>
+<p><strong>Conclusion:</strong> Even with a statistically significant result, these limitations mean we could not infer a causal relationship between pollution exposure and headaches.</p>
+</section>
+<section id="section-2" class="level4">
+<h4 class="anchored" data-anchor-id="section-2">17.</h4>
+<p>In France, a study was conducted to investigate potential risk factors for ectopic pregnancy. Of the 279 women who had experienced ectopic pregnancy, 28 had suffered from pelvic inflammatory disease. Of the 279 women who had not, 6 had suffered from pelvic inflammatory disease.</p>
+<section id="a.-construct-a-2x2-contingency-table" class="level5">
+<h5 class="anchored" data-anchor-id="a.-construct-a-2x2-contingency-table">a. Construct a 2x2 contingency table</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the DT package</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DT)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Data values</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">28</span>   <span class="co"># Ectopic &amp; PID</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">251</span>  <span class="co"># Ectopic &amp; no PID</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="dv">6</span>    <span class="co"># No Ectopic &amp; PID</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="dv">273</span>  <span class="co"># No Ectopic &amp; no PID</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the 2x2 contingency table</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>contingency_table <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(a, b, c, d), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Add row and column names</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(contingency_table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Ectopic Pregnancy"</span>, <span class="st">"No Ectopic Pregnancy"</span>)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(contingency_table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"PID (Yes)"</span>, <span class="st">"PID (No)"</span>)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to data frame for better formatting</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>contingency_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(contingency_table)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>contingency_df <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="at">Row =</span> <span class="fu">rownames</span>(contingency_table), contingency_df)</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Display interactive table</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="fu">datatable</span>(</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>  contingency_df,</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">rownames =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">options =</span> <span class="fu">list</span>(</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">dom =</span> <span class="st">'t'</span>,</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">paging =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">ordering =</span> <span class="cn">FALSE</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="datatables html-widget html-fill-item" id="htmlwidget-9c5926103c7a518e84ba" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-9c5926103c7a518e84ba">{"x":{"filter":"none","vertical":false,"data":[["Ectopic Pregnancy","No Ectopic Pregnancy"],[28,6],[251,273]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Row<\/th>\n      <th>PID (Yes)<\/th>\n      <th>PID (No)<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","paging":false,"ordering":false,"columnDefs":[{"className":"dt-right","targets":[1,2]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="b.-estimate-the-odds-ratio-of-suffering-ectopic-pregnancy-for-women-who-had-pelvic-inflammatory-disease-vs-women-who-have-not." class="level5">
+<h5 class="anchored" data-anchor-id="b.-estimate-the-odds-ratio-of-suffering-ectopic-pregnancy-for-women-who-had-pelvic-inflammatory-disease-vs-women-who-have-not.">b. Estimate the odds ratio of suffering ectopic pregnancy for women who had pelvic inflammatory disease vs women who have not.</h5>
+<p>The odds ratio (OR) for ectopic pregnancy comparing women with pelvic inflammatory disease (PID) to those without PID is calculated as:</p>
+<p><span class="math display">\[
+\text{OR} = \frac{a \cdot d}{b \cdot c},
+\]</span></p>
+<p>where:</p>
+<ul>
+<li><span class="math inline">\(a = 28\)</span> (Ectopic &amp; PID),</li>
+<li><span class="math inline">\(b = 251\)</span> (Ectopic &amp; No PID),</li>
+<li><span class="math inline">\(c = 6\)</span> (No Ectopic &amp; PID),</li>
+<li><span class="math inline">\(d = 273\)</span> (No Ectopic &amp; No PID).</li>
+</ul>
+<p>Substituting the values:</p>
+<p><span class="math display">\[
+\text{OR} = \frac{28 \cdot 273}{251 \cdot 6}
+= \frac{7644}{1506} \approx 5.07.
+\]</span></p>
+</section>
+</section>
+</section>
+<section id="r-code-to-check-work-2" class="level3">
+<h3 class="anchored" data-anchor-id="r-code-to-check-work-2">R Code to check work</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data values</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">28</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">251</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="dv">6</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="dv">273</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Odds Ratio</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>OR <span class="ot">&lt;-</span> (a <span class="sc">*</span> d) <span class="sc">/</span> (b <span class="sc">*</span> c)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>OR</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5.075697</code></pre>
+</div>
+</div>
+<p><strong>Interpretation:</strong><br>
+Women with pelvic inflammatory disease are estimated to have approximately <strong>5 times the odds</strong> of ectopic pregnancy compared to women without PID.</p>
+<section id="c.-find-a-99-confidence-interval-for-the-population-odds-ratio." class="level5">
+<h5 class="anchored" data-anchor-id="c.-find-a-99-confidence-interval-for-the-population-odds-ratio.">c.&nbsp;Find a 99% confidence interval for the population odds ratio.</h5>
+</section>
+<section id="c-99-confidence-interval-for-the-population-odds-ratio" class="level5">
+<h5 class="anchored" data-anchor-id="c-99-confidence-interval-for-the-population-odds-ratio">17(c) 99% Confidence Interval for the Population Odds Ratio</h5>
+<p>To find the confidence interval (CI) for the population odds ratio (OR), we use the log transformation:</p>
+<ol type="1">
+<li><p><strong>Log of the OR:</strong> <span class="math display">\[
+\ln(\text{OR}) = \ln\left(\frac{a \cdot d}{b \cdot c}\right)
+\]</span></p></li>
+<li><p><strong>Standard Error (SE):</strong> <span class="math display">\[
+SE = \sqrt{\frac{1}{a} + \frac{1}{b} + \frac{1}{c} + \frac{1}{d}}
+\]</span></p></li>
+<li><p><strong>99% CI for log(OR):</strong> <span class="math display">\[
+\ln(\text{OR}) \pm z_{0.005} \cdot SE
+\]</span> where <span class="math display">\[z_{0.005} = 2.576\]</span> for a 99% confidence interval.</p></li>
+<li><p><strong>Exponentiate the bounds</strong> to obtain the CI for OR.</p></li>
+</ol>
+<hr>
+</section>
+</section>
+<section id="step-by-step-calculation" class="level3">
+<h3 class="anchored" data-anchor-id="step-by-step-calculation">Step-by-Step Calculation</h3>
+<p>Given: <span class="math display">\[a = 28, \, b = 251, \, c = 6, \, d = 273, \, \text{OR} = 5.07.\]</span></p>
+<ul>
+<li><p><strong>Log(OR):</strong> <span class="math display">\[
+\ln(\text{OR}) = \ln(5.07) \approx 1.622
+\]</span></p></li>
+<li><p><strong>Standard Error:</strong> <span class="math display">\[
+SE = \sqrt{\frac{1}{28} + \frac{1}{251} + \frac{1}{6} + \frac{1}{273}}
+= \sqrt{0.0357 + 0.0040 + 0.1667 + 0.0037}
+= \sqrt{0.2101} \approx 0.458
+\]</span></p></li>
+<li><p><strong>Confidence Limits (log scale):</strong> <span class="math display">\[
+1.622 \pm 2.576 \cdot 0.458 = 1.622 \pm 1.18
+\]</span> which gives: <span class="math display">\[
+[0.442, \, 2.802]
+\]</span></p></li>
+<li><p><strong>Confidence Limits (OR scale):</strong> <span class="math display">\[
+[ e^{0.442}, \, e^{2.802} ] \approx [1.55, \, 16.47]
+\]</span></p></li>
+</ul>
+<p><strong>Interpretation:</strong> We are 99% confident that the population odds ratio lies between <strong>1.55</strong> and <strong>16.47</strong>.</p>
+<section id="d.-assuming-the-women-were-chosen-to-have-equal-numbers-who-had-and-had-not-experienced-an-ectopic-pregnancy-what-kind-of-study-is-this-is-the-relative-risk-that-you-can-calculate-from-this-table-meaningful" class="level5">
+<h5 class="anchored" data-anchor-id="d.-assuming-the-women-were-chosen-to-have-equal-numbers-who-had-and-had-not-experienced-an-ectopic-pregnancy-what-kind-of-study-is-this-is-the-relative-risk-that-you-can-calculate-from-this-table-meaningful">d.&nbsp;Assuming the women were chosen to have equal numbers who had and had not experienced an ectopic pregnancy, what kind of study is this? Is the relative risk that you can calculate from this table meaningful?</h5>
+<p>Since the study deliberately selected <strong>equal numbers of women with ectopic pregnancy (cases) and women without ectopic pregnancy (controls)</strong>, this is a <strong>case-control study</strong>.</p>
+</section>
+<section id="in-a-case-control-study" class="level5">
+<h5 class="anchored" data-anchor-id="in-a-case-control-study">In a case-control study:</h5>
+<ul>
+<li>The number of cases and controls is <strong>fixed by design</strong>, not by the natural frequency of the disease in the population.</li>
+<li>The marginal totals of the table (i.e., the row sums) <strong>do not represent population prevalence</strong> or risk.</li>
+</ul>
+</section>
+</section>
+<section id="why-relative-risk-is-not-meaningful-here" class="level3">
+<h3 class="anchored" data-anchor-id="why-relative-risk-is-not-meaningful-here">Why Relative Risk is Not Meaningful Here</h3>
+<p>The <strong>relative risk (RR)</strong> is defined as: <span class="math display">\[
+RR = \frac{P(\text{disease} \mid \text{exposed})}{P(\text{disease} \mid \text{not exposed})}.
+\]</span></p>
+<p>To compute this, we need the <strong>true probabilities</strong> of disease in exposed and unexposed groups, which requires the sample to reflect population proportions.</p>
+<section id="however-in-a-case-control-design" class="level5">
+<h5 class="anchored" data-anchor-id="however-in-a-case-control-design">However, in a case-control design:</h5>
+<ul>
+<li>The sampling artificially forces the number of cases (279) and non-cases (279) to be equal.</li>
+<li>This means <span class="math inline">\(P(\text{disease})\)</span> in this sample is not the true population probability.</li>
+</ul>
+</section>
+<section id="as-a-result-rr-calculated-from-this-table-would-be-biased-and-meaningless-because" class="level5">
+<h5 class="anchored" data-anchor-id="as-a-result-rr-calculated-from-this-table-would-be-biased-and-meaningless-because">As a result, <strong>RR calculated from this table would be biased and meaningless</strong> because:</h5>
+<ol type="1">
+<li>The probability of disease is <strong>overrepresented</strong> (50% in the table vs.&nbsp;a much smaller rate in the real population).</li>
+<li>The exposure distribution among controls might not reflect that in the overall population.</li>
+</ol>
+</section>
+</section>
+<section id="what-can-we-use-instead" class="level3">
+<h3 class="anchored" data-anchor-id="what-can-we-use-instead">What Can We Use Instead?</h3>
+<p>The <strong>odds ratio (OR)</strong> remains valid because: - OR is a ratio of odds, which is invariant to the way we sample cases and controls. - When the disease is rare, <span class="math inline">\(OR \approx RR\)</span>, so OR provides a good approximation of RR in the population.</p>
+<p><strong>In Conclusion:</strong><br>
+This is a <strong>case-control study</strong>, and RR cannot be meaningfully calculated from this data. The <strong>OR is the appropriate measure of association</strong>.</p>
+<section id="section-3" class="level4">
+<h4 class="anchored" data-anchor-id="section-3">20.</h4>
+<p>A study was conducted to determine whether geographic variations in the use of medical and surgical services could be explained in part by differences in the appropriateness with which physicians use these services. One concern might be that a high rate of inappropriate use of a service is associated with high overall use within a particular region. For the procedure coronary angiography, three geographic areas were studied: a high-use site (site 1), a low use urban site (site 2), and a low use rural site (site 3). Within each geographical region, each use of this procedure was classified as appropriate, equivocal, or inappropriate by a panel of expert physicians. These data are saved in the data set <em>angio</em>. Site number is saved under the variable name <em>site</em>, and level of appropriateness under <em>appropro</em>.</p>
+<section id="a.-at-the-0.05-level-of-significance-test-the-null-hypothesis-that-there-is-no-association-between-geographic-region-and-the-appropriateness-of-use-of-coronary-angiography." class="level5">
+<h5 class="anchored" data-anchor-id="a.-at-the-0.05-level-of-significance-test-the-null-hypothesis-that-there-is-no-association-between-geographic-region-and-the-appropriateness-of-use-of-coronary-angiography.">A. At the 0.05 level of significance, test the null hypothesis that there is no association between geographic region and the appropriateness of use of coronary angiography.</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>angio <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"angio.txt"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Contingency table</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>table_angio <span class="ot">&lt;-</span> <span class="fu">table</span>(angio<span class="sc">$</span>site, angio<span class="sc">$</span>appropro)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>table_angio</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       
+        appropr equiv inappro
+  site1     452    63     113
+  site2     394    35      85
+  site3     434    21      80</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Chi-square test</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(table_angio, <span class="at">correct =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's Chi-squared test
+
+data:  table_angio
+X-squared = 20.056, df = 4, p-value = 0.0004868</code></pre>
+</div>
+</div>
+</section>
+<section id="b.-what-do-you-conclude-1" class="level5">
+<h5 class="anchored" data-anchor-id="b.-what-do-you-conclude-1">B. What do you conclude?</h5>
+<p>The chi-square test of independence between <strong>geographic site</strong> and <strong>appropriateness of coronary angiography</strong> returned:</p>
+<ul>
+<li>Test statistic: (20.056)</li>
+<li>Degrees of freedom: (4)</li>
+<li>p-value: <strong>0.00049</strong></li>
+</ul>
+<p>Since the p-value is much smaller than 0.05, we <strong>reject <span class="math inline">\(H_0\)</span></strong>.<br>
+Overall, There is strong evidence that the appropriateness of coronary angiography <strong>varies significantly across the three geographic regions</strong>.</p>
+</section>
+<section id="c.-what-is-your-estimate-of-the-odds-ratio-for-having-an-inappropriate-use-of-angiography-comparing-the-high-use-urban-site-to-the-rural-site" class="level5">
+<h5 class="anchored" data-anchor-id="c.-what-is-your-estimate-of-the-odds-ratio-for-having-an-inappropriate-use-of-angiography-comparing-the-high-use-urban-site-to-the-rural-site">C. What is your estimate of the odds ratio for having an inappropriate use of Angiography, comparing the high use urban site to the rural site?</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter only sites 2 and 3</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>urban_vs_rural <span class="ot">&lt;-</span> table_angio[<span class="fu">c</span>(<span class="st">"site2"</span>, <span class="st">"site3"</span>), ]</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get counts</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>inappropriate <span class="ot">&lt;-</span> urban_vs_rural[, <span class="st">"inappro"</span>]   <span class="co"># corrected spelling</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>not_inappropriate <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(urban_vs_rural[, <span class="fu">c</span>(<span class="st">"appropr"</span>, <span class="st">"equiv"</span>)])</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Construct 2x2 table</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>odds_table <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(inappropriate[<span class="st">"site2"</span>], not_inappropriate[<span class="st">"site2"</span>],</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>                       inappropriate[<span class="st">"site3"</span>], not_inappropriate[<span class="st">"site3"</span>]),</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(odds_table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Inappropriate"</span>, <span class="st">"Not_Inappropriate"</span>)</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(odds_table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Urban (2)"</span>, <span class="st">"Rural (3)"</span>)</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>odds_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          Inappropriate Not_Inappropriate
+Urban (2)            85               429
+Rural (3)            80               455</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Odds ratio</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> odds_table[<span class="dv">1</span>,<span class="dv">1</span>]</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> odds_table[<span class="dv">1</span>,<span class="dv">2</span>]</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> odds_table[<span class="dv">2</span>,<span class="dv">1</span>]</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> odds_table[<span class="dv">2</span>,<span class="dv">2</span>]</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>OR <span class="ot">&lt;-</span> (a <span class="sc">*</span> d) <span class="sc">/</span> (b <span class="sc">*</span> c)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>OR</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.126894</code></pre>
+</div>
+</div>
+<p>Using the data, we obtained:</p>
+<p><span class="math display">\[
+OR \approx 1.1269.
+\]</span></p>
+<p><strong>Interpretation:</strong><br>
+The odds of inappropriate use at the high-use urban site are about <strong>1.13 times</strong> those at the rural site, indicating only a slight difference.</p>
+</section>
+</section>
+<section id="section-4" class="level4">
+<h4 class="anchored" data-anchor-id="section-4">16.7.</h4>
+<p>In a study investigating various risk factors for heart disease, the relationship between hypertension and coronary artery disease (CAD) was examined for individuals in two different age groups. (see tables below)</p>
+</section>
+</section>
+<section id="years-of-age" class="level3">
+<h3 class="anchored" data-anchor-id="years-of-age">35-49 Years of Age</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>CAD Yes</th>
+<th>CAD No</th>
+<th>Total</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Hypertension Yes</td>
+<td>552</td>
+<td>212</td>
+<td>764</td>
+</tr>
+<tr class="even">
+<td>Hypertension No</td>
+<td>941</td>
+<td>495</td>
+<td>1436</td>
+</tr>
+<tr class="odd">
+<td>Total</td>
+<td>1493</td>
+<td>707</td>
+<td>2200</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="over-65-years-of-age" class="level3">
+<h3 class="anchored" data-anchor-id="over-65-years-of-age">Over 65 Years of Age</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>CAD Yes</th>
+<th>CAD No</th>
+<th>Total</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Yes</td>
+<td>1102</td>
+<td>87</td>
+<td>1189</td>
+</tr>
+<tr class="even">
+<td>No</td>
+<td>1018</td>
+<td>106</td>
+<td>1124</td>
+</tr>
+<tr class="odd">
+<td>Total</td>
+<td>2120</td>
+<td>193</td>
+<td>2313</td>
+</tr>
+</tbody>
+</table>
+<section id="a.-within-each-category-of-age-are-the-odds-of-suffering-from-coronary-artery-disease-greater-or-smaller-for-individuals-with-hypertension" class="level5">
+<h5 class="anchored" data-anchor-id="a.-within-each-category-of-age-are-the-odds-of-suffering-from-coronary-artery-disease-greater-or-smaller-for-individuals-with-hypertension">A. Within each category of age, are the odds of suffering from coronary artery disease greater or smaller for individuals with hypertension?</h5>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="do">### 16.7(A) Odds Ratios for Each Age Group</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 35–49 years of age table</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>age1 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">552</span>, <span class="dv">212</span>,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                 <span class="dv">941</span>, <span class="dv">495</span>),</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(age1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"CAD Yes"</span>, <span class="st">"CAD No"</span>)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(age1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Hypertension Yes"</span>, <span class="st">"Hypertension No"</span>)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>age1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 CAD Yes CAD No
+Hypertension Yes     552    212
+Hypertension No      941    495</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Over 65 years of age table</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>age2 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1102</span>, <span class="dv">87</span>,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                 <span class="dv">1018</span>, <span class="dv">106</span>),</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(age2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"CAD Yes"</span>, <span class="st">"CAD No"</span>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(age2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Hypertension Yes"</span>, <span class="st">"Hypertension No"</span>)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>age2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 CAD Yes CAD No
+Hypertension Yes    1102     87
+Hypertension No     1018    106</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to compute odds ratio</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>odds_ratio <span class="ot">&lt;-</span> <span class="cf">function</span>(tab) {</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  a <span class="ot">&lt;-</span> tab[<span class="dv">1</span>, <span class="dv">1</span>]</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  b <span class="ot">&lt;-</span> tab[<span class="dv">1</span>, <span class="dv">2</span>]</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  c <span class="ot">&lt;-</span> tab[<span class="dv">2</span>, <span class="dv">1</span>]</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> tab[<span class="dv">2</span>, <span class="dv">2</span>]</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  OR <span class="ot">&lt;-</span> (a <span class="sc">*</span> d) <span class="sc">/</span> (b <span class="sc">*</span> c)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(OR)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate ORs</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>OR_age1 <span class="ot">&lt;-</span> <span class="fu">odds_ratio</span>(age1)</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>OR_age2 <span class="ot">&lt;-</span> <span class="fu">odds_ratio</span>(age2)</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>OR_age1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.369679</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>OR_age2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.318926</code></pre>
+</div>
+</div>
+</section>
+<section id="a-conclusion" class="level5">
+<h5 class="anchored" data-anchor-id="a-conclusion">16.7(A) Conclusion</h5>
+<ul>
+<li><p><strong>Ages 35–49:</strong><br>
+The odds ratio is approximately <strong>1.36</strong>, indicating that individuals with hypertension have <strong>1.36 times the odds</strong> of having coronary artery disease (CAD) compared to those without hypertension.</p></li>
+<li><p><strong>Ages over 65:</strong><br>
+The odds ratio is approximately <strong>1.31</strong>, indicating that individuals with hypertension have <strong>1.31 times the odds</strong> of having CAD compared to those without hypertension.</p></li>
+</ul>
+</section>
+<section id="b.-do-you-feel-that-it-is-appropriate-to-combine-the-information-in-these-two-tables-to-make-a-single-unifying-statement-about-the-relationship-between-hypertension-and-coronary-artery-disease-why-or-why-not" class="level5">
+<h5 class="anchored" data-anchor-id="b.-do-you-feel-that-it-is-appropriate-to-combine-the-information-in-these-two-tables-to-make-a-single-unifying-statement-about-the-relationship-between-hypertension-and-coronary-artery-disease-why-or-why-not">B. Do you feel that it is appropriate to combine the information in these two tables to make a single unifying statement about the relationship between hypertension and coronary artery disease? Why or why not?</h5>
+<p>Yes, it is reasonable to combine the information from the two tables to make a single unifying statement about the relationship between hypertension and coronary artery disease (CAD).</p>
+<p><strong>Why?</strong> - The odds ratios for the two age groups are very similar (1.36 for ages 35–49 and 1.31 for ages over 65). - This suggests that the association between hypertension and CAD is consistent (homogeneous) across the age strata. - When the effect size is similar across groups, a stratified analysis (e.g., using the Mantel–Haenszel method) provides a valid summary measure that accounts for age while estimating the overall relationship.</p>
+<p><strong>However:</strong> If the odds ratios were very different between age groups, it would not be appropriate to combine the tables because the association would depend on age (effect modification).</p>
+</section>
+<section id="c.-compute-a-mantel--haenszel-estimate-of-the-summary-odds-ratio." class="level5">
+<h5 class="anchored" data-anchor-id="c.-compute-a-mantel--haenszel-estimate-of-the-summary-odds-ratio.">C. Compute a Mantel -Haenszel estimate of the summary odds ratio.</h5>
+<p>Using the formula:</p>
+<p><span class="math display">\[
+\hat{\theta}_{MH} = \frac{\sum_i \frac{a_i d_i}{n_i}}{\sum_i \frac{b_i c_i}{n_i}},
+\]</span></p>
+<p>we compute:</p>
+<ul>
+<li><p>For ages 35–49:<br>
+<span class="math display">\[ \frac{a_1 d_1}{n_1} \approx 124.2, \quad \frac{b_1 c_1}{n_1} \approx 90.6. \]</span></p></li>
+<li><p>For ages &gt;65:<br>
+<span class="math display">\[ \frac{a_2 d_2}{n_2} \approx 50.5, \quad \frac{b_2 c_2}{n_2} \approx 38.3. \]</span></p></li>
+</ul>
+<p>Thus:</p>
+<p><span class="math display">\[
+\hat{\theta}_{MH} = \frac{124.2 + 50.5}{90.6 + 38.3} \approx 1.36.
+\]</span></p>
+</section>
+<section id="r-code-to-check-work-3" class="level4">
+<h4 class="anchored" data-anchor-id="r-code-to-check-work-3">R Code to check work:</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Construct the 2x2 tables for each stratum</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>age1 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">552</span>, <span class="dv">212</span>,</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>                 <span class="dv">941</span>, <span class="dv">495</span>),</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="at">Hypertension =</span> <span class="fu">c</span>(<span class="st">"Yes"</span>, <span class="st">"No"</span>),</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>                               <span class="at">CAD =</span> <span class="fu">c</span>(<span class="st">"Yes"</span>, <span class="st">"No"</span>)))</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>age2 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1102</span>, <span class="dv">87</span>,</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>                 <span class="dv">1018</span>, <span class="dv">106</span>),</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="at">Hypertension =</span> <span class="fu">c</span>(<span class="st">"Yes"</span>, <span class="st">"No"</span>),</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>                               <span class="at">CAD =</span> <span class="fu">c</span>(<span class="st">"Yes"</span>, <span class="st">"No"</span>)))</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine into an array for mantelhaen.test</span></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>tables <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="fu">c</span>(age1, age2), <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>),</span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>                <span class="at">dimnames =</span> <span class="fu">list</span>(</span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Hypertension =</span> <span class="fu">c</span>(<span class="st">"Yes"</span>, <span class="st">"No"</span>),</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>                  <span class="at">CAD =</span> <span class="fu">c</span>(<span class="st">"Yes"</span>, <span class="st">"No"</span>),</span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>                  <span class="at">AgeGroup =</span> <span class="fu">c</span>(<span class="st">"35-49"</span>, <span class="st">"Over65"</span>)</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>                ))</span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Mantel-Haenszel test</span></span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>mh_test <span class="ot">&lt;-</span> <span class="fu">mantelhaen.test</span>(tables)</span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>mh_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Mantel-Haenszel chi-squared test with continuity correction
+
+data:  tables
+Mantel-Haenszel X-squared = 13.372, df = 1, p-value = 0.0002554
+alternative hypothesis: true common odds ratio is not equal to 1
+95 percent confidence interval:
+ 1.152997 1.591479
+sample estimates:
+common odds ratio 
+         1.354611 </code></pre>
+</div>
+</div>
+<p><strong>Conclusion:</strong><br>
+The Mantel–Haenszel estimate of the summary odds ratio is approximately <strong>1.36</strong>.</p>
+<section id="d.-construct-a-95-confidence-interval-for-the-summary-odds-ratio." class="level5">
+<h5 class="anchored" data-anchor-id="d.-construct-a-95-confidence-interval-for-the-summary-odds-ratio.">D. Construct a 95% confidence interval for the summary odds ratio.</h5>
+<p>From <code>mantelhaen.test</code>, the Mantel–Haenszel summary odds ratio is:</p>
+<p><span class="math display">\[
+\hat{\theta}_{MH} = 1.36,
+\]</span></p>
+<p>with a 95% confidence interval of:</p>
+<p><span class="math display">\[
+[1.153, 1.591].
+\]</span></p>
+<p><strong>Conclusion:</strong> We are 95% confident that the odds of CAD are between <strong>1.15 and 1.59</strong> times higher for individuals with hypertension, after adjusting for age.</p>
+</section>
+<section id="e.-at-the-alpha-.05-level-of-significance-test-the-null-hypothesis-that-there-is-no-association-between-hypertension-and-coronary-artery-disease.-what-do-you-conclude" class="level5">
+<h5 class="anchored" data-anchor-id="e.-at-the-alpha-.05-level-of-significance-test-the-null-hypothesis-that-there-is-no-association-between-hypertension-and-coronary-artery-disease.-what-do-you-conclude">E. At the alpha= .05 level of significance, Test the null hypothesis that there is no association between hypertension and coronary artery disease. What do you conclude?</h5>
+<p><strong>Null hypothesis <span class="math inline">\(H_0\)</span>:</strong><br>
+There is no association between hypertension and coronary artery disease (CAD), i.e., the common odds ratio <span class="math inline">\(\theta_{MH} = 1\)</span>.</p>
+<p><strong>Alternative hypothesis <span class="math inline">\(H_A\)</span>:</strong><br>
+There is an association between hypertension and CAD (<span class="math inline">\(\theta_{MH} \neq 1\)</span>)).</p>
+<hr>
+</section>
+</section>
+</section>
+<section id="mantelhaenszel-test" class="level3">
+<h3 class="anchored" data-anchor-id="mantelhaenszel-test">Mantel–Haenszel Test</h3>
+<p>Using the <code>mantelhaen.test</code> function in R:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>mh_test <span class="ot">&lt;-</span> <span class="fu">mantelhaen.test</span>(tables)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>mh_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Mantel-Haenszel chi-squared test with continuity correction
+
+data:  tables
+Mantel-Haenszel X-squared = 13.372, df = 1, p-value = 0.0002554
+alternative hypothesis: true common odds ratio is not equal to 1
+95 percent confidence interval:
+ 1.152997 1.591479
+sample estimates:
+common odds ratio 
+         1.354611 </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="conclusion-for-16.7e" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion-for-16.7e">Conclusion for 16.7(E)</h2>
+<p>The Mantel–Haenszel test shows a summary odds ratio of approximately <strong>1.36</strong> with a 95% confidence interval of <strong>[1.153, 1.591]</strong> and a p-value less than <strong>0.05</strong>.<br>
+Since <span class="math inline">\(p &lt; 0.05\)</span>, we <strong>reject <span class="math inline">\(H_0\)</span></strong> and conclude that there is a statistically significant association between hypertension and coronary artery disease, after adjusting for age.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
