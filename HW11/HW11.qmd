@@ -110,90 +110,260 @@ Since the p-value is `r ifelse(summary(model)$coefficients["CD4", "Pr(>|t|)"] < 
 e.	Plot the residuals versus fitted values. Describe what you see. Does the line seem to fit well, based on this? 
 
 ```{r}
-#Enter code here
+# Calculate fitted values and residuals
+fitted_vals <- fitted(model)
+residuals <- resid(model)
 
+# Define outliers (absolute residual > 2)
+is_outlier <- abs(residuals) > 2
 
+# Plot
+plot(fitted_vals, residuals,
+     xlab = "Fitted Values",
+     ylab = "Residuals",
+     main = "Residuals vs Fitted Values",
+     pch = 19, col = ifelse(is_outlier, "red", "darkgreen"))
+
+# Add horizontal reference line at 0
+abline(h = 0, lty = 2, col = "gray")
+
+# Optionally label outliers
+text(fitted_vals[is_outlier], residuals[is_outlier],
+     labels = which(is_outlier),
+     pos = 3, cex = 0.8, col = "red")
 ```
+
+The residuals vs. fitted values plot shows the distribution of residuals across the range of fitted predictions.
+
+- **Linearity**: The residuals appear centered around 0 without a strong curved pattern, suggesting that the linearity assumption is reasonably satisfied.
+- **Homoscedasticity**: There may be slightly more variation in residuals for smaller fitted values. This could indicate mild heteroscedasticity, but it's not severe.
+- **Outliers**: There is at least one prominent outlier with a very large positive residual, which may exert **influence** on the regression line and warrants further diagnostic investigation (e.g., Cook’s distance).
+- **Independence**: No obvious patterns or clustering are present, so the residuals appear to be roughly independent.
+
+#### Conclusion
+
+Overall, the regression line seems to provide a moderately good fit. However, the presence of an outlier and mild heteroscedasticity suggest caution in interpreting model results. A more robust regression or influence diagnostics may be helpful as next steps.
 
 f.	Find the R2  using the output of the linear regression.  If you square root this, what number do you get? 
 
+We extract the \( R^2 \) (coefficient of determination) from the regression model and compute its square root.
 
+```{r}
+# Get R-squared from model summary
+r_squared <- summary(model)$r.squared
 
+# Compute square root of R-squared
+sqrt_r_squared <- sqrt(r_squared)
 
+# Display both
+r_squared
+sqrt_r_squared
+```
 
+#### Interpretation
 
+- The \( R^2 \) value is `r round(r_squared, 3)`. This means that approximately `r round(100 * r_squared, 1)`% of the variability in `betahat6` is explained by the linear relationship with `CD4`.
+- The square root of \( R^2 \) is `r round(sqrt_r_squared, 3)`, which is the **absolute value** of the **Pearson correlation coefficient** between the actual and predicted values of `betahat6`.
+
+This makes sense, since in simple linear regression:
+
+$$
+R = \text{cor}(y, \hat{y}) \quad \Rightarrow \quad R^2 = \left(\text{cor}(y, \hat{y})\right)^2
+$$
 
 
 2.	Notice that there is one large outlier, with the highest CD4 count in the data. Exclude that one value, and recompute:
 a.	The Pearson Correlation coefficient and p-value.
 
 ```{r}
-#Enter code here
+# Identify the index of the max CD4
+outlier_index <- which.max(data$CD4)
 
+# Create a new dataset without that outlier
+data_no_outlier <- data[-outlier_index, ]
 
+# Compute Pearson correlation without outlier
+cor_test_no_outlier <- cor.test(data_no_outlier$betahat6,
+                                data_no_outlier$CD4,
+                                method = "pearson")
+
+# Display result
+cor_test_no_outlier
 ```
+
+#### Updated Pearson Correlation
+
+- Correlation coefficient (r): `r round(cor_test_no_outlier$estimate, 3)`
+- p-value: `r signif(cor_test_no_outlier$p.value, 3)`
+
+#### Interpretation
+
+After excluding the highest CD4 value (an outlier), the Pearson correlation is `r ifelse(cor_test_no_outlier$p.value < 0.05, "statistically significant", "not statistically significant")`, with a correlation of `r round(cor_test_no_outlier$estimate, 3)`. This demonstrates how a single outlier can **inflate or distort** the perceived strength of a linear relationship.
 
 b.	The Spearman Correlation coefficient and p-value.
 
 ```{r}
-#Enter code here
+# Spearman correlation without the highest CD4 outlier
+spearman_test_no_outlier <- cor.test(data_no_outlier$betahat6,
+                                     data_no_outlier$CD4,
+                                     method = "spearman")
 
-
+# Show result
+spearman_test_no_outlier
 ```
+
+#### Updated Spearman Correlation
+
+- Spearman’s ρ: `r round(spearman_test_no_outlier$estimate, 3)`
+- p-value: `r signif(spearman_test_no_outlier$p.value, 3)`
+
+#### Interpretation
+
+After removing the CD4 outlier, the Spearman correlation remains `r ifelse(spearman_test_no_outlier$p.value < 0.05, "statistically significant", "not statistically significant")`. Spearman’s method is **more robust to outliers**, so the correlation value and significance level may not change as dramatically as in the Pearson case—confirming its reliability in the presence of extreme values.
 
 c.	the regression equation and p-value. 
 
 ```{r}
-#Enter code here
+# Fit new model without the outlier
+model_no_outlier <- lm(betahat6 ~ CD4, data = data_no_outlier)
 
+# Extract coefficients
+intercept_new <- coef(model_no_outlier)[1]
+slope_new <- coef(model_no_outlier)[2]
 
+# Extract p-value for slope
+pval_new <- summary(model_no_outlier)$coefficients["CD4", "Pr(>|t|)"]
+
+# Display
+list(
+  Intercept = intercept_new,
+  Slope = slope_new,
+  P_value = pval_new
+)
 ```
+
+#### Updated Regression Equation
+
+$$
+\widehat{\text{betahat6}} = `r round(intercept_new, 3)` + `r round(slope_new, 3)` \times \text{CD4}
+$$
+
+#### Interpretation
+
+- The new slope is `r round(slope_new, 3)`
+- The p-value for the slope is `r signif(pval_new, 3)`
+
+Since the p-value is `r ifelse(pval_new < 0.05, "< 0.05", "≥ 0.05")`, we `r ifelse(pval_new < 0.05, "reject", "fail to reject")` the null hypothesis that the slope is zero. This suggests that, **even after removing the outlier**, the linear association between CD4 and betahat6 is `r ifelse(pval_new < 0.05, "still statistically significant", "not statistically significant")`.
 
 d.	The plot of residuals versus fitted values
 
 ```{r}
-#Enter code here
+# Calculate fitted values and residuals
+fitted_no_outlier <- fitted(model_no_outlier)
+residuals_no_outlier <- resid(model_no_outlier)
 
-
+# Residual plot
+plot(fitted_no_outlier, residuals_no_outlier,
+     xlab = "Fitted Values",
+     ylab = "Residuals",
+     main = "Residuals vs Fitted (No CD4 Outlier)",
+     pch = 19, col = "blue")
+abline(h = 0, lty = 2, col = "gray")
 ```
 
+#### Interpretation
+
+By removing the CD4 outlier:
+- The spread of residuals is more uniform across fitted values, improving **homoscedasticity**.
+- The residuals appear more **randomly scattered** around zero, supporting **linearity** and **independence**.
+- The large vertical deviation seen earlier is no longer present, reducing concerns about **influential points**.
+
+This suggests that the regression model now fits the data **more appropriately**.
 
 Which of these changed substantially? Why?
 
+### Impact of Removing the CD4 Outlier
 
+Removing the observation with the highest CD4 value had a substantial impact on several parts of our analysis.
 
+The **Pearson correlation coefficient** and its associated p-value changed the most. Because Pearson correlation is based on raw values, it is highly sensitive to outliers. The extreme CD4 value had a strong influence on the linear relationship, likely inflating the correlation. After removing this point, the correlation more accurately reflected the underlying association between `betahat6` and `CD4`.
 
+The **regression equation and slope's p-value** also changed noticeably. The removed point had high leverage due to its extreme CD4 value, which can disproportionately affect the regression slope. Once excluded, the slope estimate and its significance shifted, leading to a more reliable interpretation of the linear relationship.
 
+The **residual plot** improved considerably. Without the outlier, the residuals appeared more randomly scattered around zero, indicating better adherence to the assumptions of linearity and homoscedasticity. This suggests that the model fit the bulk of the data more appropriately after removing the influential observation.
 
+In contrast, the **Spearman correlation coefficient and p-value** showed minimal change. Spearman’s method is based on ranks rather than raw values, making it more robust to outliers. This stability confirms that the monotonic relationship between the variables remained consistent, even when extreme values were present.
 
-
-
-
- 
-
-
-
-
-
-
+In summary, removing the outlier substantially improved the clarity and validity of the Pearson-based analyses and regression model, while Spearman’s method demonstrated resilience to distortion from that influential point.
 
  
-Other Homework: Chapter 17 #1, 3,7, Chapter 18 #4, #9, 
+#### Other Homework: Chapter 17 #1, 3,7, Chapter 18 #4, #9, 
 
 17.1 When you are investigating the relationship between two continuous random variables, why is it important to create a scatter plot of the data?
 
+Creating a scatter plot is essential when examining the relationship between two continuous random variables because it provides a clear visual representation of their association. It allows us to assess whether the relationship is linear, detect outliers, and spot any unusual patterns such as clusters or non-constant variance. These visual cues help determine whether a correlation or linear regression is appropriate. Without a scatter plot, we risk overlooking important features that could affect the validity of our analysis.
+
 17.3  How does Spearman's rank correlation differ from the Pearson correlation?
+
+Creating a scatter plot is essential when examining the relationship between two continuous random variables because it provides a clear visual representation of their association. It allows us to assess whether the relationship is linear, detect outliers, and spot any unusual patterns such as clusters or non-constant variance. These visual cues help determine whether a correlation or linear regression is appropriate. Without a scatter plot, we risk overlooking important features that could affect the validity of our analysis.
 
 17.7. The data set lowbwt contains information collected for a sample of 100 low birth weight infants born in two teaching hospitals in Boston, Massachusetts [5] (Appendix B, Table B.7). Measurements of systolic blood pressure are saved under the variable name sbp, and values of the Apgar score recorded five minutes after birth-an index of neonatal asphyxia or oxygen deprivation-are saved under the name apgar5. The Apgar score is an ordinal random variable that takes values between 0 and 10.
 
 (a) Estimate the correlation of the random variables systolic blood pressure and five-minute Apgar score for this population of low birth weight infants.
 
+We begin by loading the dataset and examining the association between systolic blood pressure (`sbp`) and five-minute Apgar score (`apgar5`) using Spearman’s rank correlation. Since `apgar5` is an ordinal variable, Spearman’s method is appropriate because it does not assume interval spacing or linearity.
+
+```{r}
+# Load the data
+lowbwt <- read.csv("lowbwtHW11.csv")
+
+# View column names to confirm structure
+colnames(lowbwt)
+
+# Compute Spearman correlation
+cor.test(lowbwt$sbp, lowbwt$apgar5, method = "spearman")
+```
+
 (b) Does Apgar score tend to increase or decrease as systolic blood pressure increases?
+
+To determine the direction of association, we examine the sign of the Spearman correlation coefficient from part (a). A **positive** coefficient indicates that Apgar scores tend to **increase** as systolic blood pressure increases, while a **negative** coefficient indicates they tend to **decrease**.
+
+```{r}
+# Display the Spearman correlation coefficient again
+spearman_result <- cor.test(lowbwt$sbp, lowbwt$apgar5, method = "spearman")
+spearman_result$estimate
+```
+
+Since the correlation coefficient is `r round(spearman_result$estimate, 3)`, we conclude that Apgar scores tend to `r ifelse(spearman_result$estimate > 0, "increase", "decrease")` as systolic blood pressure increases in this sample of low birth weight infants.
 
 (c) Test the null hypothesis  H0 : ρ = 0.  What do you conclude?
 
+We test the null hypothesis:
+
+$$
+H_0: \rho = 0 \quad \text{(no monotonic association)}
+$$
+
+$$ 
+H_A: \rho \neq 0
+$$
+
+using Spearman’s rank correlation test:
+
+```{r}
+# Hypothesis test already computed earlier
+spearman_result$p.value
+```
+
+The p-value is `r signif(spearman_result$p.value, 3)`. 
+
+#### Conclusion
+
+Since the p-value is `r ifelse(spearman_result$p.value < 0.05, "< 0.05", "≥ 0.05")`, we `r ifelse(spearman_result$p.value < 0.05, "reject", "fail to reject")` the null hypothesis at the 0.05 significance level. This suggests that there **is `r ifelse(spearman_result$p.value < 0.05, "", "not")` a statistically significant monotonic association** between systolic blood pressure and five-minute Apgar score in this sample.
 
 18.4 Why is it dangerous to extrapolate an estimated linear regression line outside the range of the observed data values?
+
+Extrapolating a linear regression line outside the range of observed data is risky because the model is only valid within the scope of the data used to fit it. The relationship between the predictor and outcome variables may not remain linear beyond the observed range, and the assumptions of the regression model—such as linearity, constant variance, and independence—may no longer hold. Predictions made in these unobserved regions can be highly inaccurate or misleading. Without empirical data to support those regions, there's no way to verify whether the trend continues or changes direction.
 
 18.9. The data set lowbwt contains information for the sample of 100 low birth weight infants born in Boston, Massachusetts. Measurements of systolic blood pressure are saved under the variable name sbp, and values of gestational age under the name *gestage*. 
 

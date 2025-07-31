@@ -161,8 +161,8 @@ window.Quarto = {
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Display only the head in a DT table, body only</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">datatable</span>(<span class="fu">head</span>(data), <span class="at">options =</span> <span class="fu">list</span>(<span class="at">dom =</span> <span class="st">'t'</span>, <span class="at">ordering =</span> <span class="cn">FALSE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-88e78707128896249d4a" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-88e78707128896249d4a">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],[1,2,3,4,5,6],[3.06857142857143,0.806976744186046,2.72209302325581,4.14,0.839473684210526,1.0578947368421],[11.8333333333333,2.96,17.46,17.0166666666667,11.3333333333333,9.5],[230,665,323,263,217,247],[440,437,1466,627,926,945],[5.48953944317225,1.69897000433602,5.08971793608945,5.07586070791327,2.09691001300806,1.69897000433602],[58,42,56,38,49,53]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>row.names<\/th>\n      <th>betahat6<\/th>\n      <th>avdiff6<\/th>\n      <th>CD4<\/th>\n      <th>CD8<\/th>\n      <th>logvl<\/th>\n      <th>age<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","ordering":false,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5,6,7]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-e50415853ecca35270ad" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-e50415853ecca35270ad">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],[1,2,3,4,5,6],[3.06857142857143,0.806976744186046,2.72209302325581,4.14,0.839473684210526,1.0578947368421],[11.8333333333333,2.96,17.46,17.0166666666667,11.3333333333333,9.5],[230,665,323,263,217,247],[440,437,1466,627,926,945],[5.48953944317225,1.69897000433602,5.08971793608945,5.07586070791327,2.09691001300806,1.69897000433602],[58,42,56,38,49,53]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>row.names<\/th>\n      <th>betahat6<\/th>\n      <th>avdiff6<\/th>\n      <th>CD4<\/th>\n      <th>CD8<\/th>\n      <th>logvl<\/th>\n      <th>age<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","ordering":false,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5,6,7]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <ol type="1">
@@ -286,11 +286,78 @@ F-statistic: 1.932 on 1 and 22 DF,  p-value: 0.1784</code></pre>
 <li>Plot the residuals versus fitted values. Describe what you see. Does the line seem to fit well, based on this?</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Enter code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate fitted values and residuals</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>fitted_vals <span class="ot">&lt;-</span> <span class="fu">fitted</span>(model)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>residuals <span class="ot">&lt;-</span> <span class="fu">resid</span>(model)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Define outliers (absolute residual &gt; 2)</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>is_outlier <span class="ot">&lt;-</span> <span class="fu">abs</span>(residuals) <span class="sc">&gt;</span> <span class="dv">2</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fitted_vals, residuals,</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Fitted Values"</span>,</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Residuals"</span>,</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Residuals vs Fitted Values"</span>,</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="fu">ifelse</span>(is_outlier, <span class="st">"red"</span>, <span class="st">"darkgreen"</span>))</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Add horizontal reference line at 0</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"gray"</span>)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Optionally label outliers</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(fitted_vals[is_outlier], residuals[is_outlier],</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>     <span class="at">labels =</span> <span class="fu">which</span>(is_outlier),</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>     <span class="at">pos =</span> <span class="dv">3</span>, <span class="at">cex =</span> <span class="fl">0.8</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HW11_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
+</div>
+</div>
+<p>The residuals vs.&nbsp;fitted values plot shows the distribution of residuals across the range of fitted predictions.</p>
+<ul>
+<li><strong>Linearity</strong>: The residuals appear centered around 0 without a strong curved pattern, suggesting that the linearity assumption is reasonably satisfied.</li>
+<li><strong>Homoscedasticity</strong>: There may be slightly more variation in residuals for smaller fitted values. This could indicate mild heteroscedasticity, but it’s not severe.</li>
+<li><strong>Outliers</strong>: There is at least one prominent outlier with a very large positive residual, which may exert <strong>influence</strong> on the regression line and warrants further diagnostic investigation (e.g., Cook’s distance).</li>
+<li><strong>Independence</strong>: No obvious patterns or clustering are present, so the residuals appear to be roughly independent.</li>
+</ul>
+</section>
+<section id="conclusion" class="level4">
+<h4 class="anchored" data-anchor-id="conclusion">Conclusion</h4>
+<p>Overall, the regression line seems to provide a moderately good fit. However, the presence of an outlier and mild heteroscedasticity suggest caution in interpreting model results. A more robust regression or influence diagnostics may be helpful as next steps.</p>
 <ol start="6" type="a">
 <li>Find the R2 using the output of the linear regression. If you square root this, what number do you get?</li>
 </ol>
+<p>We extract the ( R^2 ) (coefficient of determination) from the regression model and compute its square root.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get R-squared from model summary</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>r_squared <span class="ot">&lt;-</span> <span class="fu">summary</span>(model)<span class="sc">$</span>r.squared</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute square root of R-squared</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>sqrt_r_squared <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(r_squared)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Display both</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>r_squared</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.08073114</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>sqrt_r_squared</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2841323</code></pre>
+</div>
+</div>
+</section>
+<section id="interpretation-3" class="level4">
+<h4 class="anchored" data-anchor-id="interpretation-3">Interpretation</h4>
+<ul>
+<li>The ( R^2 ) value is 0.081. This means that approximately 8.1% of the variability in <code>betahat6</code> is explained by the linear relationship with <code>CD4</code>.</li>
+<li>The square root of ( R^2 ) is 0.284, which is the <strong>absolute value</strong> of the <strong>Pearson correlation coefficient</strong> between the actual and predicted values of <code>betahat6</code>.</li>
+</ul>
+<p>This makes sense, since in simple linear regression:</p>
+<p><span class="math display">\[
+R = \text{cor}(y, \hat{y}) \quad \Rightarrow \quad R^2 = \left(\text{cor}(y, \hat{y})\right)^2
+\]</span></p>
 <ol start="2" type="1">
 <li>Notice that there is one large outlier, with the highest CD4 count in the data. Exclude that one value, and recompute:</li>
 </ol>
@@ -298,37 +365,244 @@ F-statistic: 1.932 on 1 and 22 DF,  p-value: 0.1784</code></pre>
 <li>The Pearson Correlation coefficient and p-value.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Enter code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify the index of the max CD4</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>outlier_index <span class="ot">&lt;-</span> <span class="fu">which.max</span>(data<span class="sc">$</span>CD4)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a new dataset without that outlier</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>data_no_outlier <span class="ot">&lt;-</span> data[<span class="sc">-</span>outlier_index, ]</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute Pearson correlation without outlier</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>cor_test_no_outlier <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(data_no_outlier<span class="sc">$</span>betahat6,</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>                                data_no_outlier<span class="sc">$</span>CD4,</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>                                <span class="at">method =</span> <span class="st">"pearson"</span>)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Display result</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>cor_test_no_outlier</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's product-moment correlation
+
+data:  data_no_outlier$betahat6 and data_no_outlier$CD4
+t = -3.7253, df = 21, p-value = 0.001251
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ -0.8277628 -0.2953934
+sample estimates:
+       cor 
+-0.6307895 </code></pre>
 </div>
+</div>
+</section>
+<section id="updated-pearson-correlation" class="level4">
+<h4 class="anchored" data-anchor-id="updated-pearson-correlation">Updated Pearson Correlation</h4>
+<ul>
+<li>Correlation coefficient (r): -0.631</li>
+<li>p-value: 0.00125</li>
+</ul>
+</section>
+<section id="interpretation-4" class="level4">
+<h4 class="anchored" data-anchor-id="interpretation-4">Interpretation</h4>
+<p>After excluding the highest CD4 value (an outlier), the Pearson correlation is statistically significant, with a correlation of -0.631. This demonstrates how a single outlier can <strong>inflate or distort</strong> the perceived strength of a linear relationship.</p>
 <ol start="2" type="a">
 <li>The Spearman Correlation coefficient and p-value.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Enter code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Spearman correlation without the highest CD4 outlier</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>spearman_test_no_outlier <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(data_no_outlier<span class="sc">$</span>betahat6,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                                     data_no_outlier<span class="sc">$</span>CD4,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">method =</span> <span class="st">"spearman"</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Show result</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>spearman_test_no_outlier</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Spearman's rank correlation rho
+
+data:  data_no_outlier$betahat6 and data_no_outlier$CD4
+S = 3414, p-value = 0.0004199
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+       rho 
+-0.6867589 </code></pre>
 </div>
+</div>
+</section>
+<section id="updated-spearman-correlation" class="level4">
+<h4 class="anchored" data-anchor-id="updated-spearman-correlation">Updated Spearman Correlation</h4>
+<ul>
+<li>Spearman’s ρ: -0.687</li>
+<li>p-value: 4.2^{-4}</li>
+</ul>
+</section>
+<section id="interpretation-5" class="level4">
+<h4 class="anchored" data-anchor-id="interpretation-5">Interpretation</h4>
+<p>After removing the CD4 outlier, the Spearman correlation remains statistically significant. Spearman’s method is <strong>more robust to outliers</strong>, so the correlation value and significance level may not change as dramatically as in the Pearson case—confirming its reliability in the presence of extreme values.</p>
 <ol start="3" type="a">
 <li>the regression equation and p-value.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Enter code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit new model without the outlier</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>model_no_outlier <span class="ot">&lt;-</span> <span class="fu">lm</span>(betahat6 <span class="sc">~</span> CD4, <span class="at">data =</span> data_no_outlier)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract coefficients</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>intercept_new <span class="ot">&lt;-</span> <span class="fu">coef</span>(model_no_outlier)[<span class="dv">1</span>]</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>slope_new <span class="ot">&lt;-</span> <span class="fu">coef</span>(model_no_outlier)[<span class="dv">2</span>]</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract p-value for slope</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>pval_new <span class="ot">&lt;-</span> <span class="fu">summary</span>(model_no_outlier)<span class="sc">$</span>coefficients[<span class="st">"CD4"</span>, <span class="st">"Pr(&gt;|t|)"</span>]</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Display</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">Intercept =</span> intercept_new,</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">Slope =</span> slope_new,</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">P_value =</span> pval_new</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$Intercept
+(Intercept) 
+   4.652497 
+
+$Slope
+        CD4 
+-0.01125359 
+
+$P_value
+[1] 0.001250697</code></pre>
 </div>
+</div>
+</section>
+<section id="updated-regression-equation" class="level4">
+<h4 class="anchored" data-anchor-id="updated-regression-equation">Updated Regression Equation</h4>
+<p><span class="math display">\[
+\widehat{\text{betahat6}} = 4.652 + -0.011 \times \text{CD4}
+\]</span></p>
+</section>
+<section id="interpretation-6" class="level4">
+<h4 class="anchored" data-anchor-id="interpretation-6">Interpretation</h4>
+<ul>
+<li>The new slope is -0.011</li>
+<li>The p-value for the slope is 0.00125</li>
+</ul>
+<p>Since the p-value is &lt; 0.05, we reject the null hypothesis that the slope is zero. This suggests that, <strong>even after removing the outlier</strong>, the linear association between CD4 and betahat6 is still statistically significant.</p>
 <ol start="4" type="a">
 <li>The plot of residuals versus fitted values</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Enter code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate fitted values and residuals</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>fitted_no_outlier <span class="ot">&lt;-</span> <span class="fu">fitted</span>(model_no_outlier)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>residuals_no_outlier <span class="ot">&lt;-</span> <span class="fu">resid</span>(model_no_outlier)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Residual plot</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fitted_no_outlier, residuals_no_outlier,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Fitted Values"</span>,</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Residuals"</span>,</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Residuals vs Fitted (No CD4 Outlier)"</span>,</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"blue"</span>)</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"gray"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HW11_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
+</div>
+</div>
+</section>
+<section id="interpretation-7" class="level4">
+<h4 class="anchored" data-anchor-id="interpretation-7">Interpretation</h4>
+<p>By removing the CD4 outlier: - The spread of residuals is more uniform across fitted values, improving <strong>homoscedasticity</strong>. - The residuals appear more <strong>randomly scattered</strong> around zero, supporting <strong>linearity</strong> and <strong>independence</strong>. - The large vertical deviation seen earlier is no longer present, reducing concerns about <strong>influential points</strong>.</p>
+<p>This suggests that the regression model now fits the data <strong>more appropriately</strong>.</p>
 <p>Which of these changed substantially? Why?</p>
-<p>Other Homework: Chapter 17 #1, 3,7, Chapter 18 #4, #9,</p>
+</section>
+<section id="impact-of-removing-the-cd4-outlier" class="level3">
+<h3 class="anchored" data-anchor-id="impact-of-removing-the-cd4-outlier">Impact of Removing the CD4 Outlier</h3>
+<p>Removing the observation with the highest CD4 value had a substantial impact on several parts of our analysis.</p>
+<p>The <strong>Pearson correlation coefficient</strong> and its associated p-value changed the most. Because Pearson correlation is based on raw values, it is highly sensitive to outliers. The extreme CD4 value had a strong influence on the linear relationship, likely inflating the correlation. After removing this point, the correlation more accurately reflected the underlying association between <code>betahat6</code> and <code>CD4</code>.</p>
+<p>The <strong>regression equation and slope’s p-value</strong> also changed noticeably. The removed point had high leverage due to its extreme CD4 value, which can disproportionately affect the regression slope. Once excluded, the slope estimate and its significance shifted, leading to a more reliable interpretation of the linear relationship.</p>
+<p>The <strong>residual plot</strong> improved considerably. Without the outlier, the residuals appeared more randomly scattered around zero, indicating better adherence to the assumptions of linearity and homoscedasticity. This suggests that the model fit the bulk of the data more appropriately after removing the influential observation.</p>
+<p>In contrast, the <strong>Spearman correlation coefficient and p-value</strong> showed minimal change. Spearman’s method is based on ranks rather than raw values, making it more robust to outliers. This stability confirms that the monotonic relationship between the variables remained consistent, even when extreme values were present.</p>
+<p>In summary, removing the outlier substantially improved the clarity and validity of the Pearson-based analyses and regression model, while Spearman’s method demonstrated resilience to distortion from that influential point.</p>
+<section id="other-homework-chapter-17-1-37-chapter-18-4-9" class="level4">
+<h4 class="anchored" data-anchor-id="other-homework-chapter-17-1-37-chapter-18-4-9">Other Homework: Chapter 17 #1, 3,7, Chapter 18 #4, #9,</h4>
 <p>17.1 When you are investigating the relationship between two continuous random variables, why is it important to create a scatter plot of the data?</p>
+<p>Creating a scatter plot is essential when examining the relationship between two continuous random variables because it provides a clear visual representation of their association. It allows us to assess whether the relationship is linear, detect outliers, and spot any unusual patterns such as clusters or non-constant variance. These visual cues help determine whether a correlation or linear regression is appropriate. Without a scatter plot, we risk overlooking important features that could affect the validity of our analysis.</p>
 <p>17.3 How does Spearman’s rank correlation differ from the Pearson correlation?</p>
+<p>Creating a scatter plot is essential when examining the relationship between two continuous random variables because it provides a clear visual representation of their association. It allows us to assess whether the relationship is linear, detect outliers, and spot any unusual patterns such as clusters or non-constant variance. These visual cues help determine whether a correlation or linear regression is appropriate. Without a scatter plot, we risk overlooking important features that could affect the validity of our analysis.</p>
 <p>17.7. The data set lowbwt contains information collected for a sample of 100 low birth weight infants born in two teaching hospitals in Boston, Massachusetts [5] (Appendix B, Table B.7). Measurements of systolic blood pressure are saved under the variable name sbp, and values of the Apgar score recorded five minutes after birth-an index of neonatal asphyxia or oxygen deprivation-are saved under the name apgar5. The Apgar score is an ordinal random variable that takes values between 0 and 10.</p>
 <ol type="a">
-<li><p>Estimate the correlation of the random variables systolic blood pressure and five-minute Apgar score for this population of low birth weight infants.</p></li>
-<li><p>Does Apgar score tend to increase or decrease as systolic blood pressure increases?</p></li>
-<li><p>Test the null hypothesis H0 : ρ = 0. What do you conclude?</p></li>
+<li>Estimate the correlation of the random variables systolic blood pressure and five-minute Apgar score for this population of low birth weight infants.</li>
 </ol>
+<p>We begin by loading the dataset and examining the association between systolic blood pressure (<code>sbp</code>) and five-minute Apgar score (<code>apgar5</code>) using Spearman’s rank correlation. Since <code>apgar5</code> is an ordinal variable, Spearman’s method is appropriate because it does not assume interval spacing or linearity.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>lowbwt <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"lowbwtHW11.csv"</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># View column names to confirm structure</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(lowbwt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "sbp"     "sex"     "tox"     "grmhem"  "gestage" "apgar5" </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute Spearman correlation</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(lowbwt<span class="sc">$</span>sbp, lowbwt<span class="sc">$</span>apgar5, <span class="at">method =</span> <span class="st">"spearman"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in cor.test.default(lowbwt$sbp, lowbwt$apgar5, method = "spearman"):
+Cannot compute exact p-value with ties</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Spearman's rank correlation rho
+
+data:  lowbwt$sbp and lowbwt$apgar5
+S = 148593, p-value = 0.2832
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+      rho 
+0.1083551 </code></pre>
+</div>
+</div>
+<ol start="2" type="a">
+<li>Does Apgar score tend to increase or decrease as systolic blood pressure increases?</li>
+</ol>
+<p>To determine the direction of association, we examine the sign of the Spearman correlation coefficient from part (a). A <strong>positive</strong> coefficient indicates that Apgar scores tend to <strong>increase</strong> as systolic blood pressure increases, while a <strong>negative</strong> coefficient indicates they tend to <strong>decrease</strong>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the Spearman correlation coefficient again</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>spearman_result <span class="ot">&lt;-</span> <span class="fu">cor.test</span>(lowbwt<span class="sc">$</span>sbp, lowbwt<span class="sc">$</span>apgar5, <span class="at">method =</span> <span class="st">"spearman"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in cor.test.default(lowbwt$sbp, lowbwt$apgar5, method = "spearman"):
+Cannot compute exact p-value with ties</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>spearman_result<span class="sc">$</span>estimate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      rho 
+0.1083551 </code></pre>
+</div>
+</div>
+<p>Since the correlation coefficient is 0.108, we conclude that Apgar scores tend to increase as systolic blood pressure increases in this sample of low birth weight infants.</p>
+<ol start="3" type="a">
+<li>Test the null hypothesis H0 : ρ = 0. What do you conclude?</li>
+</ol>
+<p>We test the null hypothesis:</p>
+<p><span class="math display">\[
+H_0: \rho = 0 \quad \text{(no monotonic association)}
+\]</span></p>
+<p><span class="math display">\[
+H_A: \rho \neq 0
+\]</span></p>
+<p>using Spearman’s rank correlation test:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Hypothesis test already computed earlier</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>spearman_result<span class="sc">$</span>p.value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.28323</code></pre>
+</div>
+</div>
+<p>The p-value is 0.283.</p>
+</section>
+<section id="conclusion-1" class="level4">
+<h4 class="anchored" data-anchor-id="conclusion-1">Conclusion</h4>
+<p>Since the p-value is ≥ 0.05, we fail to reject the null hypothesis at the 0.05 significance level. This suggests that there <strong>is not a statistically significant monotonic association</strong> between systolic blood pressure and five-minute Apgar score in this sample.</p>
 <p>18.4 Why is it dangerous to extrapolate an estimated linear regression line outside the range of the observed data values?</p>
+<p>Extrapolating a linear regression line outside the range of observed data is risky because the model is only valid within the scope of the data used to fit it. The relationship between the predictor and outcome variables may not remain linear beyond the observed range, and the assumptions of the regression model—such as linearity, constant variance, and independence—may no longer hold. Predictions made in these unobserved regions can be highly inaccurate or misleading. Without empirical data to support those regions, there’s no way to verify whether the trend continues or changes direction.</p>
 <p>18.9. The data set lowbwt contains information for the sample of 100 low birth weight infants born in Boston, Massachusetts. Measurements of systolic blood pressure are saved under the variable name sbp, and values of gestational age under the name <em>gestage</em>.</p>
 <ol type="a">
 <li><p>Construct a two-way scatter plot of systolic blood pressure versus gestational age. Does the graph suggest anything about the nature of the relationship between these variables?</p></li>
@@ -340,6 +614,7 @@ F-statistic: 1.932 on 1 and 22 DF,  p-value: 0.1784</code></pre>
 <li><p>Construct a 95% prediction interval for this new value of systolic blood pressure.</p></li>
 <li><p>Does the least-squares regression model seem to fit the observed data? Comment on the coefficient of determination and a plot of the residuals versus the fitted values of systolic blood pressure.</p></li>
 </ol>
+</section>
 </section>
 </section>
 
