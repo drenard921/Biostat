@@ -369,17 +369,133 @@ Extrapolating a linear regression line outside the range of observed data is ris
 
 (a) Construct a two-way scatter plot of systolic blood pressure versus gestational age. Does the graph suggest anything about the nature of the relationship between these variables?
 
+```{r}
+plot(lowbwt$gestage, lowbwt$sbp,
+     main = "Scatterplot of SBP vs Gestational Age",
+     xlab = "Gestational Age (weeks)",
+     ylab = "Systolic Blood Pressure (mmHg)",
+     pch = 19, col = "blue")
+abline(lm(sbp ~ gestage, data = lowbwt), col = "blue", lwd = 2)
+```
+
+The scatterplot of systolic blood pressure (SBP) versus gestational age shows a slightly positive linear trend, with SBP tending to increase modestly as gestational age increases.
+
+However, the data points are widely scattered around the fitted regression line, indicating a weak association.
+There are no extreme outliers, but there is a fair amount of vertical spread at each gestational age, suggesting substantial variability in SBP not explained by gestational age alone.
+
+Overall, the relationship appears approximately linear but not strong.
+
 (b) Using systolic blood pressure as the response and gestational age as the explanatory variable, compute the  least-squares regression line. Interpret the estimated slope andy-intercept of the line; what do they mean in words?
+```{r}
+model <- lm(sbp ~ gestage, data = lowbwt)
+intercept <- coef(model)[1]
+slope <- coef(model)[2]
+summary(model)
+```
+
+The estimated regression line is:
+
+$$
+\hat{sbp} = `r round(intercept, 2)` + `r round(slope, 2)` \times gestage
+$$
+
+- The **intercept** is `r round(intercept, 2)`, which is the predicted systolic blood pressure when gestational age is 0 weeks. Since a gestational age of 0 is unrealistic, this is not directly meaningful in context.
+
+- The **slope** is `r round(slope, 2)`, meaning that for every additional week of gestation, the predicted systolic blood pressure increases by about `r round(slope, 2)` mmHg.
 
 (c) At the 0.05 level of significance, test the null hypothesis that the true population slope β is equal to 0. What do you conclude?
 
+```{r}
+# Extract test results from model
+model_summary <- summary(model)
+slope_estimate <- coef(model)[2]
+slope_se <- coef(model_summary)[, "Std. Error"][2]
+slope_t <- coef(model_summary)[, "t value"][2]
+slope_p <- coef(model_summary)[, "Pr(>|t|)"][2]
+df <- model_summary$df[2]
+```
+
+At the 0.05 level of significance, we test:
+
+$$
+H_0: \beta = 0 \quad \text{vs} \quad H_A: \beta \ne 0
+$$
+
+From the regression output:
+- Estimated slope \( \hat{\beta} \) = `r round(slope_estimate, 3)`
+- Standard error = `r round(slope_se, 3)`
+- t-statistic = `r round(slope_t, 3)`
+- Degrees of freedom = `r df`
+- p-value = `r signif(slope_p, 3)`
+
+Since the p-value is `r ifelse(slope_p < 0.05, "< 0.05", paste0("= ", signif(slope_p, 3)))`, we `r ifelse(slope_p < 0.05, "reject", "fail to reject")` the null hypothesis at the 0.05 significance level.
+
+**Conclusion**: There `r ifelse(slope_p < 0.05, "is", "is not")` statistically significant evidence that gestational age is linearly associated with systolic blood pressure.
+
 (d) What is the estimated mean systolic blood pressure for the population of low birth weight infants whose gestational age is 31 weeks?
+```{r}
+# Predict mean SBP at gestational age = 31
+newdata <- data.frame(gestage = 31)
+pred_mean <- predict(model, newdata = newdata, interval = "confidence")
+pred_mean
+```
+
+$$
+\hat{sbp}(31) = `r round(pred_mean[1], 2)` \text{ mmHg}
+$$
+
 
 (e) Construct a 95% confidence interval for the true mean value of systolic blood pressure when x = 31 weeks.
 
+We are `r round(100 * (1 - 0.05))`% confident that the **mean** SBP for all low birth weight infants with 31 weeks gestation lies between:
+
+$$
+(`r round(pred_mean[2], 2)`,\ `r round(pred_mean[3], 2)`) \text{ mmHg}
+$$
+
 (f) Suppose that you randomly select a new child from the population of low birth weight infants with gestational age 31 weeks. What is the predicted systolic blood pressure for this child?
+```{r}
+# Predict SBP for an individual infant at 31 weeks with a prediction interval
+pred_indiv <- predict(model, newdata = data.frame(gestage = 31), interval = "prediction")
+pred_indiv
+```
+
+$$
+\hat{sbp}(31) = `r round(pred_indiv[1], 2)` \text{ mmHg}
+$$
 
 (g) Construct a 95% prediction interval for this new value of systolic blood pressure.
 
+The **95% prediction interval** for this infant’s systolic blood pressure is:
+$$
+(`r round(pred_indiv[2], 2)`,\ `r round(pred_indiv[3], 2)`) \text{ mmHg}
+$$
+
 (h) Does the least-squares regression model seem to fit the observed data? Comment on the coefficient of determination and a plot of the residuals versus the fitted values of systolic blood pressure.
 
+```{r}
+# Get model summary and R-squared
+model_summary <- summary(model)
+r_squared <- round(model_summary$r.squared, 3)
+
+# Residual plot
+plot(model$fitted.values, model$residuals,
+     main = "Residuals vs. Fitted Values",
+     xlab = "Fitted SBP",
+     ylab = "Residuals",
+     pch = 19, col = "darkgreen")
+abline(h = 0, col = "red", lty = 2)
+```
+
+- The **coefficient of determination** is:
+
+$$
+R^2 = `r r_squared`
+$$
+
+
+This means that only **7.9% of the variability in systolic blood pressure** is explained by gestational age. This suggests that the linear relationship is **weak**, and that other unmeasured variables may play a much larger role in predicting systolic blood pressure in low birth weight infants.
+
+- The **residual plot** does not show a clear pattern such as curvature or funnel shapes, which supports the assumption of linearity and constant variance. The residuals are fairly symmetrically distributed around 0, forming a loose horizontal band ("shotgun blast" pattern). This indicates that while the **model form appears appropriate**, the **predictive power is low**.
+
+**Conclusion**: The linear regression model appears to meet basic assumptions of linearity and homoscedasticity, but it does **not explain much of the variation** in systolic blood pressure. Gestational age alone may not be a strong predictor in this population.

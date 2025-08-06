@@ -161,8 +161,8 @@ window.Quarto = {
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Display only the head in a DT table, body only</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">datatable</span>(<span class="fu">head</span>(data), <span class="at">options =</span> <span class="fu">list</span>(<span class="at">dom =</span> <span class="st">'t'</span>, <span class="at">ordering =</span> <span class="cn">FALSE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-e50415853ecca35270ad" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-e50415853ecca35270ad">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],[1,2,3,4,5,6],[3.06857142857143,0.806976744186046,2.72209302325581,4.14,0.839473684210526,1.0578947368421],[11.8333333333333,2.96,17.46,17.0166666666667,11.3333333333333,9.5],[230,665,323,263,217,247],[440,437,1466,627,926,945],[5.48953944317225,1.69897000433602,5.08971793608945,5.07586070791327,2.09691001300806,1.69897000433602],[58,42,56,38,49,53]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>row.names<\/th>\n      <th>betahat6<\/th>\n      <th>avdiff6<\/th>\n      <th>CD4<\/th>\n      <th>CD8<\/th>\n      <th>logvl<\/th>\n      <th>age<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","ordering":false,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5,6,7]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-f8bfd713d5ebfd152643" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-f8bfd713d5ebfd152643">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6"],[1,2,3,4,5,6],[3.06857142857143,0.806976744186046,2.72209302325581,4.14,0.839473684210526,1.0578947368421],[11.8333333333333,2.96,17.46,17.0166666666667,11.3333333333333,9.5],[230,665,323,263,217,247],[440,437,1466,627,926,945],[5.48953944317225,1.69897000433602,5.08971793608945,5.07586070791327,2.09691001300806,1.69897000433602],[58,42,56,38,49,53]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>row.names<\/th>\n      <th>betahat6<\/th>\n      <th>avdiff6<\/th>\n      <th>CD4<\/th>\n      <th>CD8<\/th>\n      <th>logvl<\/th>\n      <th>age<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","ordering":false,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5,6,7]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <ol type="1">
@@ -605,15 +605,160 @@ H_A: \rho \neq 0
 <p>Extrapolating a linear regression line outside the range of observed data is risky because the model is only valid within the scope of the data used to fit it. The relationship between the predictor and outcome variables may not remain linear beyond the observed range, and the assumptions of the regression model—such as linearity, constant variance, and independence—may no longer hold. Predictions made in these unobserved regions can be highly inaccurate or misleading. Without empirical data to support those regions, there’s no way to verify whether the trend continues or changes direction.</p>
 <p>18.9. The data set lowbwt contains information for the sample of 100 low birth weight infants born in Boston, Massachusetts. Measurements of systolic blood pressure are saved under the variable name sbp, and values of gestational age under the name <em>gestage</em>.</p>
 <ol type="a">
-<li><p>Construct a two-way scatter plot of systolic blood pressure versus gestational age. Does the graph suggest anything about the nature of the relationship between these variables?</p></li>
-<li><p>Using systolic blood pressure as the response and gestational age as the explanatory variable, compute the least-squares regression line. Interpret the estimated slope andy-intercept of the line; what do they mean in words?</p></li>
-<li><p>At the 0.05 level of significance, test the null hypothesis that the true population slope β is equal to 0. What do you conclude?</p></li>
-<li><p>What is the estimated mean systolic blood pressure for the population of low birth weight infants whose gestational age is 31 weeks?</p></li>
-<li><p>Construct a 95% confidence interval for the true mean value of systolic blood pressure when x = 31 weeks.</p></li>
-<li><p>Suppose that you randomly select a new child from the population of low birth weight infants with gestational age 31 weeks. What is the predicted systolic blood pressure for this child?</p></li>
-<li><p>Construct a 95% prediction interval for this new value of systolic blood pressure.</p></li>
-<li><p>Does the least-squares regression model seem to fit the observed data? Comment on the coefficient of determination and a plot of the residuals versus the fitted values of systolic blood pressure.</p></li>
+<li>Construct a two-way scatter plot of systolic blood pressure versus gestational age. Does the graph suggest anything about the nature of the relationship between these variables?</li>
 </ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(lowbwt<span class="sc">$</span>gestage, lowbwt<span class="sc">$</span>sbp,</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Scatterplot of SBP vs Gestational Age"</span>,</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Gestational Age (weeks)"</span>,</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Systolic Blood Pressure (mmHg)"</span>,</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"blue"</span>)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="fu">lm</span>(sbp <span class="sc">~</span> gestage, <span class="at">data =</span> lowbwt), <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HW11_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The scatterplot of systolic blood pressure (SBP) versus gestational age shows a slightly positive linear trend, with SBP tending to increase modestly as gestational age increases.</p>
+<p>However, the data points are widely scattered around the fitted regression line, indicating a weak association. There are no extreme outliers, but there is a fair amount of vertical spread at each gestational age, suggesting substantial variability in SBP not explained by gestational age alone.</p>
+<p>Overall, the relationship appears approximately linear but not strong.</p>
+<ol start="2" type="a">
+<li>Using systolic blood pressure as the response and gestational age as the explanatory variable, compute the least-squares regression line. Interpret the estimated slope andy-intercept of the line; what do they mean in words?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(sbp <span class="sc">~</span> gestage, <span class="at">data =</span> lowbwt)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>intercept <span class="ot">&lt;-</span> <span class="fu">coef</span>(model)[<span class="dv">1</span>]</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>slope <span class="ot">&lt;-</span> <span class="fu">coef</span>(model)[<span class="dv">2</span>]</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = sbp ~ gestage, data = lowbwt)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-23.162  -7.828  -1.483   5.568  39.781 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)   
+(Intercept)  10.5521    12.6506   0.834  0.40625   
+gestage       1.2644     0.4362   2.898  0.00463 **
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 11 on 98 degrees of freedom
+Multiple R-squared:  0.07895,   Adjusted R-squared:  0.06956 
+F-statistic: 8.401 on 1 and 98 DF,  p-value: 0.004628</code></pre>
+</div>
+</div>
+<p>The estimated regression line is:</p>
+<p><span class="math display">\[
+\hat{sbp} = 10.55 + 1.26 \times gestage
+\]</span></p>
+<ul>
+<li><p>The <strong>intercept</strong> is 10.55, which is the predicted systolic blood pressure when gestational age is 0 weeks. Since a gestational age of 0 is unrealistic, this is not directly meaningful in context.</p></li>
+<li><p>The <strong>slope</strong> is 1.26, meaning that for every additional week of gestation, the predicted systolic blood pressure increases by about 1.26 mmHg.</p></li>
+</ul>
+<ol start="3" type="a">
+<li>At the 0.05 level of significance, test the null hypothesis that the true population slope β is equal to 0. What do you conclude?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract test results from model</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>model_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(model)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>slope_estimate <span class="ot">&lt;-</span> <span class="fu">coef</span>(model)[<span class="dv">2</span>]</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>slope_se <span class="ot">&lt;-</span> <span class="fu">coef</span>(model_summary)[, <span class="st">"Std. Error"</span>][<span class="dv">2</span>]</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>slope_t <span class="ot">&lt;-</span> <span class="fu">coef</span>(model_summary)[, <span class="st">"t value"</span>][<span class="dv">2</span>]</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>slope_p <span class="ot">&lt;-</span> <span class="fu">coef</span>(model_summary)[, <span class="st">"Pr(&gt;|t|)"</span>][<span class="dv">2</span>]</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> model_summary<span class="sc">$</span>df[<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>At the 0.05 level of significance, we test:</p>
+<p><span class="math display">\[
+H_0: \beta = 0 \quad \text{vs} \quad H_A: \beta \ne 0
+\]</span></p>
+<p>From the regression output: - Estimated slope ( ) = 1.264 - Standard error = 0.436 - t-statistic = 2.898 - Degrees of freedom = 98 - p-value = 0.00463</p>
+<p>Since the p-value is &lt; 0.05, we reject the null hypothesis at the 0.05 significance level.</p>
+<p><strong>Conclusion</strong>: There is statistically significant evidence that gestational age is linearly associated with systolic blood pressure.</p>
+<ol start="4" type="a">
+<li>What is the estimated mean systolic blood pressure for the population of low birth weight infants whose gestational age is 31 weeks?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict mean SBP at gestational age = 31</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>newdata <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">gestage =</span> <span class="dv">31</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>pred_mean <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, <span class="at">newdata =</span> newdata, <span class="at">interval =</span> <span class="st">"confidence"</span>)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>pred_mean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       fit      lwr      upr
+1 49.74784 46.90159 52.59409</code></pre>
+</div>
+</div>
+<p><span class="math display">\[
+\hat{sbp}(31) = 49.75 \text{ mmHg}
+\]</span></p>
+<ol start="5" type="a">
+<li>Construct a 95% confidence interval for the true mean value of systolic blood pressure when x = 31 weeks.</li>
+</ol>
+<p>We are 95% confident that the <strong>mean</strong> SBP for all low birth weight infants with 31 weeks gestation lies between:</p>
+<p><span class="math display">\[
+(46.9,\ 52.59) \text{ mmHg}
+\]</span></p>
+<ol start="6" type="a">
+<li>Suppose that you randomly select a new child from the population of low birth weight infants with gestational age 31 weeks. What is the predicted systolic blood pressure for this child?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict SBP for an individual infant at 31 weeks with a prediction interval</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>pred_indiv <span class="ot">&lt;-</span> <span class="fu">predict</span>(model, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">gestage =</span> <span class="dv">31</span>), <span class="at">interval =</span> <span class="st">"prediction"</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>pred_indiv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       fit      lwr     upr
+1 49.74784 27.73488 71.7608</code></pre>
+</div>
+</div>
+<p><span class="math display">\[
+\hat{sbp}(31) = 49.75 \text{ mmHg}
+\]</span></p>
+<ol start="7" type="a">
+<li>Construct a 95% prediction interval for this new value of systolic blood pressure.</li>
+</ol>
+<p>The <strong>95% prediction interval</strong> for this infant’s systolic blood pressure is: <span class="math display">\[
+(27.73,\ 71.76) \text{ mmHg}
+\]</span></p>
+<ol start="8" type="a">
+<li>Does the least-squares regression model seem to fit the observed data? Comment on the coefficient of determination and a plot of the residuals versus the fitted values of systolic blood pressure.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get model summary and R-squared</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>model_summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(model)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>r_squared <span class="ot">&lt;-</span> <span class="fu">round</span>(model_summary<span class="sc">$</span>r.squared, <span class="dv">3</span>)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Residual plot</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model<span class="sc">$</span>fitted.values, model<span class="sc">$</span>residuals,</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Residuals vs. Fitted Values"</span>,</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Fitted SBP"</span>,</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Residuals"</span>,</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="st">"darkgreen"</span>)</span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HW11_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>The <strong>coefficient of determination</strong> is:</li>
+</ul>
+<p><span class="math display">\[
+R^2 = 0.079
+\]</span></p>
+<p>This means that only <strong>7.9% of the variability in systolic blood pressure</strong> is explained by gestational age. This suggests that the linear relationship is <strong>weak</strong>, and that other unmeasured variables may play a much larger role in predicting systolic blood pressure in low birth weight infants.</p>
+<ul>
+<li>The <strong>residual plot</strong> does not show a clear pattern such as curvature or funnel shapes, which supports the assumption of linearity and constant variance. The residuals are fairly symmetrically distributed around 0, forming a loose horizontal band (“shotgun blast” pattern). This indicates that while the <strong>model form appears appropriate</strong>, the <strong>predictive power is low</strong>.</li>
+</ul>
+<p><strong>Conclusion</strong>: The linear regression model appears to meet basic assumptions of linearity and homoscedasticity, but it does <strong>not explain much of the variation</strong> in systolic blood pressure. Gestational age alone may not be a strong predictor in this population.</p>
 </section>
 </section>
 </section>
