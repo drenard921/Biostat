@@ -596,11 +596,126 @@ This means there is insufficient evidence to conclude that the effect of gestati
 The Bayley Scales of Infant Development yield scores on two indices--the Psychomotor Development Index (PDI) and the Mental Development Index (MDI)--which can be use to assess a child's level of functioning in each of these areas at approximately one year of age. Among normal healthy infants, both indices have a mean value of 100. As part of a study assessing the development and neurologic status of children who have undergone reparative heart surgery during the first three months of life, the Bayley Scales were administered to a sample of one-year-old infants with congenital heart disease. The children had been randomized to one of two different treatment groups, known as "circulatory arrest" and "low-flow bypass." The groups differed in the specific way in which the reparative surgery was performed. Unlike circulatory arrest, low-flow bypass maintains continuous circulation through the brain; although it is felt to be preferable by some physicians, it also has its own risk of brain injury. The data contained in the data set heart. PDI scores are saved under the variable name pdi while MDI scores are saved under mdi and indicators of treatment group under trtment. For this variable, 0 represents circulatory arrest and 1 is for low-flow bypass.
 
 a. In Chapter 11, the two-sample t-test was used to compare mean PDI and MDI scores for infants assigned to the two treatment groups. These analyses could also be performed with linear regression. Fit two linear regression models, one with PDI score as the response and the other with MDI score as the response. Write the equations.
+```{r}
+#| label: model-pdi-mdi-trt
+#| warning: false
+#| message: false
+
+# Load data
+heart <- read.csv("heart.csv")
+
+# Force numeric conversion
+heart$pdi <- as.numeric(heart$pdi)
+heart$mdi <- as.numeric(heart$mdi)
+
+# Drop rows with missing PDI, MDI, or treatment
+heart_clean <- na.omit(heart[, c("pdi", "mdi", "trtment")])
+
+# Fit models
+model_pdi <- lm(pdi ~ trtment, data = heart_clean)
+model_mdi <- lm(mdi ~ trtment, data = heart_clean)
+
+# Summaries
+summary(model_pdi)
+summary(model_mdi)
+```
+
+### Regression Equations
+From the **PDI** model:
+
+$$
+\hat{\text{PDI}} = \text{`r round(coef(model_pdi)[1], 3)`} + \text{`r round(coef(model_pdi)[2], 3)`} \cdot \text{Treatment}
+$$
+
+From the **MDI** model:
+
+$$
+\hat{\text{MDI}} = \text{`r round(coef(model_mdi)[1], 3)`} + \text{`r round(coef(model_mdi)[2], 3)`} \cdot \text{Treatment}
+$$
+
+Here, **Treatment** is coded as 0 for circulatory arrest and 1 for low-flow bypass.  
+- **Intercept ($\hat{\beta}_0$):** estimated mean score for infants in the circulatory arrest group.  
+- **Slope ($\hat{\beta}_1$):** estimated mean difference in score between the low-flow bypass group and the circulatory arrest group.
+
+For PDI:  
+- Circulatory arrest mean = `r round(coef(model_pdi)[1], 3)`  
+- Mean difference (low-flow − circulatory) = `r round(coef(model_pdi)[2], 3)`
+
+For MDI:  
+- Circulatory arrest mean = `r round(coef(model_mdi)[1], 3)`  
+- Mean difference (low-flow − circulatory) = `r round(coef(model_mdi)[2], 3)`
+
 
 b. Who is more likely to have a higher PDI score (which treatment group). How much higher, on average?
 
+```{r}
+#| label: model-pdi-trt-interpret
+#| warning: false
+#| message: false
+
+# Extract coefficient for treatment
+coef_pdi_diff <- coef(model_pdi)[2]
+pval_pdi_diff <- summary(model_pdi)$coefficients[2, 4]
+```
+
+### Justification
+
+From the PDI model:
+
+- **Treatment coefficient**:  
+  $\hat{\beta}_\text{Treatment} = \text{`r round(coef_pdi_diff, 3)`}$ points  
+  $p = \text{`r signif(pval_pdi_diff, 3)`}$
+
+Interpretation:  
+Treatment is coded as 0 for **circulatory arrest** and 1 for **low-flow bypass**.  
+The positive coefficient means that, on average, infants in the low-flow bypass group have **`r round(coef_pdi_diff, 3)` points** higher PDI scores than infants in the circulatory arrest group.  
+
+Since $p = \text{`r signif(pval_pdi_diff, 3)`}$, this difference is **`r ifelse(pval_pdi_diff < 0.05, "statistically significant", "not statistically significant")`** at $\alpha = 0.05$.
+
 c. Who is more likely to have a higher MDI score (which treatment group). How much higher, on average?
+
+```{r}
+#| label: model-mdi-trt-interpret
+#| warning: false
+#| message: false
+
+# Extract coefficient for treatment
+coef_mdi_diff <- coef(model_mdi)[2]
+pval_mdi_diff <- summary(model_mdi)$coefficients[2, 4]
+```
+
+### Justification
+From the MDI model:
+
+- **Treatment coefficient**:  
+  $\hat{\beta}_\text{Treatment} = \text{`r round(coef_mdi_diff, 3)`}$ points  
+  $p = \text{`r signif(pval_mdi_diff, 3)`}$
+
+Interpretation:  
+Treatment is coded as 0 for **circulatory arrest** and 1 for **low-flow bypass**.  
+A positive coefficient means that, on average, infants in the low-flow bypass group have **`r round(coef_mdi_diff, 3)` points** higher MDI scores than infants in the circulatory arrest group.  
+
+Since $p = \text{`r signif(pval_mdi_diff, 3)`}$, this difference is **`r ifelse(pval_mdi_diff < 0.05, "statistically significant", "not statistically significant")`** at $\alpha = 0.05$.
 
 d. Which score (if either) is different between groups at a statistically significant level?
 
+```{r}
+#| label: compare-pdi-mdi-sig
+#| warning: false
+#| message: false
 
+# Significance check
+pdi_sig <- pval_pdi_diff < 0.05
+mdi_sig <- pval_mdi_diff < 0.05
+```
+
+From the regression models:
+
+- **PDI group difference**:  
+  $p = \text{`r signif(pval_pdi_diff, 3)`}$ → **`r ifelse(pdi_sig, "significant", "not significant")`**
+
+- **MDI group difference**:  
+  $p = \text{`r signif(pval_mdi_diff, 3)`}$ → **`r ifelse(mdi_sig, "significant", "not significant")`**
+
+**Conclusion:**  
+Only the **`r ifelse(pdi_sig, "PDI", ifelse(mdi_sig, "MDI", "neither"))`** score shows a statistically significant difference between the circulatory arrest and low-flow bypass groups at $\alpha = 0.05$.
