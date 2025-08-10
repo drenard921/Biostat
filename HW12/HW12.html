@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Homework 12 - Multiple Regression</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="HW12_files/libs/clipboard/clipboard.min.js"></script>
+<script src="HW12_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="HW12_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="HW12_files/libs/quarto-html/popper.min.js"></script>
+<script src="HW12_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="HW12_files/libs/quarto-html/anchor.min.js"></script>
+<link href="HW12_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="HW12_files/libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="HW12_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="HW12_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="HW12_files/libs/bootstrap/bootstrap-81267100e462c21b3d6c0d5bf76a3417.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Homework 12 - Multiple Regression</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="dylan-renard" class="level4">
+<h4 class="anchored" data-anchor-id="dylan-renard">Dylan Renard</h4>
+</section>
+<section id="professor-proschan-professor-nason" class="level4">
+<h4 class="anchored" data-anchor-id="professor-proschan-professor-nason">Professor Proschan &amp; Professor Nason</h4>
+</section>
+<section id="jhu-biostatistics" class="level4">
+<h4 class="anchored" data-anchor-id="jhu-biostatistics">JHU Biostatistics</h4>
+</section>
+<section id="aug-10th-2025" class="level4">
+<h4 class="anchored" data-anchor-id="aug-10th-2025">Aug 10th, 2025</h4>
+</section>
+<section id="biostat-assignment-multiple-regression" class="level2">
+<h2 class="anchored" data-anchor-id="biostat-assignment-multiple-regression">Biostat Assignment: Multiple Regression</h2>
+<section id="chapter-19-problem-7" class="level3">
+<h3 class="anchored" data-anchor-id="chapter-19-problem-7">Chapter 19, Problem 7</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Coefficient</th>
+<th>Standard Error</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Diet Group</td>
+<td>-11.25</td>
+<td>4.33</td>
+</tr>
+<tr class="even">
+<td>Baseline Cholesterol</td>
+<td>0.85</td>
+<td>0.07</td>
+</tr>
+<tr class="odd">
+<td>Body Mass Index</td>
+<td>0.23</td>
+<td>0.65</td>
+</tr>
+<tr class="even">
+<td>Gender</td>
+<td>-3.02</td>
+<td>4.42</td>
+</tr>
+</tbody>
+</table>
+<ol type="a">
+<li>Conduct tests of the null hypothesis that each of the four coefficients in the regression equation is equal to 0. At the 0.05 level of significance, which of the explanatory variables have an effect on serum cholesterol level eight weeks after the start of the study?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: coef-table</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># With unknown residuals, the normal approximation (p_norm) is fine for large samples.</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>df_resid <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>coef_df <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>variable,              <span class="sc">~</span>beta_hat, <span class="sc">~</span>se,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Diet group"</span>,            <span class="sc">-</span><span class="fl">11.25</span>,     <span class="fl">4.33</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Baseline cholesterol"</span>,    <span class="fl">0.85</span>,     <span class="fl">0.07</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Body mass index"</span>,         <span class="fl">0.23</span>,     <span class="fl">0.65</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Gender (1=male, 0=female)"</span>, <span class="sc">-</span><span class="fl">3.02</span>,  <span class="fl">4.42</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">t_stat  =</span> beta_hat <span class="sc">/</span> se,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">p_t     =</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">pt</span>(<span class="sc">-</span><span class="fu">abs</span>(t_stat), <span class="at">df =</span> df_resid),</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">p_norm  =</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">pnorm</span>(<span class="sc">-</span><span class="fu">abs</span>(t_stat)),              <span class="co"># large-sample approximation</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">sig_0.05_t    =</span> <span class="fu">ifelse</span>(p_t   <span class="sc">&lt;</span> <span class="fl">0.05</span>, <span class="st">"Yes"</span>, <span class="st">"No"</span>),</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">sig_0.05_norm =</span> <span class="fu">ifelse</span>(p_norm<span class="sc">&lt;</span> <span class="fl">0.05</span>, <span class="st">"Yes"</span>, <span class="st">"No"</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>coef_df <span class="sc">%&gt;%</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">beta_hat =</span> <span class="fu">round</span>(beta_hat, <span class="dv">2</span>),</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">se       =</span> <span class="fu">round</span>(se, <span class="dv">2</span>),</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">t_stat   =</span> <span class="fu">round</span>(t_stat, <span class="dv">2</span>),</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">p_t      =</span> <span class="fu">signif</span>(p_t, <span class="dv">3</span>),</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">p_norm   =</span> <span class="fu">signif</span>(p_norm, <span class="dv">3</span>)</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(variable, beta_hat, se, t_stat, p_t, p_norm, sig_0<span class="fl">.05</span>_t) <span class="sc">%&gt;%</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">"Coefficient Tests (H0: β = 0, two-sided)"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">variable =</span> <span class="st">"Variable"</span>,</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">beta_hat =</span> <span class="st">"Estimate (β̂)"</span>,</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">se       =</span> <span class="st">"Std. Error"</span>,</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">t_stat   =</span> <span class="st">"t statistic"</span>,</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">p_t      =</span> <span class="st">"p-value (t, df = set)"</span>,</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">p_norm   =</span> <span class="st">"p-value (normal approx.)"</span>,</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">sig_0.05_t =</span> <span class="st">"Significant at α=0.05?"</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="haaxawwfrb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#haaxawwfrb table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#haaxawwfrb thead, #haaxawwfrb tbody, #haaxawwfrb tfoot, #haaxawwfrb tr, #haaxawwfrb td, #haaxawwfrb th {
+  border-style: none;
+}
+
+#haaxawwfrb p {
+  margin: 0;
+  padding: 0;
+}
+
+#haaxawwfrb .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#haaxawwfrb .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#haaxawwfrb .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#haaxawwfrb .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#haaxawwfrb .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#haaxawwfrb .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#haaxawwfrb .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#haaxawwfrb .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#haaxawwfrb .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#haaxawwfrb .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#haaxawwfrb .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#haaxawwfrb .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#haaxawwfrb .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#haaxawwfrb .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#haaxawwfrb .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#haaxawwfrb .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#haaxawwfrb .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#haaxawwfrb .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#haaxawwfrb .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#haaxawwfrb .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#haaxawwfrb .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#haaxawwfrb .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#haaxawwfrb .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#haaxawwfrb .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#haaxawwfrb .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#haaxawwfrb .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#haaxawwfrb .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#haaxawwfrb .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#haaxawwfrb .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#haaxawwfrb .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#haaxawwfrb .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#haaxawwfrb .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#haaxawwfrb .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#haaxawwfrb .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#haaxawwfrb .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#haaxawwfrb .gt_left {
+  text-align: left;
+}
+
+#haaxawwfrb .gt_center {
+  text-align: center;
+}
+
+#haaxawwfrb .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#haaxawwfrb .gt_font_normal {
+  font-weight: normal;
+}
+
+#haaxawwfrb .gt_font_bold {
+  font-weight: bold;
+}
+
+#haaxawwfrb .gt_font_italic {
+  font-style: italic;
+}
+
+#haaxawwfrb .gt_super {
+  font-size: 65%;
+}
+
+#haaxawwfrb .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#haaxawwfrb .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#haaxawwfrb .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#haaxawwfrb .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#haaxawwfrb .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#haaxawwfrb .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#haaxawwfrb .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#haaxawwfrb .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#haaxawwfrb div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<th colspan="7" class="gt_heading gt_title gt_font_normal gt_bottom_border">Coefficient Tests (H0: β = 0, two-sided)</th>
+</tr>
+<tr class="gt_col_headings even">
+<th id="variable" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Variable</th>
+<th id="beta_hat" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Estimate (β̂)</th>
+<th id="se" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Std. Error</th>
+<th id="t_stat" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">t statistic</th>
+<th id="p_t" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">p-value (t, df = set)</th>
+<th id="p_norm" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">p-value (normal approx.)</th>
+<th id="sig_0.05_t" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Significant at α=0.05?</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="variable">Diet group</td>
+<td class="gt_row gt_right" headers="beta_hat">-11.25</td>
+<td class="gt_row gt_right" headers="se">4.33</td>
+<td class="gt_row gt_right" headers="t_stat">-2.60</td>
+<td class="gt_row gt_right" headers="p_t">1.08e-02</td>
+<td class="gt_row gt_right" headers="p_norm">9.37e-03</td>
+<td class="gt_row gt_left" headers="sig_0.05_t">Yes</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="variable">Baseline cholesterol</td>
+<td class="gt_row gt_right" headers="beta_hat">0.85</td>
+<td class="gt_row gt_right" headers="se">0.07</td>
+<td class="gt_row gt_right" headers="t_stat">12.14</td>
+<td class="gt_row gt_right" headers="p_t">2.17e-21</td>
+<td class="gt_row gt_right" headers="p_norm">6.26e-34</td>
+<td class="gt_row gt_left" headers="sig_0.05_t">Yes</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="variable">Body mass index</td>
+<td class="gt_row gt_right" headers="beta_hat">0.23</td>
+<td class="gt_row gt_right" headers="se">0.65</td>
+<td class="gt_row gt_right" headers="t_stat">0.35</td>
+<td class="gt_row gt_right" headers="p_t">7.24e-01</td>
+<td class="gt_row gt_right" headers="p_norm">7.23e-01</td>
+<td class="gt_row gt_left" headers="sig_0.05_t">No</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="variable">Gender (1=male, 0=female)</td>
+<td class="gt_row gt_right" headers="beta_hat">-3.02</td>
+<td class="gt_row gt_right" headers="se">4.42</td>
+<td class="gt_row gt_right" headers="t_stat">-0.68</td>
+<td class="gt_row gt_right" headers="p_t">4.96e-01</td>
+<td class="gt_row gt_right" headers="p_norm">4.94e-01</td>
+<td class="gt_row gt_left" headers="sig_0.05_t">No</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="justification" class="level3">
+<h3 class="anchored" data-anchor-id="justification">Justification</h3>
+<p>For each predictor, we tested</p>
+<p><span class="math display">\[
+H_0: \beta = 0 \quad \text{vs.} \quad H_a: \beta \neq 0
+\]</span></p>
+<p>using the test statistic</p>
+<p><span class="math display">\[
+t = \frac{\hat{\beta}}{\text{SE}(\hat{\beta})}
+\]</span></p>
+<p>and a two-sided p-value from the <span class="math inline">\(t\)</span> distribution (large-sample normal approximation when <span class="math inline">\(n\)</span> is large).<br>
+At <span class="math inline">\(\alpha = 0.05\)</span>, <strong>Diet group</strong> <span class="math inline">\((t \approx -2.60, \; p \approx 0.010)\)</span> and <strong>Baseline cholesterol</strong> <span class="math inline">\((t \approx 12.14, \; p &lt; 0.0001)\)</span> are statistically significant. <strong>Body mass index</strong> <span class="math inline">\((t \approx 0.35, \; p \approx 0.726)\)</span> and <strong>Gender</strong> <span class="math inline">\((t \approx -0.68, \; p \approx 0.498)\)</span> are not.</p>
+<p>In the context of multiple regression, each <span class="math inline">\(\hat{\beta}\)</span> represents the expected change in serum cholesterol for a one-unit increase in that predictor, <strong>holding all other predictors constant</strong>.<br>
+The results therefore indicate that only Diet group assignment and Baseline cholesterol have independent effects on 8-week serum cholesterol; BMI and Gender do not.</p>
+<ol start="2" type="a">
+<li>If an individual’s body mass index were to increase by 1 kg/m2, while the values of all other explanatory variables remained constant, what would happen to his/her serum cholesterol level?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>bmi_coef <span class="ot">&lt;-</span> <span class="fl">0.23</span> <span class="co"># from HW table</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>bmi_coef</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.23</code></pre>
+</div>
+</div>
+</section>
+<section id="justification-1" class="level3">
+<h3 class="anchored" data-anchor-id="justification-1">Justification</h3>
+<p>In a multiple regression model, each coefficient <span class="math inline">\(\hat{\beta}\)</span> represents the estimated change in the response variable <span class="math inline">\(y\)</span> for a one-unit increase in that predictor, <strong>holding all other predictors constant</strong>.</p>
+<p>For BMI, the model estimate is:</p>
+<p><span class="math display">\[
+\hat{\beta}_{\text{BMI}} = 0.23
+\]</span></p>
+<p>Thus, a 1 kg/m² increase in BMI—while Diet Group, Baseline Cholesterol, and Gender remain fixed—is associated with an <strong>expected increase of 0.23 units</strong> in serum cholesterol.</p>
+<p>From part (a), the corresponding <span class="math inline">\(t\)</span>-test yielded <span class="math inline">\(p \approx 0.726\)</span>, indicating that this effect is not statistically significant at <span class="math inline">\(\alpha = 0.05\)</span>. Therefore, while the point estimate suggests a small positive association, the evidence is insufficient to conclude that BMI has an independent effect on 8-week serum cholesterol.</p>
+<ol start="3" type="a">
+<li>If an individual’s body mass index were to increase by 10 kg/m2, while the values of all other explanatory variables remained constant, what would happen to his/her serum cholesterol level?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>bmi_coef <span class="ot">&lt;-</span> <span class="fl">0.23</span>   <span class="co"># from HW table</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>delta_bmi <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Point estimate for the change in serum cholesterol</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>effect_10 <span class="ot">&lt;-</span> bmi_coef <span class="sc">*</span> delta_bmi</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>effect_10</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 95% CI for the 10-unit change</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># placeholder df_resid.</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>df_resid <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>se_bmi   <span class="ot">&lt;-</span> <span class="fl">0.65</span>       <span class="co"># from HW table</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>tcrit    <span class="ot">&lt;-</span> <span class="fu">qt</span>(<span class="fl">0.975</span>, <span class="at">df =</span> df_resid)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>ci_low  <span class="ot">&lt;-</span> effect_10 <span class="sc">-</span> tcrit <span class="sc">*</span> (delta_bmi <span class="sc">*</span> se_bmi)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>ci_high <span class="ot">&lt;-</span> effect_10 <span class="sc">+</span> tcrit <span class="sc">*</span> (delta_bmi <span class="sc">*</span> se_bmi)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">effect_10 =</span> effect_10, <span class="at">ci_low =</span> ci_low, <span class="at">ci_high =</span> ci_high)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>effect_10    ci_low   ci_high 
+  2.30000 -10.59581  15.19581 </code></pre>
+</div>
+</div>
+</section>
+<section id="justification-2" class="level3">
+<h3 class="anchored" data-anchor-id="justification-2">Justification</h3>
+<p>In multiple regression, each coefficient <span class="math inline">\(\hat{\beta}\)</span> represents the expected change in the response for a one‑unit increase in that predictor, <strong>holding all other predictors constant</strong>.</p>
+<p>For BMI, the estimated slope is <span class="math display">\[
+\hat{\beta}_{\text{BMI}} = 0.23.
+\]</span></p>
+<p>A <span class="math inline">\(10\ \text{kg/m}^2\)</span> increase in BMI therefore implies an expected change of <span class="math display">\[
+10 \times \hat{\beta}_{\text{BMI}} = 10 \times 0.23 = 2.3
+\]</span> units in serum cholesterol (an increase), with Diet Group, Baseline Cholesterol, and Gender held fixed.</p>
+<p>From part (a), the BMI effect was <strong>not statistically significant</strong> (<span class="math inline">\(p \approx 0.726\)</span>). Scaling the change from 1 to 10 units scales both the point estimate and its standard error by 10, so the inference remains <strong>non‑significant</strong> even though the point estimate is larger.</p>
+<ol start="4" type="a">
+<li>The indicator variable gender is coded so that 1 represents a male and 0 a female. Who is more likely to have a higher serum cholesterol level, a man or a woman? By how much, on average?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>gender_coef <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">3.02</span>   <span class="co"># from the HW coefficient table</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>se_gender   <span class="ot">&lt;-</span>  <span class="fl">4.42</span>   <span class="co"># from the HW SE table</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Effect for male (1) relative to female (0), holding other predictors fixed:</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>effect_male_vs_female <span class="ot">&lt;-</span> gender_coef</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>effect_male_vs_female</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -3.02</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 95% CI:</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>df_resid <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>tcrit    <span class="ot">&lt;-</span> <span class="fu">qt</span>(<span class="fl">0.975</span>, <span class="at">df =</span> df_resid)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>ci_low   <span class="ot">&lt;-</span> gender_coef <span class="sc">-</span> tcrit <span class="sc">*</span> se_gender</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>ci_high  <span class="ot">&lt;-</span> gender_coef <span class="sc">+</span> tcrit <span class="sc">*</span> se_gender</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">effect =</span> effect_male_vs_female, <span class="at">ci_low =</span> ci_low, <span class="at">ci_high =</span> ci_high)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    effect     ci_low    ci_high 
+ -3.020000 -11.789154   5.749154 </code></pre>
+</div>
+</div>
+</section>
+<section id="justification-3" class="level3">
+<h3 class="anchored" data-anchor-id="justification-3">Justification</h3>
+<p>Let Gender be coded as <span class="math inline">\(G=\{0,1\}\)</span> with <span class="math inline">\(G=1\)</span> for male and <span class="math inline">\(G=0\)</span> for female.<br>
+In a multiple regression, the indicator’s coefficient <span class="math inline">\(\hat{\beta}_{G}\)</span> represents the <strong>expected difference</strong> in mean response between males and females <strong>holding all other predictors constant</strong>: <span class="math display">\[
+E[Y \mid G=1,\ \text{others}] - E[Y \mid G=0,\ \text{others}] \;=\; \hat{\beta}_{G}.
+\]</span></p>
+<p>From the fitted model, <span class="math display">\[
+\hat{\beta}_{G} = -3.02,
+\]</span> so, on average, <strong>males are expected to have serum cholesterol that is 3.02 units lower than females</strong>, with Diet Group, Baseline Cholesterol, and BMI held fixed.</p>
+<p>From part (a), this coefficient was <strong>not statistically significant</strong> (<span class="math inline">\(p \approx 0.498\)</span>), so while the point estimate suggests slightly lower cholesterol for males by 3.02 units, the evidence is insufficient to conclude a true gender difference in this adjusted model.</p>
+</section>
+<section id="chapter-19-problem-8" class="level3">
+<h3 class="anchored" data-anchor-id="chapter-19-problem-8">Chapter 19, Problem 8</h3>
+<p>For the population of low birth weight infants, a significant linear relationship was found to exist between systolic blood pressure and gestational age (data set lowbwt).</p>
+<ol type="a">
+<li>Construct a two-way scatter plot of systolic blood pressure versus five-minute Apgar score. What kind of linear relationship (if any) appears to exist?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>lowbwt <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"lowbwtHW12.csv"</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Check column names (adjust if different)</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(lowbwt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "sbp"     "sex"     "tox"     "grmhem"  "gestage" "apgar5" </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatter plot</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(lowbwt, <span class="fu">aes</span>(<span class="at">x =</span> apgar5, <span class="at">y =</span> sbp)) <span class="sc">+</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Five-minute Apgar score"</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Systolic Blood Pressure (mmHg)"</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Systolic Blood Pressure vs. Five-minute Apgar Score"</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="HW12_files/figure-html/plot-sbp-apgar-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Scatter plot of systolic blood pressure vs.&nbsp;five-minute Apgar score</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The scatter plot shows the distribution of systolic blood pressure (SBP) across values of the five-minute Apgar score.<br>
+A <em>slight</em> positive trend may be visible — higher Apgar scores tend to be associated with somewhat higher SBP — but the relationship appears weak and there is substantial variability in SBP at each Apgar score.<br>
+This visual impression suggests that, if a linear relationship exists, it is likely to be modest in strength and should be confirmed with formal regression analysis in later parts of the problem.</p>
+<ol start="2" type="a">
+<li>using systolic blood pressure as the response and gestational age and apgar score as the explanatory variables, find the least-squares model <span class="math inline">\(\hat{y} = \alpha + \hat{\beta_1} * x1 + \hat{\beta_2} * x2\)</span> Interpret <span class="math inline">\(\hat{\beta_1}\)</span>, the estimated coefficient of gestational age. What does it mean in words? Do the same for <span class="math inline">\(\hat{\beta_2}\)</span>, the estimated coefficient of Apgar score..</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the model</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>model_ga_apgar <span class="ot">&lt;-</span> <span class="fu">lm</span>(sbp <span class="sc">~</span> gestage <span class="sc">+</span> apgar5, <span class="at">data =</span> lowbwt)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary of model</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_ga_apgar)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = sbp ~ gestage + apgar5, data = lowbwt)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-22.374  -8.180  -1.088   4.985  39.424 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)   
+(Intercept)   9.8034    12.6629   0.774   0.4407   
+gestage       1.1848     0.4424   2.678   0.0087 **
+apgar5        0.4875     0.4613   1.057   0.2932   
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 10.99 on 97 degrees of freedom
+Multiple R-squared:  0.08944,   Adjusted R-squared:  0.07066 
+F-statistic: 4.764 on 2 and 97 DF,  p-value: 0.01063</code></pre>
+</div>
+</div>
+<p>The fitted least-squares model is:</p>
+<p><span class="math display">\[
+\hat{y} = 9.803 \;+\; 1.185 \cdot \text{Gestational Age} \;+\; 0.488 \cdot \text{Apgar_5}.
+\]</span></p>
+<ul>
+<li><p><strong>Gestational Age (<span class="math inline">\(\hat{\beta}_1 = 1.185\)</span>, <span class="math inline">\(SE=0.442\)</span>, <span class="math inline">\(t=2.678\)</span>, <span class="math inline">\(p=0.0087\)</span>):</strong><br>
+Holding Apgar score constant, each additional week of gestational age is associated with an average <strong>increase of 1.185 mmHg</strong> in systolic blood pressure. This effect is statistically significant at <span class="math inline">\(\alpha = 0.05\)</span>, suggesting a true positive association.</p></li>
+<li><p><strong>Apgar_5 (<span class="math inline">\(\hat{\beta}_2 = 0.488\)</span>, <span class="math inline">\(SE=0.461\)</span>, <span class="math inline">\(t=1.057\)</span>, <span class="math inline">\(p=0.293\)</span>):</strong><br>
+Holding gestational age constant, each additional point in the five-minute Apgar score is associated with an estimated <strong>increase of 0.488 mmHg</strong> in systolic blood pressure. However, this effect is <strong>not statistically significant</strong> at <span class="math inline">\(\alpha = 0.05\)</span>, indicating insufficient evidence for a true association.</p></li>
+<li><p><strong>Overall model fit:</strong> <span class="math inline">\(R^2 = 0.089\)</span>, adjusted <span class="math inline">\(R^2 = 0.071\)</span>; <span class="math inline">\(F(2,97) = 4.764\)</span>, <span class="math inline">\(p = 0.0106\)</span>.<br>
+The model explains about <strong>8.9%</strong> of the variability in systolic blood pressure, and the predictors are jointly significant.</p></li>
+</ul>
+<p>These interpretations follow the multiple regression principle that each coefficient represents the independent effect of its predictor, holding all other variables constant.</p>
+<ol start="3" type="a">
+<li>What is the estimated mean systolic blood pressure for the population of low birth weight infants whose gestational age is 31 weeks and whose five-minute Apgar score is 7?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># coefficients from model</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>alpha_hat <span class="ot">&lt;-</span> <span class="fl">9.803</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>b1_hat    <span class="ot">&lt;-</span> <span class="fl">1.185</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>b2_hat    <span class="ot">&lt;-</span> <span class="fl">0.488</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co"># predictors</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>ga_val    <span class="ot">&lt;-</span> <span class="dv">31</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>apgar_val <span class="ot">&lt;-</span> <span class="dv">7</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co"># prediction</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>pred_sbp <span class="ot">&lt;-</span> alpha_hat <span class="sc">+</span> b1_hat <span class="sc">*</span> ga_val <span class="sc">+</span> b2_hat <span class="sc">*</span> apgar_val</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>pred_sbp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 49.954</code></pre>
+</div>
+</div>
+<p>The estimated mean systolic blood pressure is computed from the regression equation:</p>
+<p><span class="math display">\[
+\hat{y} = 9.803 + 1.185 \cdot (31) + 0.488 \cdot (7).
+\]</span></p>
+<p>Calculating:</p>
+<p><span class="math display">\[
+\hat{y} = 9.803 + 36.735 + 3.416 = 49.954 \ \text{mmHg}.
+\]</span></p>
+<p>Interpretation: For low birth weight infants with a gestational age of 31 weeks and a five-minute Apgar score of 7, the model predicts an average systolic blood pressure of <strong>49.95 mmHg</strong>.</p>
+<p>This estimate represents the mean SBP for the <em>population</em> of infants with these predictor values, under the assumption that the multiple regression model is correctly specified.</p>
+<ol start="4" type="a">
+<li>Construct a 95% confidence interval for the true mean value of systolic blood pressure when x1 = 31 weeks and x2 = 7.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit model again (if not already in workspace)</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>model_ga_apgar <span class="ot">&lt;-</span> <span class="fu">lm</span>(sbp <span class="sc">~</span> gestage <span class="sc">+</span> apgar5, <span class="at">data =</span> lowbwt)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># New data point</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>new_obs <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">gestage =</span> <span class="dv">31</span>, <span class="at">apgar5 =</span> <span class="dv">7</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 95% CI for the mean prediction</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>pred_ci <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_ga_apgar, <span class="at">newdata =</span> new_obs, <span class="at">interval =</span> <span class="st">"confidence"</span>, <span class="at">level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>pred_ci</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       fit      lwr      upr
+1 49.94562 47.07655 52.81469</code></pre>
+</div>
+</div>
+</section>
+<section id="justification-4" class="level3">
+<h3 class="anchored" data-anchor-id="justification-4">Justification</h3>
+<p>To construct a 95% confidence interval for the <em>mean</em> systolic blood pressure at gestational age = 31 weeks and Apgar_5 = 7, we use:</p>
+<p><span class="math display">\[
+\hat{y} \pm t_{(0.975, \ df)} \times SE_{\hat{y}}
+\]</span></p>
+<p>where:</p>
+<ul>
+<li><span class="math inline">\(\hat{y}\)</span> is the fitted value from the regression equation: <span class="math display">\[
+\hat{y} = 9.803 + 1.185(31) + 0.488(7) = 49.954 \ \text{mmHg}
+\]</span></li>
+<li><span class="math inline">\(SE_{\hat{y}}\)</span> is the standard error of the fitted mean at these predictor values, obtained from the regression output (<code>predict(..., se.fit=TRUE)</code> in R).</li>
+<li><span class="math inline">\(t_{(0.975, \ df)}\)</span> is the critical value from the <span class="math inline">\(t\)</span>-distribution with the model’s residual degrees of freedom.</li>
+</ul>
+<p>From the model output:</p>
+<p><span class="math display">\[
+\text{95\% CI} = [ 47.08 , \ 52.81 ] \ \text{mmHg}
+\]</span></p>
+<p>Interpretation: We are 95% confident that the <em>average</em> SBP for all low birth weight infants with GA = 31 weeks and Apgar_5 = 7 lies between 47.08 and 52.81, assuming the model is correct and assumptions hold.</p>
+<ol start="5" type="a">
+<li>Test the null hypothesis H0: beta-2 = 0, at the 0.05 significance level. What do you conclude?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get model summary for gestational age + apgar model</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_ga_apgar)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = sbp ~ gestage + apgar5, data = lowbwt)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-22.374  -8.180  -1.088   4.985  39.424 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)   
+(Intercept)   9.8034    12.6629   0.774   0.4407   
+gestage       1.1848     0.4424   2.678   0.0087 **
+apgar5        0.4875     0.4613   1.057   0.2932   
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 10.99 on 97 degrees of freedom
+Multiple R-squared:  0.08944,   Adjusted R-squared:  0.07066 
+F-statistic: 4.764 on 2 and 97 DF,  p-value: 0.01063</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract t-statistic and p-value for apgar5</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>co_apgar <span class="ot">&lt;-</span> <span class="fu">summary</span>(model_ga_apgar)<span class="sc">$</span>coefficients[<span class="st">"apgar5"</span>, ]</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>t_apgar  <span class="ot">&lt;-</span> co_apgar[<span class="st">"t value"</span>]</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>p_apgar  <span class="ot">&lt;-</span> co_apgar[<span class="st">"Pr(&gt;|t|)"</span>]</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">t_value =</span> t_apgar, <span class="at">p_value =</span> p_apgar)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> t_value.t value p_value.Pr(&gt;|t|) 
+       1.0567645        0.2932439 </code></pre>
+</div>
+</div>
+</section>
+<section id="justification-5" class="level3">
+<h3 class="anchored" data-anchor-id="justification-5">Justification</h3>
+<p>We test:</p>
+<p><span class="math display">\[
+H_0: \beta_2 = 0 \quad \text{vs.} \quad H_a: \beta_2 \neq 0
+\]</span></p>
+<p>where <span class="math inline">\(\beta_2\)</span> is the coefficient for the five-minute Apgar score in the multiple regression.</p>
+<p>From the model output:</p>
+<ul>
+<li><span class="math inline">\(t = \text{1.057}\)</span><br>
+</li>
+<li><span class="math inline">\(p = \text{0.293}\)</span></li>
+</ul>
+<p>At <span class="math inline">\(\alpha = 0.05\)</span>, we compare <span class="math inline">\(p\)</span> to 0.05.<br>
+Since <span class="math inline">\(p = \text{0.293} &gt; 0.05\)</span>, we <strong>fail to reject <span class="math inline">\(H_0\)</span></strong>.</p>
+<p><strong>Conclusion:</strong> After adjusting for gestational age, there is insufficient evidence to conclude that Apgar score has an independent effect on systolic blood pressure in this sample.</p>
+<ol start="6" type="a">
+<li>Comment on the magnitude of R2? Does the inclusion of five-minute Apgar score in the model already containing gestational age improve your ability to predict systolic blood pressure?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model with gestational age only</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>model_ga <span class="ot">&lt;-</span> <span class="fu">lm</span>(sbp <span class="sc">~</span> gestage, <span class="at">data =</span> lowbwt)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Model with gestational age + Apgar</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>model_ga_apgar <span class="ot">&lt;-</span> <span class="fu">lm</span>(sbp <span class="sc">~</span> gestage <span class="sc">+</span> apgar5, <span class="at">data =</span> lowbwt)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract R²</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>r2_ga       <span class="ot">&lt;-</span> <span class="fu">summary</span>(model_ga)<span class="sc">$</span>r.squared</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>r2_ga_apgar <span class="ot">&lt;-</span> <span class="fu">summary</span>(model_ga_apgar)<span class="sc">$</span>r.squared</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">r2_ga =</span> r2_ga, <span class="at">r2_ga_apgar =</span> r2_ga_apgar)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      r2_ga r2_ga_apgar 
+ 0.07895449  0.08943770 </code></pre>
+</div>
+</div>
+</section>
+<section id="justification-6" class="level3">
+<h3 class="anchored" data-anchor-id="justification-6">Justification</h3>
+<p>From the model with <strong>gestational age only</strong>, <span class="math inline">\(R^2 = \text{0.079}\)</span>, meaning about <strong>7.9%</strong> of the variation in systolic blood pressure is explained by gestational age alone.</p>
+<p>From the model with <strong>gestational age + five-minute Apgar score</strong>, <span class="math inline">\(R^2 = \text{0.089}\)</span>, meaning about <strong>8.9%</strong> of the variation is explained when both predictors are included.</p>
+<p>The increase in <span class="math inline">\(R^2\)</span> is:</p>
+<p><span class="math display">\[
+\Delta R^2 = \text{0.01},
+\]</span></p>
+<p>which is <strong>1 percentage points</strong>.</p>
+<p>Interpretation: The overall <span class="math inline">\(R^2\)</span> values are small, indicating that most of the variability in SBP remains unexplained by these predictors. The inclusion of Apgar score yields only a minor increase in <span class="math inline">\(R^2\)</span>, suggesting little improvement in predictive ability beyond gestational age alone. This is consistent with the non-significant <span class="math inline">\(p\)</span>-value for the Apgar coefficient in part (b).</p>
+<ol start="7" type="a">
+<li>Construct a plot of the residuals versus the fitted values of systolic blood pressure . What does this plot tell you about the fit of the model to observed data?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get fitted values and residuals</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>lowbwt<span class="sc">$</span>resid <span class="ot">&lt;-</span> <span class="fu">resid</span>(model_ga_apgar)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>lowbwt<span class="sc">$</span>fitted <span class="ot">&lt;-</span> <span class="fu">fitted</span>(model_ga_apgar)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(lowbwt, <span class="fu">aes</span>(<span class="at">x =</span> fitted, <span class="at">y =</span> resid)) <span class="sc">+</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Fitted values (SBP, mmHg)"</span>,</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Residuals"</span>,</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Residuals vs. Fitted Values"</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="HW12_files/figure-html/plot-residuals-fitted-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Residuals vs.&nbsp;fitted values for SBP model</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="justification-7" class="level3">
+<h3 class="anchored" data-anchor-id="justification-7">Justification</h3>
+<p>The residuals vs.&nbsp;fitted values plot assesses whether the linear model assumptions are reasonable.</p>
+<p>In this plot, the residuals are scattered fairly evenly around zero across the range of fitted SBP values, with no strong curvature. This suggests that:</p>
+<ul>
+<li>The <strong>linearity assumption</strong> is reasonable — there is no obvious systematic pattern in the residuals.</li>
+<li>The <strong>constant variance (homoscedasticity)</strong> assumption appears mostly satisfied — the spread of residuals is roughly constant across fitted values.</li>
+</ul>
+<p>However, there is some variability in spread at different fitted values, which could indicate mild heteroscedasticity. Overall, the plot does not reveal major violations of model assumptions, but the relatively small <span class="math inline">\(R^2\)</span> from earlier parts suggests that much of the variability in SBP is unexplained by the predictors.</p>
+</section>
+<section id="chapter-19-problem-9" class="level3">
+<h3 class="anchored" data-anchor-id="chapter-19-problem-9">Chapter 19, Problem 9</h3>
+<p>The dataset lowbwt also contains sex.</p>
+<ol type="a">
+<li>Add the indicator sex (1 for male, 0 for female) to the model that contains gestational age. Given two infants with the same gestational ages, one male and the other female, which would tend to have the higher systolic blood pressure? By how much, on average?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the model: gestational age + apgar + sex</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>model_ga_apgar_sex <span class="ot">&lt;-</span> <span class="fu">lm</span>(sbp <span class="sc">~</span> gestage <span class="sc">+</span> apgar5 <span class="sc">+</span> sex, <span class="at">data =</span> lowbwt)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize model</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_ga_apgar_sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = sbp ~ gestage + apgar5 + sex, data = lowbwt)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-21.854  -7.996  -1.046   5.092  38.737 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)   
+(Intercept)   9.3235    12.7371   0.732  0.46595   
+gestage       1.1853     0.4440   2.670  0.00892 **
+apgar5        0.4747     0.4635   1.024  0.30840   
+sex           1.2434     2.2253   0.559  0.57764   
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 11.03 on 96 degrees of freedom
+Multiple R-squared:  0.09239,   Adjusted R-squared:  0.06403 
+F-statistic: 3.257 on 3 and 96 DF,  p-value: 0.02494</code></pre>
+</div>
+</div>
+</section>
+<section id="justification-8" class="level3">
+<h3 class="anchored" data-anchor-id="justification-8">Justification</h3>
+<p>We extend the model from 8(b) by adding the indicator variable <strong>Sex</strong> (1 = male, 0 = female):</p>
+<p><span class="math display">\[
+\hat{y} = \hat{\alpha} + \hat{\beta}_1 \cdot \text{Gestational Age}
+          + \hat{\beta}_2 \cdot \text{Apgar 5}
+          + \hat{\beta}_3 \cdot \text{Sex}.
+\]</span></p>
+<p>From the fitted model:</p>
+<ul>
+<li><strong>Sex coefficient</strong>:<br>
+<span class="math inline">\(\hat{\beta}_3 = \text{1.243}\)</span> mmHg<br>
+<span class="math inline">\(p = \text{0.578}\)</span></li>
+</ul>
+<p>Interpretation:<br>
+Holding gestational age and Apgar score constant, male infants are predicted to have systolic blood pressure that is <strong>1.243 mmHg</strong> higher (if positive) or lower (if negative) than female infants.</p>
+<ol start="2" type="a">
+<li>Construct a two-way scatter plot of systolic blood pressure versus gestational age. On the graph, draw the two separate least-squares regression lines corresponding to males and females. Is the gender difference at each value of gestational age significantly different from 0?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the GA + Apgar + Sex model</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>lowbwt<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">factor</span>(lowbwt<span class="sc">$</span>sex, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Female"</span>, <span class="st">"Male"</span>))</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>model_ga_apgar_sex <span class="ot">&lt;-</span> <span class="fu">lm</span>(sbp <span class="sc">~</span> gestage <span class="sc">+</span> apgar5 <span class="sc">+</span> sex, <span class="at">data =</span> lowbwt)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Hold Apgar constant at its mean for plotting regression lines</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>mean_apgar <span class="ot">&lt;-</span> <span class="fu">mean</span>(lowbwt<span class="sc">$</span>apgar5, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Create dataset for fitted lines</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>newdat <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">gestage =</span> <span class="fu">seq</span>(<span class="fu">min</span>(lowbwt<span class="sc">$</span>gestage), <span class="fu">max</span>(lowbwt<span class="sc">$</span>gestage), <span class="at">length.out =</span> <span class="dv">50</span>),</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">sex =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">apgar5 =</span> mean_apgar</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>newdat<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">factor</span>(newdat<span class="sc">$</span>sex, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Female"</span>, <span class="st">"Male"</span>))</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Predicted values</span></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>newdat<span class="sc">$</span>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_ga_apgar_sex, <span class="at">newdata =</span> newdat)</span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatter plot with regression lines</span></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(lowbwt, <span class="fu">aes</span>(<span class="at">x =</span> gestage, <span class="at">y =</span> sbp, <span class="at">color =</span> <span class="fu">factor</span>(sex, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Female"</span>, <span class="st">"Male"</span>)))) <span class="sc">+</span></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> newdat, <span class="fu">aes</span>(<span class="at">x =</span> gestage, <span class="at">y =</span> pred, <span class="at">color =</span> sex), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Gestational Age (weeks)"</span>,</span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Systolic Blood Pressure (mmHg)"</span>,</span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Sex"</span>,</span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"SBP vs. Gestational Age by Sex (Apgar held at mean)"</span></span>
+<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="HW12_files/figure-html/plot-sbp-ga-sex-apgar-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>SBP vs.&nbsp;gestational age with separate regression lines by sex (Apgar adjusted)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="justification-9" class="level3">
+<h3 class="anchored" data-anchor-id="justification-9">Justification</h3>
+<p>From the GA + Apgar + Sex model:</p>
+<ul>
+<li><strong>Sex coefficient</strong>:<br>
+<span class="math inline">\(\hat{\beta}_\text{Sex} = \text{1.243}\)</span> mmHg<br>
+<span class="math inline">\(p = \text{0.578}\)</span></li>
+</ul>
+<p>Interpretation:<br>
+At any fixed gestational age, and with Apgar score held constant, male infants are predicted to have systolic blood pressure that is <strong>1.243 mmHg</strong> higher (if positive) or lower (if negative) than female infants.</p>
+<p>Since <span class="math inline">\(p = \text{0.578} &gt; 0.05\)</span>, this gender difference is <strong>not statistically significant</strong> at <span class="math inline">\(\alpha = 0.05\)</span>.</p>
+<p>The parallel regression lines in the plot reflect that the model does not include an interaction term between gestational age and sex, so the effect of gestational age on SBP is assumed to be the same for both sexes.</p>
+<ol start="3" type="a">
+<li>Add to the model a third explanatory variable that is the interaction between gestational age and sex. Does gestational age have a different effect on systolic blood pressure depending on the sex of the infant?</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit interaction model</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>model_ga_apgar_sex_int <span class="ot">&lt;-</span> <span class="fu">lm</span>(sbp <span class="sc">~</span> gestage <span class="sc">*</span> sex <span class="sc">+</span> apgar5, <span class="at">data =</span> lowbwt)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarize model</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_ga_apgar_sex_int)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = sbp ~ gestage * sex + apgar5, data = lowbwt)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-22.534  -7.660  -0.943   5.246  38.697 
+
+Coefficients:
+                Estimate Std. Error t value Pr(&gt;|t|)  
+(Intercept)      14.4355    15.2461   0.947   0.3461  
+gestage           1.0072     0.5313   1.896   0.0611 .
+sexMale         -15.7541    27.7402  -0.568   0.5714  
+apgar5            0.4795     0.4651   1.031   0.3052  
+gestage:sexMale   0.5881     0.9567   0.615   0.5402  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 11.07 on 95 degrees of freedom
+Multiple R-squared:  0.09599,   Adjusted R-squared:  0.05792 
+F-statistic: 2.522 on 4 and 95 DF,  p-value: 0.04606</code></pre>
+</div>
+</div>
+</section>
+<section id="justification-10" class="level3">
+<h3 class="anchored" data-anchor-id="justification-10">Justification</h3>
+<p>We extend the model from 9(a) by adding the interaction term between gestational age and sex:</p>
+<p><span class="math display">\[
+\hat{y} = \hat{\alpha}
+        + \hat{\beta}_1 \cdot \text{Gestational Age}
+        + \hat{\beta}_2 \cdot \text{Sex}
+        + \hat{\beta}_3 \cdot \text{Apgar 5}
+        + \hat{\beta}_4 \cdot (\text{Gestational Age} \times \text{Sex}),
+\]</span></p>
+<p>where Sex = 1 for male, 0 for female.</p>
+<p>From the fitted model:</p>
+<ul>
+<li><strong>Interaction coefficient (<span class="math inline">\(\hat{\beta}_4\)</span>)</strong>:<br>
+<span class="math inline">\(\hat{\beta}_4 = \text{0.588}\)</span> mmHg/week<br>
+<span class="math inline">\(p = \text{0.54}\)</span></li>
+</ul>
+<p>Interpretation:<br>
+<span class="math inline">\(\hat{\beta}_4\)</span> represents the difference in the <strong>slope</strong> of systolic blood pressure vs.&nbsp;gestational age between males and females, after adjusting for Apgar score.</p>
+<p>Since <span class="math inline">\(p = \text{0.54} &gt; 0.05\)</span>, we <strong>fail to reject</strong> <span class="math inline">\(H_0: \beta_4 = 0\)</span>.</p>
+<p><strong>Conclusion:</strong> There is insufficient evidence to conclude that the effect of gestational age on SBP differs by sex in this sample, once Apgar score is taken into account.</p>
+<ol start="4" type="a">
+<li>Would you choose to include sex and the gestational age-sex interaction term simultaneously? Why or why not?</li>
+</ol>
+</section>
+<section id="chapter-19-problem-10" class="level3">
+<h3 class="anchored" data-anchor-id="chapter-19-problem-10">Chapter 19, Problem 10</h3>
+<p>The Bayley Scales of Infant Development yield scores on two indices–the Psychomotor Development Index (PDI) and the Mental Development Index (MDI)–which can be use to assess a child’s level of functioning in each of these areas at approximately one year of age. Among normal healthy infants, both indices have a mean value of 100. As part of a study assessing the development and neurologic status of children who have undergone reparative heart surgery during the first three months of life, the Bayley Scales were administered to a sample of one-year-old infants with congenital heart disease. The children had been randomized to one of two different treatment groups, known as “circulatory arrest” and “low-flow bypass.” The groups differed in the specific way in which the reparative surgery was performed. Unlike circulatory arrest, low-flow bypass maintains continuous circulation through the brain; although it is felt to be preferable by some physicians, it also has its own risk of brain injury. The data contained in the data set heart. PDI scores are saved under the variable name pdi while MDI scores are saved under mdi and indicators of treatment group under trtment. For this variable, 0 represents circulatory arrest and 1 is for low-flow bypass.</p>
+<ol type="a">
+<li><p>In Chapter 11, the two-sample t-test was used to compare mean PDI and MDI scores for infants assigned to the two treatment groups. These analyses could also be performed with linear regression. Fit two linear regression models, one with PDI score as the response and the other with MDI score as the response. Write the equations.</p></li>
+<li><p>Who is more likely to have a higher PDI score (which treatment group). How much higher, on average?</p></li>
+<li><p>Who is more likely to have a higher MDI score (which treatment group). How much higher, on average?</p></li>
+<li><p>Which score (if either) is different between groups at a statistically significant level?</p></li>
+</ol>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

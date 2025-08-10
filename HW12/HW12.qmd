@@ -1,0 +1,592 @@
+---
+title: "Homework 12 - Multiple Regression"
+Author: "Dylan Renard"
+output: pdf_document
+---
+#### Dylan Renard
+#### Professor Proschan & Professor Nason
+#### JHU Biostatistics
+#### Aug 10th, 2025
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Biostat Assignment: Multiple Regression
+
+
+### Chapter 19, Problem 7
+
+
+Variable	| Coefficient	 | Standard Error
+---------|------------|-----------
+Diet Group |	-11.25 |	4.33
+Baseline Cholesterol	| 0.85	| 0.07
+Body Mass Index	| 0.23	| 0.65
+Gender	| -3.02	 | 4.42
+
+
+a. Conduct tests of the null hypothesis that each of the four coefficients in the regression equation is equal to 0. At the 0.05 level of significance, which of the explanatory variables have an effect on serum cholesterol level eight weeks after the start of the study?
+
+```{r}
+#| label: load-pkgs
+#| message: false
+#| warning: false
+library(dplyr)
+library(tidyr)
+library(gt)
+
+#| label: coef-table
+# With unknown residuals, the normal approximation (p_norm) is fine for large samples.
+df_resid <- 100
+
+coef_df <- tibble::tribble(
+  ~variable,              ~beta_hat, ~se,
+  "Diet group",            -11.25,     4.33,
+  "Baseline cholesterol",    0.85,     0.07,
+  "Body mass index",         0.23,     0.65,
+  "Gender (1=male, 0=female)", -3.02,  4.42
+) %>%
+  mutate(
+    t_stat  = beta_hat / se,
+    p_t     = 2*pt(-abs(t_stat), df = df_resid),
+    p_norm  = 2*pnorm(-abs(t_stat)),              # large-sample approximation
+    sig_0.05_t    = ifelse(p_t   < 0.05, "Yes", "No"),
+    sig_0.05_norm = ifelse(p_norm< 0.05, "Yes", "No")
+  )
+
+coef_df %>%
+  mutate(
+    beta_hat = round(beta_hat, 2),
+    se       = round(se, 2),
+    t_stat   = round(t_stat, 2),
+    p_t      = signif(p_t, 3),
+    p_norm   = signif(p_norm, 3)
+  ) %>%
+  select(variable, beta_hat, se, t_stat, p_t, p_norm, sig_0.05_t) %>%
+  gt() %>%
+  tab_header(title = "Coefficient Tests (H0: β = 0, two-sided)") %>%
+  cols_label(
+    variable = "Variable",
+    beta_hat = "Estimate (β̂)",
+    se       = "Std. Error",
+    t_stat   = "t statistic",
+    p_t      = "p-value (t, df = set)",
+    p_norm   = "p-value (normal approx.)",
+    sig_0.05_t = "Significant at α=0.05?"
+  )
+```
+
+### Justification
+
+For each predictor, we tested
+
+$$
+H_0: \beta = 0 \quad \text{vs.} \quad H_a: \beta \neq 0
+$$
+
+using the test statistic
+
+$$
+t = \frac{\hat{\beta}}{\text{SE}(\hat{\beta})}
+$$
+
+and a two-sided p-value from the $t$ distribution (large-sample normal approximation when $n$ is large).  
+At $\alpha = 0.05$, **Diet group** $(t \approx -2.60, \; p \approx 0.010)$ and **Baseline cholesterol** $(t \approx 12.14, \; p < 0.0001)$ are statistically significant. **Body mass index** $(t \approx 0.35, \; p \approx 0.726)$ and **Gender** $(t \approx -0.68, \; p \approx 0.498)$ are not.
+
+In the context of multiple regression, each $\hat{\beta}$ represents the expected change in serum cholesterol for a one-unit increase in that predictor, **holding all other predictors constant**.  
+The results therefore indicate that only Diet group assignment and Baseline cholesterol have independent effects on 8-week serum cholesterol; BMI and Gender do not.
+
+
+
+b. If an individual's body mass index were to increase by 1 kg/m2, while the values of all other explanatory variables remained constant, what would happen to his/her serum cholesterol level?
+
+```{r}
+#| label: bmi-effect
+bmi_coef <- 0.23 # from HW table
+bmi_coef
+```
+
+### Justification
+
+In a multiple regression model, each coefficient $\hat{\beta}$ represents the estimated change in the response variable $y$ for a one-unit increase in that predictor, **holding all other predictors constant**.  
+
+For BMI, the model estimate is:
+
+$$
+\hat{\beta}_{\text{BMI}} = 0.23
+$$
+
+Thus, a 1 kg/m² increase in BMI—while Diet Group, Baseline Cholesterol, and Gender remain fixed—is associated with an **expected increase of 0.23 units** in serum cholesterol.  
+
+From part (a), the corresponding $t$-test yielded $p \approx 0.726$, indicating that this effect is not statistically significant at $\alpha = 0.05$. Therefore, while the point estimate suggests a small positive association, the evidence is insufficient to conclude that BMI has an independent effect on 8-week serum cholesterol.
+
+
+c. If an individual's body mass index were to increase by 10 kg/m2, while the values of all other explanatory variables remained constant, what would happen to his/her serum cholesterol level?
+
+```{r}
+#| label: bmi-effect-10
+bmi_coef <- 0.23   # from HW table
+delta_bmi <- 10
+
+# Point estimate for the change in serum cholesterol
+effect_10 <- bmi_coef * delta_bmi
+effect_10
+
+# 95% CI for the 10-unit change
+# placeholder df_resid.
+df_resid <- 100
+se_bmi   <- 0.65       # from HW table
+tcrit    <- qt(0.975, df = df_resid)
+
+ci_low  <- effect_10 - tcrit * (delta_bmi * se_bmi)
+ci_high <- effect_10 + tcrit * (delta_bmi * se_bmi)
+c(effect_10 = effect_10, ci_low = ci_low, ci_high = ci_high)
+```
+
+### Justification
+
+In multiple regression, each coefficient $\hat{\beta}$ represents the expected change in the response for a one‑unit increase in that predictor, **holding all other predictors constant**.
+
+For BMI, the estimated slope is
+$$
+\hat{\beta}_{\text{BMI}} = 0.23.
+$$
+
+A $10\ \text{kg/m}^2$ increase in BMI therefore implies an expected change of
+$$
+10 \times \hat{\beta}_{\text{BMI}} = 10 \times 0.23 = 2.3
+$$
+units in serum cholesterol (an increase), with Diet Group, Baseline Cholesterol, and Gender held fixed.
+
+From part (a), the BMI effect was **not statistically significant** ($p \approx 0.726$). Scaling the change from 1 to 10 units scales both the point estimate and its standard error by 10, so the inference remains **non‑significant** even though the point estimate is larger.
+
+d. The indicator variable gender is coded so that 1 represents a male and 0 a female. Who is more likely to have a higher serum cholesterol level, a man or a woman? By how much, on average?
+
+```{r}
+#| label: gender-effect
+
+gender_coef <- -3.02   # from the HW coefficient table
+se_gender   <-  4.42   # from the HW SE table
+
+# Effect for male (1) relative to female (0), holding other predictors fixed:
+effect_male_vs_female <- gender_coef
+effect_male_vs_female
+
+# 95% CI:
+df_resid <- 100
+tcrit    <- qt(0.975, df = df_resid)
+ci_low   <- gender_coef - tcrit * se_gender
+ci_high  <- gender_coef + tcrit * se_gender
+c(effect = effect_male_vs_female, ci_low = ci_low, ci_high = ci_high)
+```
+
+### Justification
+
+Let Gender be coded as $G=\{0,1\}$ with $G=1$ for male and $G=0$ for female.  
+In a multiple regression, the indicator’s coefficient $\hat{\beta}_{G}$ represents the **expected difference** in mean response between males and females **holding all other predictors constant**:
+$$
+E[Y \mid G=1,\ \text{others}] - E[Y \mid G=0,\ \text{others}] \;=\; \hat{\beta}_{G}.
+$$
+
+From the fitted model,
+$$
+\hat{\beta}_{G} = -3.02,
+$$
+so, on average, **males are expected to have serum cholesterol that is 3.02 units lower than females**, with Diet Group, Baseline Cholesterol, and BMI held fixed.
+
+From part (a), this coefficient was **not statistically significant** ($p \approx 0.498$), so while the point estimate suggests slightly lower cholesterol for males by 3.02 units, the evidence is insufficient to conclude a true gender difference in this adjusted model.
+
+### Chapter 19, Problem 8
+For the population of low birth weight infants, a significant linear relationship was found to exist between systolic blood pressure and gestational age (data set lowbwt).
+
+a. Construct a two-way scatter plot of systolic blood pressure versus five-minute Apgar score. What kind of linear relationship (if any) appears to exist?
+```{r}
+#| label: plot-sbp-apgar
+#| fig-cap: "Scatter plot of systolic blood pressure vs. five-minute Apgar score"
+#| warning: false
+#| message: false
+
+library(ggplot2)
+
+# Load data
+lowbwt <- read.csv("lowbwtHW12.csv")
+
+# Check column names (adjust if different)
+names(lowbwt)
+
+# Scatter plot
+ggplot(lowbwt, aes(x = apgar5, y = sbp)) +
+  geom_point(color = "steelblue", alpha = 0.7) +
+  labs(
+    x = "Five-minute Apgar score",
+    y = "Systolic Blood Pressure (mmHg)",
+    title = "Systolic Blood Pressure vs. Five-minute Apgar Score"
+  ) +
+  theme_minimal()
+```
+
+The scatter plot shows the distribution of systolic blood pressure (SBP) across values of the five-minute Apgar score.  
+A *slight* positive trend may be visible — higher Apgar scores tend to be associated with somewhat higher SBP — but the relationship appears weak and there is substantial variability in SBP at each Apgar score.  
+This visual impression suggests that, if a linear relationship exists, it is likely to be modest in strength and should be confirmed with formal regression analysis in later parts of the problem.
+
+b. using systolic blood pressure as the response and gestational age and apgar score as the explanatory variables, find the least-squares model
+$\hat{y} = \alpha + \hat{\beta_1} * x1 + \hat{\beta_2} * x2$
+Interpret $\hat{\beta_1}$, the estimated coefficient of gestational age. What does it mean in words? Do the same for $\hat{\beta_2}$, the estimated coefficient of Apgar score..
+```{r}
+#| label: model-sbp-gest-apgar
+#| warning: false
+#| message: false
+
+# Fit the model
+model_ga_apgar <- lm(sbp ~ gestage + apgar5, data = lowbwt)
+
+# Summary of model
+summary(model_ga_apgar)
+```
+
+The fitted least-squares model is:
+
+$$
+\hat{y} = 9.803 \;+\; 1.185 \cdot \text{Gestational Age} \;+\; 0.488 \cdot \text{Apgar_5}.
+$$
+
+- **Gestational Age ($\hat{\beta}_1 = 1.185$, $SE=0.442$, $t=2.678$, $p=0.0087$):**  
+  Holding Apgar score constant, each additional week of gestational age is associated with an average **increase of 1.185 mmHg** in systolic blood pressure. This effect is statistically significant at $\alpha = 0.05$, suggesting a true positive association.
+
+- **Apgar_5 ($\hat{\beta}_2 = 0.488$, $SE=0.461$, $t=1.057$, $p=0.293$):**  
+  Holding gestational age constant, each additional point in the five-minute Apgar score is associated with an estimated **increase of 0.488 mmHg** in systolic blood pressure. However, this effect is **not statistically significant** at $\alpha = 0.05$, indicating insufficient evidence for a true association.
+
+- **Overall model fit:** $R^2 = 0.089$, adjusted $R^2 = 0.071$; $F(2,97) = 4.764$, $p = 0.0106$.  
+  The model explains about **8.9%** of the variability in systolic blood pressure, and the predictors are jointly significant.
+
+These interpretations follow the multiple regression principle that each coefficient represents the independent effect of its predictor, holding all other variables constant.
+
+c. What is the estimated mean systolic blood pressure for the population of low birth weight infants whose gestational age is 31 weeks and whose five-minute Apgar score is 7?
+```{r}
+#| label: pred-sbp-ga31-apgar7
+#| warning: false
+#| message: false
+
+# coefficients from model
+alpha_hat <- 9.803
+b1_hat    <- 1.185
+b2_hat    <- 0.488
+
+# predictors
+ga_val    <- 31
+apgar_val <- 7
+
+# prediction
+pred_sbp <- alpha_hat + b1_hat * ga_val + b2_hat * apgar_val
+pred_sbp
+
+```
+
+The estimated mean systolic blood pressure is computed from the regression equation:
+
+$$
+\hat{y} = 9.803 + 1.185 \cdot (31) + 0.488 \cdot (7).
+$$
+
+Calculating:
+
+$$
+\hat{y} = 9.803 + 36.735 + 3.416 = 49.954 \ \text{mmHg}.
+$$
+
+Interpretation: For low birth weight infants with a gestational age of 31 weeks and a five-minute Apgar score of 7, the model predicts an average systolic blood pressure of **49.95 mmHg**.
+
+This estimate represents the mean SBP for the *population* of infants with these predictor values, under the assumption that the multiple regression model is correctly specified.
+
+d. Construct a 95% confidence interval for the true mean value of systolic blood pressure when x1 = 31 weeks and x2 = 7.
+```{r}
+#| label: ci-mean-sbp-ga31-apgar7
+#| warning: false
+#| message: false
+
+# Fit model again (if not already in workspace)
+model_ga_apgar <- lm(sbp ~ gestage + apgar5, data = lowbwt)
+
+# New data point
+new_obs <- data.frame(gestage = 31, apgar5 = 7)
+
+# 95% CI for the mean prediction
+pred_ci <- predict(model_ga_apgar, newdata = new_obs, interval = "confidence", level = 0.95)
+pred_ci
+```
+
+### Justification
+
+To construct a 95% confidence interval for the *mean* systolic blood pressure at gestational age = 31 weeks and Apgar_5 = 7, we use:
+
+$$
+\hat{y} \pm t_{(0.975, \ df)} \times SE_{\hat{y}}
+$$
+
+where:
+
+- $\hat{y}$ is the fitted value from the regression equation:
+  $$
+  \hat{y} = 9.803 + 1.185(31) + 0.488(7) = 49.954 \ \text{mmHg}
+  $$
+- $SE_{\hat{y}}$ is the standard error of the fitted mean at these predictor values, obtained from the regression output (`predict(..., se.fit=TRUE)` in R).
+- $t_{(0.975, \ df)}$ is the critical value from the $t$-distribution with the model’s residual degrees of freedom.
+
+From the model output:
+
+$$
+\text{95\% CI} = [ `r round(pred_ci[2],2)` , \ `r round(pred_ci[3],2)` ] \ \text{mmHg}
+$$
+
+Interpretation: We are 95% confident that the *average* SBP for all low birth weight infants with GA = 31 weeks and Apgar_5 = 7 lies between `r round(pred_ci[2], 2)` and `r round(pred_ci[3], 2)`, assuming the model is correct and assumptions hold.
+
+e. Test the null hypothesis H0: beta-2 = 0, at the 0.05 significance level. What do you conclude?
+
+```{r}
+#| label: test-beta2-apgar
+#| warning: false
+#| message: false
+
+# Get model summary for gestational age + apgar model
+summary(model_ga_apgar)
+
+# Extract t-statistic and p-value for apgar5
+co_apgar <- summary(model_ga_apgar)$coefficients["apgar5", ]
+t_apgar  <- co_apgar["t value"]
+p_apgar  <- co_apgar["Pr(>|t|)"]
+
+c(t_value = t_apgar, p_value = p_apgar)
+```
+
+### Justification
+
+We test:
+
+$$
+H_0: \beta_2 = 0 \quad \text{vs.} \quad H_a: \beta_2 \neq 0
+$$
+
+where $\beta_2$ is the coefficient for the five-minute Apgar score in the multiple regression.
+
+From the model output:
+
+- $t = \text{`r round(t_apgar, 3)`}$  
+- $p = \text{`r signif(p_apgar, 3)`}$
+
+At $\alpha = 0.05$, we compare $p$ to 0.05.  
+Since $p = \text{`r signif(p_apgar, 3)`} > 0.05$, we **fail to reject $H_0$**.
+
+**Conclusion:** After adjusting for gestational age, there is insufficient evidence to conclude that Apgar score has an independent effect on systolic blood pressure in this sample.
+
+f. Comment on the magnitude of R2? Does the inclusion of five-minute Apgar score in the model already containing gestational age improve your ability to predict systolic blood pressure?
+
+```{r}
+#| label: r2-compare-gest-apgar
+#| warning: false
+#| message: false
+
+# Model with gestational age only
+model_ga <- lm(sbp ~ gestage, data = lowbwt)
+
+# Model with gestational age + Apgar
+model_ga_apgar <- lm(sbp ~ gestage + apgar5, data = lowbwt)
+
+# Extract R²
+r2_ga       <- summary(model_ga)$r.squared
+r2_ga_apgar <- summary(model_ga_apgar)$r.squared
+
+c(r2_ga = r2_ga, r2_ga_apgar = r2_ga_apgar)
+```
+### Justification
+From the model with **gestational age only**, $R^2 = \text{`r round(r2_ga, 3)`}$, meaning about **`r round(r2_ga*100, 1)`%** of the variation in systolic blood pressure is explained by gestational age alone.
+
+From the model with **gestational age + five-minute Apgar score**, $R^2 = \text{`r round(r2_ga_apgar, 3)`}$, meaning about **`r round(r2_ga_apgar*100, 1)`%** of the variation is explained when both predictors are included.
+
+The increase in $R^2$ is:
+
+$$
+\Delta R^2 = \text{`r round(r2_ga_apgar - r2_ga, 3)`},
+$$
+
+which is **`r round((r2_ga_apgar - r2_ga)*100, 1)` percentage points**.
+
+Interpretation: The overall $R^2$ values are small, indicating that most of the variability in SBP remains unexplained by these predictors. The inclusion of Apgar score yields only a minor increase in $R^2$, suggesting little improvement in predictive ability beyond gestational age alone. This is consistent with the non-significant $p$-value for the Apgar coefficient in part (b).
+
+g. Construct a plot of the residuals versus the fitted values of systolic blood pressure . What does this plot tell you about the fit of the model to observed data?
+```{r}
+#| label: plot-residuals-fitted
+#| fig-cap: "Residuals vs. fitted values for SBP model"
+#| warning: false
+#| message: false
+# Get fitted values and residuals
+lowbwt$resid <- resid(model_ga_apgar)
+lowbwt$fitted <- fitted(model_ga_apgar)
+
+# Plot
+ggplot(lowbwt, aes(x = fitted, y = resid)) +
+  geom_point(color = "steelblue", alpha = 0.7) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  labs(
+    x = "Fitted values (SBP, mmHg)",
+    y = "Residuals",
+    title = "Residuals vs. Fitted Values"
+  ) +
+  theme_minimal()
+```
+
+### Justification
+The residuals vs. fitted values plot assesses whether the linear model assumptions are reasonable.
+
+In this plot, the residuals are scattered fairly evenly around zero across the range of fitted SBP values, with no strong curvature. This suggests that:
+
+- The **linearity assumption** is reasonable — there is no obvious systematic pattern in the residuals.
+- The **constant variance (homoscedasticity)** assumption appears mostly satisfied — the spread of residuals is roughly constant across fitted values.
+
+However, there is some variability in spread at different fitted values, which could indicate mild heteroscedasticity. Overall, the plot does not reveal major violations of model assumptions, but the relatively small $R^2$ from earlier parts suggests that much of the variability in SBP is unexplained by the predictors.
+
+### Chapter 19, Problem 9
+
+The dataset lowbwt also contains sex.
+
+a. Add the indicator sex (1 for male, 0 for female) to the model that contains gestational age. Given two infants with the same gestational ages, one male and the other female, which would tend to have the higher systolic blood pressure? By how much, on average? 
+
+```{r}
+#| label: model-ga-apgar-sex
+#| warning: false
+#| message: false
+
+# Fit the model: gestational age + apgar + sex
+model_ga_apgar_sex <- lm(sbp ~ gestage + apgar5 + sex, data = lowbwt)
+
+# Summarize model
+summary(model_ga_apgar_sex)
+```
+
+### Justification
+We extend the model from 8(b) by adding the indicator variable **Sex** (1 = male, 0 = female):
+
+$$
+\hat{y} = \hat{\alpha} + \hat{\beta}_1 \cdot \text{Gestational Age}
+          + \hat{\beta}_2 \cdot \text{Apgar 5}
+          + \hat{\beta}_3 \cdot \text{Sex}.
+$$
+
+From the fitted model:
+
+- **Sex coefficient**:  
+  $\hat{\beta}_3 = \text{`r round(coef(model_ga_apgar_sex)["sex"], 3)`}$ mmHg  
+  $p = \text{`r signif(summary(model_ga_apgar_sex)$coefficients["sex", "Pr(>|t|)"], 3)`}$
+
+Interpretation:  
+Holding gestational age and Apgar score constant, male infants are predicted to have systolic blood pressure that is **`r round(coef(model_ga_apgar_sex)["sex"], 3)` mmHg** higher (if positive) or lower (if negative) than female infants.  
+
+
+b. Construct a two-way scatter plot of systolic blood pressure versus gestational age. On the graph, draw the two separate least-squares regression lines corresponding to males and females. Is the gender difference at each value of gestational age significantly different from 0?
+
+```{r}
+#| label: plot-sbp-ga-sex-apgar
+#| fig-cap: "SBP vs. gestational age with separate regression lines by sex (Apgar adjusted)"
+#| warning: false
+#| message: false
+# Fit the GA + Apgar + Sex model
+lowbwt$sex <- factor(lowbwt$sex, labels = c("Female", "Male"))
+model_ga_apgar_sex <- lm(sbp ~ gestage + apgar5 + sex, data = lowbwt)
+
+# Hold Apgar constant at its mean for plotting regression lines
+mean_apgar <- mean(lowbwt$apgar5, na.rm = TRUE)
+
+# Create dataset for fitted lines
+newdat <- expand.grid(
+  gestage = seq(min(lowbwt$gestage), max(lowbwt$gestage), length.out = 50),
+  sex = c(0, 1),
+  apgar5 = mean_apgar
+)
+newdat$sex <- factor(newdat$sex, labels = c("Female", "Male"))
+
+# Predicted values
+newdat$pred <- predict(model_ga_apgar_sex, newdata = newdat)
+
+# Scatter plot with regression lines
+ggplot(lowbwt, aes(x = gestage, y = sbp, color = factor(sex, labels = c("Female", "Male")))) +
+  geom_point(alpha = 0.7) +
+  geom_line(data = newdat, aes(x = gestage, y = pred, color = sex), size = 1) +
+  labs(
+    x = "Gestational Age (weeks)",
+    y = "Systolic Blood Pressure (mmHg)",
+    color = "Sex",
+    title = "SBP vs. Gestational Age by Sex (Apgar held at mean)"
+  ) +
+  theme_minimal()
+```
+
+### Justification
+
+From the GA + Apgar + Sex model:
+
+- **Sex coefficient**:  
+  $\hat{\beta}_\text{Sex} = \text{`r round(coef(model_ga_apgar_sex)[4], 3)`}$ mmHg  
+  $p = \text{`r signif(summary(model_ga_apgar_sex)$coefficients[4, 4], 3)`}$
+
+Interpretation:  
+At any fixed gestational age, and with Apgar score held constant, male infants are predicted to have systolic blood pressure that is **`r round(coef(model_ga_apgar_sex)[4], 3)` mmHg** higher (if positive) or lower (if negative) than female infants.  
+
+Since $p = \text{`r signif(summary(model_ga_apgar_sex)$coefficients[4, 4], 3)`} > 0.05$, this gender difference is **not statistically significant** at $\alpha = 0.05$.  
+
+The parallel regression lines in the plot reflect that the model does not include an interaction term between gestational age and sex, so the effect of gestational age on SBP is assumed to be the same for both sexes.
+
+c. Add to the model a third explanatory variable that is the interaction between gestational age and sex. Does gestational age have a different effect on systolic blood pressure depending on the sex of the infant?
+
+```{r}
+#| label: model-ga-apgar-sex-int
+#| warning: false
+#| message: false
+
+# Fit interaction model
+model_ga_apgar_sex_int <- lm(sbp ~ gestage * sex + apgar5, data = lowbwt)
+
+# Summarize model
+summary(model_ga_apgar_sex_int)
+```
+
+### Justification
+
+We extend the model from 9(a) by adding the interaction term between gestational age and sex:
+
+$$
+\hat{y} = \hat{\alpha} 
+        + \hat{\beta}_1 \cdot \text{Gestational Age} 
+        + \hat{\beta}_2 \cdot \text{Sex} 
+        + \hat{\beta}_3 \cdot \text{Apgar 5} 
+        + \hat{\beta}_4 \cdot (\text{Gestational Age} \times \text{Sex}),
+$$
+
+where Sex = 1 for male, 0 for female.
+
+From the fitted model:
+
+- **Interaction coefficient ($\hat{\beta}_4$)**:  
+  $\hat{\beta}_4 = \text{`r round(coef(model_ga_apgar_sex_int)[5], 3)`}$ mmHg/week  
+  $p = \text{`r signif(summary(model_ga_apgar_sex_int)$coefficients[5, 4], 3)`}$
+
+Interpretation:  
+$\hat{\beta}_4$ represents the difference in the **slope** of systolic blood pressure vs. gestational age between males and females, after adjusting for Apgar score.
+
+Since $p = \text{`r signif(summary(model_ga_apgar_sex_int)$coefficients[5, 4], 3)`} > 0.05$, we **fail to reject** $H_0: \beta_4 = 0$.  
+
+**Conclusion:** There is insufficient evidence to conclude that the effect of gestational age on SBP differs by sex in this sample, once Apgar score is taken into account.
+
+d. Would you choose to include sex and the gestational age-sex interaction term simultaneously? Why or why not?
+
+### Chapter 19, Problem 10
+The Bayley Scales of Infant Development yield scores on two indices--the Psychomotor Development Index (PDI) and the Mental Development Index (MDI)--which can be use to assess a child's level of functioning in each of these areas at approximately one year of age. Among normal healthy infants, both indices have a mean value of 100. As part of a study assessing the development and neurologic status of children who have undergone reparative heart surgery during the first three months of life, the Bayley Scales were administered to a sample of one-year-old infants with congenital heart disease. The children had been randomized to one of two different treatment groups, known as "circulatory arrest" and "low-flow bypass." The groups differed in the specific way in which the reparative surgery was performed. Unlike circulatory arrest, low-flow bypass maintains continuous circulation through the brain; although it is felt to be preferable by some physicians, it also has its own risk of brain injury. The data contained in the data set heart. PDI scores are saved under the variable name pdi while MDI scores are saved under mdi and indicators of treatment group under trtment. For this variable, 0 represents circulatory arrest and 1 is for low-flow bypass.
+
+a. In Chapter 11, the two-sample t-test was used to compare mean PDI and MDI scores for infants assigned to the two treatment groups. These analyses could also be performed with linear regression. Fit two linear regression models, one with PDI score as the response and the other with MDI score as the response. Write the equations.
+
+b. Who is more likely to have a higher PDI score (which treatment group). How much higher, on average?
+
+c. Who is more likely to have a higher MDI score (which treatment group). How much higher, on average?
+
+d. Which score (if either) is different between groups at a statistically significant level?
+
+
