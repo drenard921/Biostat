@@ -452,88 +452,77 @@ The dataset lowbwt also contains sex.
 a. Add the indicator sex (1 for male, 0 for female) to the model that contains gestational age. Given two infants with the same gestational ages, one male and the other female, which would tend to have the higher systolic blood pressure? By how much, on average? 
 
 ```{r}
-#| label: model-ga-apgar-sex
+#| label: model-ga-sex
 #| warning: false
 #| message: false
 
-# Fit the model: gestational age + apgar + sex
-model_ga_apgar_sex <- lm(sbp ~ gestage + apgar5 + sex, data = lowbwt)
+# Fit the model: gestational age + sex
+model_ga_sex <- lm(sbp ~ gestage + sex, data = lowbwt)
 
 # Summarize model
-summary(model_ga_apgar_sex)
+summary(model_ga_sex)
 ```
 
 ### Justification
-We extend the model from 8(b) by adding the indicator variable **Sex** (1 = male, 0 = female):
+We fit the model:
 
 $$
-\hat{y} = \hat{\alpha} + \hat{\beta}_1 \cdot \text{Gestational Age}
-          + \hat{\beta}_2 \cdot \text{Apgar 5}
-          + \hat{\beta}_3 \cdot \text{Sex}.
+\hat{y} = \hat{\alpha} + \hat{\beta}_1 \cdot \text{Gestational Age} + \hat{\beta}_2 \cdot \text{Sex},
 $$
+
+where Sex = 1 for male, 0 for female.
 
 From the fitted model:
 
 - **Sex coefficient**:  
-  $\hat{\beta}_3 = \text{`r round(coef(model_ga_apgar_sex)["sex"], 3)`}$ mmHg  
-  $p = \text{`r signif(summary(model_ga_apgar_sex)$coefficients["sex", "Pr(>|t|)"], 3)`}$
+  $\hat{\beta}_2 = \text{`r round(coef(model_ga_sex)[3], 3)`}$ mmHg  
+  $p = \text{`r signif(summary(model_ga_sex)$coefficients[3, 4], 3)`}$
 
 Interpretation:  
-Holding gestational age and Apgar score constant, male infants are predicted to have systolic blood pressure that is **`r round(coef(model_ga_apgar_sex)["sex"], 3)` mmHg** higher (if positive) or lower (if negative) than female infants.  
+Holding gestational age constant, male infants are predicted to have **`r round(coef(model_ga_sex)[3], 3)` mmHg** higher (if positive) or lower (if negative) systolic blood pressure than female infants.  
 
+Since $p = \text{`r signif(summary(model_ga_sex)$coefficients[3, 4], 3)`} > 0.05$, this difference is **not statistically significant** at $\alpha = 0.05$.
 
 b. Construct a two-way scatter plot of systolic blood pressure versus gestational age. On the graph, draw the two separate least-squares regression lines corresponding to males and females. Is the gender difference at each value of gestational age significantly different from 0?
 
 ```{r}
-#| label: plot-sbp-ga-sex-apgar
-#| fig-cap: "SBP vs. gestational age with separate regression lines by sex (Apgar adjusted)"
+#| label: plot-sbp-ga-sex
+#| fig-cap: "SBP vs. gestational age with separate regression lines by sex"
 #| warning: false
 #| message: false
-# Fit the GA + Apgar + Sex model
-lowbwt$sex <- factor(lowbwt$sex, labels = c("Female", "Male"))
-model_ga_apgar_sex <- lm(sbp ~ gestage + apgar5 + sex, data = lowbwt)
-
-# Hold Apgar constant at its mean for plotting regression lines
-mean_apgar <- mean(lowbwt$apgar5, na.rm = TRUE)
-
-# Create dataset for fitted lines
+# Predict lines from the GA + sex model
 newdat <- expand.grid(
   gestage = seq(min(lowbwt$gestage), max(lowbwt$gestage), length.out = 50),
-  sex = c(0, 1),
-  apgar5 = mean_apgar
+  sex = c(0, 1)  # keep numeric for prediction
 )
-newdat$sex <- factor(newdat$sex, labels = c("Female", "Male"))
-
-# Predicted values
-newdat$pred <- predict(model_ga_apgar_sex, newdata = newdat)
+newdat$pred <- predict(model_ga_sex, newdata = newdat)
 
 # Scatter plot with regression lines
 ggplot(lowbwt, aes(x = gestage, y = sbp, color = factor(sex, labels = c("Female", "Male")))) +
   geom_point(alpha = 0.7) +
-  geom_line(data = newdat, aes(x = gestage, y = pred, color = sex), size = 1) +
+  geom_line(data = newdat, aes(x = gestage, y = pred, color = factor(sex, labels = c("Female", "Male"))), size = 1) +
   labs(
     x = "Gestational Age (weeks)",
     y = "Systolic Blood Pressure (mmHg)",
     color = "Sex",
-    title = "SBP vs. Gestational Age by Sex (Apgar held at mean)"
+    title = "SBP vs. Gestational Age by Sex"
   ) +
   theme_minimal()
 ```
-
 ### Justification
-
-From the GA + Apgar + Sex model:
+From the GA + sex model:
 
 - **Sex coefficient**:  
-  $\hat{\beta}_\text{Sex} = \text{`r round(coef(model_ga_apgar_sex)[4], 3)`}$ mmHg  
-  $p = \text{`r signif(summary(model_ga_apgar_sex)$coefficients[4, 4], 3)`}$
+  $\hat{\beta}_2 = \text{`r round(coef(model_ga_sex)[3], 3)`}$ mmHg  
+  $p = \text{`r signif(summary(model_ga_sex)$coefficients[3, 4], 3)`}$
 
 Interpretation:  
-At any fixed gestational age, and with Apgar score held constant, male infants are predicted to have systolic blood pressure that is **`r round(coef(model_ga_apgar_sex)[4], 3)` mmHg** higher (if positive) or lower (if negative) than female infants.  
+At any given gestational age, male infants are predicted to have **`r round(coef(model_ga_sex)[3], 3)` mmHg** higher (if positive) or lower (if negative) systolic blood pressure than female infants.  
 
-Since $p = \text{`r signif(summary(model_ga_apgar_sex)$coefficients[4, 4], 3)`} > 0.05$, this gender difference is **not statistically significant** at $\alpha = 0.05$.  
+Since $p = \text{`r signif(summary(model_ga_sex)$coefficients[3, 4], 3)`} > 0.05$, the gender difference is **not statistically significant** at $\alpha = 0.05$.  
 
-The parallel regression lines in the plot reflect that the model does not include an interaction term between gestational age and sex, so the effect of gestational age on SBP is assumed to be the same for both sexes.
+The parallel regression lines in the plot reflect that the model does not include an interaction term, so the effect of gestational age on SBP is assumed to be the same for both sexes.
+
 
 c. Add to the model a third explanatory variable that is the interaction between gestational age and sex. Does gestational age have a different effect on systolic blood pressure depending on the sex of the infant?
 
@@ -577,6 +566,31 @@ Since $p = \text{`r signif(summary(model_ga_apgar_sex_int)$coefficients[5, 4], 3
 **Conclusion:** There is insufficient evidence to conclude that the effect of gestational age on SBP differs by sex in this sample, once Apgar score is taken into account.
 
 d. Would you choose to include sex and the gestational age-sex interaction term simultaneously? Why or why not?
+
+```{r}
+#| label: model-ga-sex-int
+#| warning: false
+#| message: false
+
+# Fit model with interaction
+model_ga_sex_int <- lm(sbp ~ gestage * sex, data = lowbwt)
+
+# Summarize model
+summary(model_ga_sex_int)
+```
+
+### Justification
+To decide whether to include both **sex** and the **gestational age × sex interaction** in the model, we look at the p-value for the interaction term:
+
+- Interaction coefficient:  
+  $\hat{\beta}_{GA \times Sex} = \text{`r round(coef(model_ga_sex_int)[4], 3)`}$ mmHg/week  
+  $p = \text{`r signif(summary(model_ga_sex_int)$coefficients[4, 4], 3)`}$
+
+Since $p = \text{`r signif(summary(model_ga_sex_int)$coefficients[4, 4], 3)`} > 0.05$, the interaction is **not statistically significant** at $\alpha = 0.05$.
+
+**Interpretation:**  
+This means there is insufficient evidence to conclude that the effect of gestational age on SBP differs between males and females. Including the interaction term would add complexity without providing a significant improvement in fit.
+
 
 ### Chapter 19, Problem 10
 The Bayley Scales of Infant Development yield scores on two indices--the Psychomotor Development Index (PDI) and the Mental Development Index (MDI)--which can be use to assess a child's level of functioning in each of these areas at approximately one year of age. Among normal healthy infants, both indices have a mean value of 100. As part of a study assessing the development and neurologic status of children who have undergone reparative heart surgery during the first three months of life, the Bayley Scales were administered to a sample of one-year-old infants with congenital heart disease. The children had been randomized to one of two different treatment groups, known as "circulatory arrest" and "low-flow bypass." The groups differed in the specific way in which the reparative surgery was performed. Unlike circulatory arrest, low-flow bypass maintains continuous circulation through the brain; although it is felt to be preferable by some physicians, it also has its own risk of brain injury. The data contained in the data set heart. PDI scores are saved under the variable name pdi while MDI scores are saved under mdi and indicators of treatment group under trtment. For this variable, 0 represents circulatory arrest and 1 is for low-flow bypass.
