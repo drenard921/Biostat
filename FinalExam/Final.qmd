@@ -29,6 +29,7 @@ $$
 
 ```{r}
 library(dplyr)
+library(gt)
 ```
 
 
@@ -69,12 +70,105 @@ out <- data.frame(
   Lower95CI = c(CI_OR[1], CI_RR[1]),
   Upper95CI = c(CI_OR[2], CI_RR[2])
 )
-out[] <- lapply(out, function(x) if(is.numeric(x)) round(x, 3) else x)
-knitr::kable(out, caption = "Q2(a) Manual effect estimates with 95% CIs")
+out |> gt() |> tab_header(title = "Q2(a) Manual effect estimates with 95% CIs")
 ```
 
-#### Q2 (b)
+
+
+####  Q2 (d)
+
+
+Under the null hypothesis of no association between drug regimen and achieving A1c < 7,  
+we assume the row and column variables are **independent**.  
+In that case, the probability of being in a given cell is the product of its row probability and column probability.  
+Multiplying these probabilities by the total sample size $N$ gives the expected count formula:
+
+$$
+E_{ij} = \frac{(\text{row total}_i) \times (\text{column total}_j)}{N}
+$$
+
+For example:  
+- $$E_{\text{drug1},<7} = \frac{156 \times 184}{344} = 83.48$$  
+- $$E_{\text{drug1},\ge 7} = \frac{156 \times 160}{344} = 72.52$$  
+- $$E_{\text{drug2},<7} = \frac{188 \times 184}{344} = 100.52$$  
+- $$E_{\text{drug2},\ge 7} = \frac{188 \times 160}{344} = 87.48$$
+
 ```{r}
-# Q2(b): Which measure if design is unknown?
-cat("Use the **odds ratio**. It is valid regardless of sampling design (including case–control), whereas the risk ratio requires risks/incidence and isn’t defined for case–control data.")
-````
+# Q2(d): Expected counts under H0 (no association)
+
+library(gt)
+
+# Observed table (rows: drug1, drug2; cols: <7, >=7)
+O <- matrix(c(110, 46,
+              74, 114),
+            nrow = 2, byrow = TRUE,
+            dimnames = list(Drug = c("drug1","drug2"),
+                            A1c  = c("<7", ">=7")))
+
+# Totals
+row_tot <- rowSums(O)
+col_tot <- colSums(O)
+N <- sum(O)
+
+# Expected counts formula: E_ij = (row_i * col_j) / N
+E <- outer(row_tot, col_tot) / N
+
+# Show the math in-line for clarity
+explain <- sprintf(
+  paste0("E[drug1,<7] = 156*184/344 = %.2f;  ",
+         "E[drug1,>=7] = 156*160/344 = %.2f;  ",
+         "E[drug2,<7] = 188*184/344 = %.2f;  ",
+         "E[drug2,>=7] = 188*160/344 = %.2f."),
+  E[1,1], E[1,2], E[2,1], E[2,2]
+)
+
+# Table of expected counts (rounded for display only)
+make_table <- function(m, title){
+  as.data.frame.matrix(round(m, 2)) |>
+    tibble::rownames_to_column("Drug") |>
+    gt() |>
+    tab_header(title = title)
+}
+
+
+make_table(E, "Q2(d) Expected counts under H0")
+```
+
+## Q2(e): Chi-square statistic
+
+We test independence using the Pearson chi-square:
+
+$$
+\chi^2 \;=\; \sum_{i,j} \frac{(O_{ij}-E_{ij})^2}{E_{ij}}, \quad \text{df} = (r-1)(c-1) = 1.
+$$
+
+
+```{r}
+# Recreate observed counts (rows: drug1, drug2; cols: <7, >=7)
+O <- matrix(c(110, 46,
+              74, 114),
+            nrow = 2, byrow = TRUE,
+            dimnames = list(Drug = c("drug1","drug2"),
+                            A1c  = c("<7", ">=7")))
+
+# Expected counts from part (d)
+row_tot <- rowSums(O); col_tot <- colSums(O); N <- sum(O)
+E <- outer(row_tot, col_tot) / N
+
+# Chi-square components and statistic
+contrib <- (O - E)^2 / E
+chisq_stat <- sum(contrib)
+df <- (nrow(O)-1)*(ncol(O)-1)
+pval <- 1 - pchisq(chisq_stat, df = df)
+
+# Nicely show contributions (optional)
+as.data.frame.matrix(round(contrib, 3)) |>
+  tibble::rownames_to_column("Drug") |>
+  gt() |>
+  tab_header(title = "Cell-wise chi-square contributions")
+
+# Final result
+data.frame(Statistic = round(chisq_stat, 2), df = df, p_value = signif(pval, 4)) |>
+  gt() |>
+  tab_header(title = "Q2(e) Chi-square test result")
+```
