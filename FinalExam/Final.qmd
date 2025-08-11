@@ -1,0 +1,80 @@
+---
+title: "Final Scratch Work - Biostatistics"
+Author: "Dylan Renard"
+output: pdf_document
+---
+
+#### Dylan Renard
+#### Professor Proschan & Professor Nason
+#### JHU Biostatistics
+#### Aug 10th, 2025
+
+
+### Q5 Simple Linear Regression Question (A,B,C,D) 10 pts
+
+(a) **Fitted Equation**
+
+### The Fitted equation from this lienar model is:
+$$
+\widehat{\text{CognitiveScoreChange}} = -5.160 - 0.148 \cdot \text{Age}
+$$
+
+### Where:
+
+- **The Intercept** **($\beta_0 = -5.160$)** is the predicted change in cognitive score when Age = 0. While this value is not meaningful in practice, it serves as our y-intercept in the linear model.
+
+### and: 
+
+- **The Slope** **($\beta_1 = -0.148$)** indicates that each additional year of age is associated with a predicted decrease of 0.148 points in cognitive score.
+
+```{r}
+library(dplyr)
+```
+
+
+### Q2 Odds ratio and Chi-squared tests (A,B,C,D,E)
+#### Q2(a): recreate table and compute OR & RR
+```{r}
+# Q2(a) manual calculations: OR, RR, 95% CIs
+
+# Observed 2x2 (rows: drug1, drug2; cols: <7, >=7)
+tab <- matrix(c(110, 46,
+                74, 114),
+              nrow = 2, byrow = TRUE,
+              dimnames = list(Drug = c("drug1","drug2"),
+                              A1c  = c("<7", ">=7")))
+tab
+
+a <- tab[1,1]; b <- tab[1,2]
+c <- tab[2,1]; d <- tab[2,2]
+
+# Odds Ratio
+OR <- (a*d)/(b*c)
+logOR <- log(OR)
+se_logOR <- sqrt(1/a + 1/b + 1/c + 1/d)
+CI_OR <- exp(logOR + c(-1,1)*1.96*se_logOR)
+
+# Risk Ratio
+p1 <- a/(a+b)
+p0 <- c/(c+d)
+RR <- p1/p0
+# Wald SE for log(RR)
+se_logRR <- sqrt( (1/a) - (1/(a+b)) + (1/c) - (1/(c+d)) )
+CI_RR <- exp(log(RR) + c(-1,1)*1.96*se_logRR)
+
+# Pretty output
+out <- data.frame(
+  Measure = c("Odds Ratio (drug1/drug2)", "Risk Ratio (drug1/drug2)"),
+  Estimate = c(OR, RR),
+  Lower95CI = c(CI_OR[1], CI_RR[1]),
+  Upper95CI = c(CI_OR[2], CI_RR[2])
+)
+out[] <- lapply(out, function(x) if(is.numeric(x)) round(x, 3) else x)
+knitr::kable(out, caption = "Q2(a) Manual effect estimates with 95% CIs")
+```
+
+#### Q2 (b)
+```{r}
+# Q2(b): Which measure if design is unknown?
+cat("Use the **odds ratio**. It is valid regardless of sampling design (including case–control), whereas the risk ratio requires risks/incidence and isn’t defined for case–control data.")
+````
