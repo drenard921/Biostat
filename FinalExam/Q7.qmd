@@ -1,0 +1,99 @@
+---
+title: "Q7 — Lassa Fever Pilot Study"
+format: docx
+---
+
+## 1) Pilot Data Summary
+| Outcome   | n  | mean_CT | sd_CT | median_CT | mean_age |
+|-----------|----|---------|-------|-----------|----------|
+| Died      | 4  | 25.50   | 4.65  | 25.5      | 33.13    |
+| Survived  | 21 | 31.81   | 4.24  | 31.0      | 31.23    |
+
+**Interpretation:** Survivors had higher CT values (lower viral load) than those who died. The group sizes are small and unequal, which guided the test selection in the next step.
+
+---
+
+## 2) Mean CT Difference (Unadjusted & Adjusted)
+
+| Comparison                                | Estimate | CI_Lower | CI_Upper | p_value |
+|-------------------------------------------|----------|----------|----------|---------|
+| Unadjusted (Welch t-test)                  | -6.31    | -13.26   | 0.64     | 0.065   |
+| Adjusted (Linear regression: +Age +Gender) | 7.54     | 3.26     | 11.82    | 0.001   |
+
+**Methodology:**  
+The Welch’s t-test was used for the unadjusted comparison because it compares the means of two independent groups without assuming equal variances — a safer choice given our small and unequal group sizes. Linear regression was then used for the adjusted analysis to estimate the mean CT difference while controlling for age and sex, reducing confounding and isolating the association with survival.
+
+**Interpretation:** The unadjusted result is borderline significant at α = 0.05. After adjustment, the mean CT difference is statistically significant, supporting the hypothesized relationship.
+
+---
+
+## 3) Required Sample Size for 90% Power
+
+**Formula:**  
+$$
+n_{\text{per group}} = 2 \left( \frac{z_{1-\alpha/2} + z_{1-\beta}}{\Delta / s} \right)^2
+$$
+
+- $$z_{1-\alpha/2} = 1.96$$ for α = 0.05 (two-sided)  
+- $$z_{1-\beta} = 1.2816$$ for 90% power  
+- $$s = 4.655$$ (larger pilot SD for conservatism)  
+- $$\Delta = 4$$ (clinically meaningful mean difference)
+
+| Outcome  | sd_CT |
+|----------|-------|
+| Died     | 4.655 |
+| Survived | 4.238 |
+| SD used  | 4.655 |
+| Required n per group (Δ = 4) | 29 |
+
+**Interpretation:** Using the larger group SD makes the estimate conservative, ensuring adequate sample size even in the more variable group. Enrolling 29 per group will provide 90% power to detect a 4-point difference in CT at α = 0.05.
+
+---
+
+## Conclusion
+Pilot data suggest survivors present with higher CT values, indicating lower viral load at admission. Adjustment for age and sex strengthens the statistical evidence. The sample size estimate of 29 per group offers a practical target for designing the larger study, though results should be interpreted cautiously due to the small pilot sample.
+
+---
+
+## Appendix: Full R Code
+```{r}
+library(dplyr); library(broom)
+
+dat <- read.csv("lassa.csv") |>
+  mutate(
+    Outcome = factor(ifelse(Died == 1, "Died", "Survived")),
+    Gender  = factor(ifelse(Female == 1, "Female", "Male"))
+  )
+
+# 1) Summaries
+summ_tab <- dat |>
+  group_by(Outcome) |>
+  summarise(
+    n         = n(),
+    mean_CT   = mean(CT, na.rm = TRUE),
+    sd_CT     = sd(CT,   na.rm = TRUE),
+    median_CT = median(CT, na.rm = TRUE),
+    mean_age  = mean(Age, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+# 2) Unadjusted & adjusted
+tt <- t.test(CT ~ Outcome, data = dat, var.equal = FALSE)
+tt_row <- tidy(tt) |>
+  transmute(Comparison = "Unadjusted (Welch t-test)",
+            Estimate = estimate, CI_Lower = conf.low, CI_Upper = conf.high, p_value = p.value)
+
+fit <- lm(CT ~ Outcome + Age + Gender, data = dat)
+adj_row <- tidy(fit, conf.int = TRUE) |>
+  filter(term == "OutcomeSurvived") |>
+  transmute(Comparison = "Adjusted (Linear regression: +Age +Gender)",
+            Estimate = estimate, CI_Lower = conf.low, CI_Upper = conf.high, p_value = p.value)
+
+# 3) Sample size calc
+sds <- dat |>
+  group_by(Outcome) |>
+  summarise(sd_CT = sd(CT, na.rm = TRUE), .groups = "drop")
+s_used <- max(sds$sd_CT)
+alpha <- 0.05; z_alpha <- qnorm(1 - alpha/2); z_beta <- qnorm(0.90); Delta <- 4
+n_per_group <- ceiling(2 * ((z_alpha + z_beta)^2) * (s_used^2) / (Delta^2))
+```
