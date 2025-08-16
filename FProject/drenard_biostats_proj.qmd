@@ -1,0 +1,395 @@
+---
+title: "Sugar Content Estimation and Cola Preference Study"
+author: "Dylan Renard"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: true
+    theme: cosmo
+editor: source
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+```{r setup, include=FALSE}
+# ---- Class-scope packages ----
+if (!requireNamespace("tidyverse", quietly = TRUE)) install.packages("tidyverse")
+if (!requireNamespace("DT", quietly = TRUE)) install.packages("DT")
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(DT)
+})
+has_openxlsx <- requireNamespace("openxlsx", quietly = TRUE)
+if (has_openxlsx) library(openxlsx)
+
+set.seed(42)
+
+# ---- Data loading (prefers your XLSX) ----
+xlsx1 <- "Dylan's AMC Movie Tickets Biostatistics Sweepstakes!.xlsx"
+csv2  <- "soda_survey.csv"
+
+if (file.exists(xlsx1) && has_openxlsx) {
+  df_raw <- openxlsx::read.xlsx(xlsx1, sheet = 1)
+} else if (file.exists(csv2)) {
+  df_raw <- readr::read_csv(csv2, show_col_types = FALSE)
+} else {
+  stop("Place the XLSX or CSV next to this .qmd (need either the XLSX or 'soda_survey.csv').")
+}
+
+nm <- names(df_raw)
+
+# ---- Column detection (fixed-string starts; no regex escapes) ----
+base_hdr <- "How.many.grams.of.sugar.do.you.guess.are.in.this.12-oz.soft-drink?"
+guess_cols <- nm[startsWith(nm, base_hdr)]
+if (length(guess_cols) < 5) stop("Could not find all five sugar-guess columns. Found: ", paste(nm, collapse=", "))
+guess_cols <- guess_cols[order(nchar(guess_cols), guess_cols)]
+
+pref_col   <- nm[nm == "Which.soft-drink.do.you.prefer"]
+gender_col <- nm[nm == "What.is.your.Gender.Identity?"]
+age_col    <- nm[nm == "What.is.your.age?"]
+
+weekly_prefix <- "How.many.canned/bottled.soft.drinks.do.you.drink.in.a.typical.week?"
+weekly_cols <- nm[startsWith(nm, weekly_prefix)]
+if (length(pref_col) == 0 || length(gender_col) == 0 || length(age_col) == 0 || length(weekly_cols) == 0) {
+  stop("Missing a key column (preference, gender, age, or weekly). Headers were: ", paste(nm, collapse=", "))
+}
+weekly_col <- weekly_cols[1]
+
+# ---- Build analysis data ----
+numify <- function(x) suppressWarnings(as.numeric(as.character(x)))
+df0 <- df_raw %>%
+  mutate(
+    q1_silver = numify(.data[[guess_cols[1]]]),
+    q2_blue   = numify(.data[[guess_cols[2]]]),
+    q3_red    = numify(.data[[guess_cols[3]]]),
+    q4_pepsi  = numify(.data[[guess_cols[4]]]),
+    q5_coke   = numify(.data[[guess_cols[5]]]),
+    age       = numify(.data[[age_col]]),
+    gender    = as.character(.data[[gender_col]]),
+    weekly    = numify(.data[[weekly_col]]),
+    prefer_raw = as.character(.data[[pref_col]])
+  ) %>%
+  mutate(
+    gender_simple = case_when(
+      str_detect(tolower(gender), "female|woman") ~ "Female",
+      str_detect(tolower(gender), "male|man")     ~ "Male",
+      TRUE ~ "Other"
+    ),
+    soda_drinker = if_else(replace_na(weekly, 0) > 0, "Soda", "Non-soda"),
+    prefer = case_when(
+      str_detect(tolower(prefer_raw), "coke")      ~ "Coke",
+      str_detect(tolower(prefer_raw), "pepsi")     ~ "Pepsi",
+      str_detect(tolower(prefer_raw), "diet|zero") ~ "Diet",
+      TRUE ~ NA_character_
+    )
+  )
+
+# ---- Outlier removal: any guess > 100 g ----
+outlier_flag <- with(df0, q1_silver > 100 | q2_blue > 100 | q3_red > 100 | q4_pepsi > 100 | q5_coke > 100)
+df_removed <- df0 %>% filter(outlier_flag)
+df <- df0 %>% filter(!outlier_flag)
+
+N_total_raw <- nrow(df_raw)
+N_removed   <- nrow(df_removed)
+N_analytic  <- nrow(df)
+
+# ---- Helpers ----
+fmt_p <- function(p) {
+  if (is.null(p) || is.na(p)) return("NA")
+  if (p < 0.001) return("<0.001")
+  sprintf("%.3f", p)
+}
+decide <- function(p, alt_text = "reject H0", null_text = "fail to reject H0") {
+  if (is.null(p) || is.na(p)) return("insufficient data to test")
+  if (p < 0.05) alt_text else null_text
+}
+grab_cell <- function(tbl, variable, contrast, col) {
+  sub <- tbl %>% filter(variable == !!variable, contrast == !!contrast)
+  if (nrow(sub) == 0) return(NA_real_)
+  sub[[col]][1]
+}
+
+run_2group <- function(data, var, group_col, gA, gB) {
+  dat <- data %>% filter(.data[[group_col]] %in% c(gA, gB)) %>% select(all_of(group_col), all_of(var)) %>% drop_na()
+  lv <- levels(factor(dat[[group_col]]))
+  if (length(lv) != 2) {
+    return(tibble(variable=var, contrast=paste(gA, "vs", gB), n=nrow(dat), welch_p=NA_real_, mw_p=NA_real_))
+  }
+  nA <- sum(dat[[group_col]] == gA); nB <- sum(dat[[group_col]] == gB)
+  if (nA == 0 || nB == 0) {
+    return(tibble(variable=var, contrast=paste(gA, "vs", gB), n=nrow(dat), welch_p=NA_real_, mw_p=NA_real_))
+  }
+  fml <- reformulate(group_col, response = var)
+  tibble(
+    variable = var, contrast = paste(gA, "vs", gB), n = nrow(dat),
+    welch_p  = tryCatch(t.test(fml, data=dat, var.equal=FALSE)$p.value, error=function(e) NA_real_),
+    mw_p     = tryCatch(wilcox.test(fml, data=dat)$p.value, error=function(e) NA_real_)
+  )
+}
+
+# Z-scores across Q1..Q5
+guesses <- df %>% select(q1_silver, q2_blue, q3_red, q4_pepsi, q5_coke)
+row_m <- apply(guesses, 1, function(x) mean(x, na.rm=TRUE))
+row_s <- apply(guesses, 1, function(x) sd(x,   na.rm=TRUE))
+zmat  <- sweep(guesses, 1, row_m, `-`)
+zmat  <- sweep(zmat,    1, ifelse(row_s==0, NA, row_s), `/`)
+colnames(zmat) <- paste0(colnames(zmat), "_z")
+df <- bind_cols(df, as_tibble(zmat))
+
+# Coke absolute error
+df <- df %>% mutate(coke_abserr = abs(q5_coke - 39))
+
+# ---- Power preparation ----
+# H1: one-sample prop power within gender for a 0.65 vs 0.50 alternative (alpha=.05)
+pref_gender <- df %>% filter(prefer %in% c("Coke","Pepsi"), gender_simple %in% c("Female","Male")) %>%
+  mutate(coke_ind = if_else(prefer=="Coke",1L,0L))
+nF <- sum(pref_gender$gender_simple=="Female")
+nM <- sum(pref_gender$gender_simple=="Male")
+powF <- if (nF>0) power.prop.test(n=nF, p1=0.65, p2=0.50, sig.level=0.05, alternative="two.sided")$power else NA_real_
+powM <- if (nM>0) power.prop.test(n=nM, p1=0.65, p2=0.50, sig.level=0.05, alternative="two.sided")$power else NA_real_
+
+# H2: detectable paired difference at ~80% power
+diffs <- df$q5_coke - df$q1_silver
+sd_diff <- sd(diffs, na.rm=TRUE); n_pairs <- sum(!is.na(diffs))
+detect_delta <- NA_real_
+if (!is.na(sd_diff) && n_pairs>1) {
+  deltas <- seq(1, 10, by=0.1)
+  powers <- sapply(deltas, function(d) power.t.test(n=n_pairs, delta=d, sd=sd_diff,
+                                                    type="paired", alternative="two.sided")$power)
+  if (any(powers>=0.8)) detect_delta <- deltas[which(powers>=0.8)[1]]
+}
+```
+
+# Abstract
+
+We examined gender differences in **Coke vs Pepsi** preference and the accuracy of sugar estimates for **12‑oz** sodas in a randomized‑order, convenience‑sample survey. Outliers (>100 g on any can) were excluded _a priori_. We used **prop.test**, **paired t‑tests** with **Wilcoxon** sensitivity, and **Welch/Mann–Whitney** for group comparisons of standardized z‑scores and absolute error. We add per‑hypothesis p‑values, confidence intervals, explicit decision statements, societal implications, and brief power notes.
+
+# Introduction
+
+Public perception of beverage sugar content often diverges from nutritional values, potentially influencing consumption behavior. We assessed (a) whether Coke is equally preferred across gender and (b) whether branding shifts perceived sugar content relative to an unbranded control. Secondary analyses explored standardized within‑person sweetness sentiment and estimation accuracy.
+
+# Method
+
+## Participants and Sampling
+
+Participants were recruited via a **convenience sample** from my workplace, University of Iowa researchers, Johns Hopkins Bioinformatics students, and LinkedIn connections. The sample exhibited slightly higher male participation and a skew toward Coke preference.
+**Study link (data collection form):** <a href="https://forms.office.com/r/LPVjczSM1P" target="_blank">https://forms.office.com/r/LPVjczSM1P</a>
+
+
+## Materials and Procedure
+
+Participants viewed five can images—Silver (Q1), Blue (Q2), Red (Q3), Pepsi (Q4), and Coke (Q5)—in **randomized order** and estimated grams of sugar for each. Nutritional labels were hidden. Cola preference, weekly intake, age, and gender identity were collected.
+
+**Figure 1.** Images presented to participants (randomized order).
+
+<div style="display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start; border:1px solid #ddd; padding:10px;">
+  <figure style="margin:0"><img src="Control can.png" width="180"/><figcaption>Silver (Q1)</figcaption></figure>
+  <figure style="margin:0"><img src="blue can.png" width="180"/><figcaption>Blue (Q2)</figcaption></figure>
+  <figure style="margin:0"><img src="red can.png" width="180"/><figcaption>Red (Q3)</figcaption></figure>
+  <figure style="margin:0"><img src="Pepsi can.jpg" width="180"/><figcaption>Pepsi (Q4)</figcaption></figure>
+  <figure style="margin:0"><img src="coke can.jpeg" width="180"/><figcaption>Coke (Q5)</figcaption></figure>
+</div>
+
+## Design and Bias Control
+
+This was an **observational** survey with repeated measures per participant (Q1–Q5). To mitigate order effects, **image order was randomized** uniformly. Branding remained visible for Coke/Pepsi; the Silver can acted as a neutral control.
+
+### Blinding Justification
+
+A **fully blinded taste test** or label‑masking paradigm would better isolate branding effects. Given logistical constraints (remote data collection, single‑session design), complete blinding was not feasible. We therefore used **randomized image order** and a **neutral (Silver) control** as practical bias controls. This choice is acknowledged as a limitation.
+
+## Measures
+
+- **Sugar estimates:** self‑reported grams for each can.  
+- **Preference:** Coke/Pepsi/Diet.  
+- **Weekly intake:** numeric, used to classify **Soda vs Non‑soda** drinkers.  
+- **Demographics:** age, gender identity (consolidated into Female/Male/Other for analysis).
+
+## Data Treatment
+
+Outliers were defined _a priori_ as any record with **any** sugar guess **> 100 g**, removed to protect estimates from extreme entries. This threshold is conservative relative to typical 12‑oz soda values and was established before hypothesis testing. No personal identifiers are reported.
+
+## Sample Size and A Priori Power
+
+```{r sample-size, fig.cap="Table 1. Sample size counts."}
+tibble(
+  N_total_raw = N_total_raw,
+  N_removed_outliers_gt100g = N_removed,
+  N_analytic = N_analytic
+) %>% datatable(options = list(dom='t'), rownames = FALSE)
+```
+
+For **H1** (proportion test within each gender), power to detect a **15‑point deviation** (0.65 vs 0.50) at α = .05 was approximately **Female:** `r if (!is.na(powF)) sprintf('%.0f%%', 100*powF) else 'NA'`, **Male:** `r if (!is.na(powM)) sprintf('%.0f%%', 100*powM) else 'NA'` (Pagano & Gauvreau, 2018). For **H2** (paired), given the observed SD of differences `r round(sd_diff,2)` and `r n_pairs` pairs, the smallest **detectable difference** with ~80% power is about **`r if (!is.na(detect_delta)) round(detect_delta,1) else 'NA'` g**.
+
+# Results
+
+
+## Descriptive Statistics
+
+```{r descriptives-prep, include=FALSE}
+demo_gender <- df %>% count(gender_simple, name = "n") %>% mutate(pct = 100*n/sum(n))
+pref_counts <- df %>% filter(!is.na(prefer)) %>% count(prefer, name = "n") %>% mutate(pct = 100*n/sum(n))
+age_df <- df %>% filter(!is.na(age))
+```
+
+```{r figA_gender, fig.cap="Figure A. Gender composition of the analytic sample."}
+ggplot(demo_gender, aes(x=gender_simple, y=n)) +
+  geom_col() +
+  geom_text(aes(label=n), vjust=-0.2) +
+  labs(x="Gender", y="Count")
+```
+<div class="figure-note">Bars show the number of participants by gender. This contextualizes subgroup sizes used in hypothesis testing.</div>
+
+```{r figB_pref, fig.cap="Figure B. Cola preference distribution (Coke/Pepsi/Diet)."}
+ggplot(pref_counts, aes(x=prefer, y=n)) +
+  geom_col() +
+  geom_text(aes(label=n), vjust=-0.2) +
+  labs(x="Self-reported preference", y="Count")
+```
+<div class="figure-note">Counts of participants by stated preference. In our convenience sample, both men and women in my circle tended to prefer Coke.</div>
+
+```{r figC_age, fig.cap="Figure C. Age distribution (histogram) of the analytic sample."}
+ggplot(age_df, aes(x=age)) +
+  geom_histogram(bins=15) +
+  labs(x="Age (years)", y="Count")
+```
+<div class="figure-note">Histogram summarizing the age distribution, useful for understanding population heterogeneity and potential confounding.</div>
+
+## H1 — Coke vs Pepsi Preference by Gender (Primary)
+ — Coke vs Pepsi Preference by Gender (Primary)
+
+**Hypothesis.** Within each gender, P(Coke) = .50 (two‑sided).
+
+**Method.** One‑sample **prop.test** against .50 within Female and Male groups.
+
+```{r H1-results}
+run_prop <- function(dat, g) {
+  sub <- dat %>% filter(gender_simple==g)
+  if (nrow(sub)==0) return(tibble(gender=g, n=0, coke_n=NA, prop_coke=NA, p_value=NA, ci_l=NA, ci_u=NA))
+  x <- sum(sub$coke_ind); n <- nrow(sub)
+  pt <- prop.test(x, n, p=0.5, alternative="two.sided", correct=FALSE)
+  tibble(gender=g, n=n, coke_n=x, prop_coke=round(x/n,3), p_value=pt$p.value, ci_l=pt$conf.int[1], ci_u=pt$conf.int[2])
+}
+h1_tab <- bind_rows(run_prop(pref_gender,"Female"),
+                    run_prop(pref_gender,"Male"))
+datatable(h1_tab, options = list(dom='t'), rownames = FALSE)
+```
+
+**Narrative Results.** In our convenience sample drawn from my personal and professional circles, **Coke preference exceeded Pepsi in both genders**. For **Females**, the proportion preferring Coke was **`r if (nrow(h1_tab)>0) h1_tab$prop_coke[h1_tab$gender=='Female'] else NA`** (95% CI **[`r if (nrow(h1_tab)>0) round(h1_tab$ci_l[h1_tab$gender=='Female'],2) else NA`, `r if (nrow(h1_tab)>0) round(h1_tab$ci_u[h1_tab$gender=='Female'],2) else NA`]**), *p* = **`r if (nrow(h1_tab)>0) fmt_p(h1_tab$p_value[h1_tab$gender=='Female']) else 'NA'`** vs .50; for **Males**, the proportion was **`r if (nrow(h1_tab)>0) h1_tab$prop_coke[h1_tab$gender=='Male'] else NA`** (95% CI **[`r if (nrow(h1_tab)>0) round(h1_tab$ci_l[h1_tab$gender=='Male'],2) else NA`, `r if (nrow(h1_tab)>0) round(h1_tab$ci_u[h1_tab$gender=='Male'],2) else NA`]**), *p* = **`r if (nrow(h1_tab)>0) fmt_p(h1_tab$p_value[h1_tab$gender=='Male']) else 'NA'`**. We therefore **`r if (nrow(h1_tab)>0) decide(h1_tab$p_value[h1_tab$gender=='Female'], 'reject H0 for Females', 'fail to reject H0 for Females') else 'insufficient data'`** and **`r if (nrow(h1_tab)>0) decide(h1_tab$p_value[h1_tab$gender=='Male'], 'reject H0 for Males', 'fail to reject H0 for Males') else 'insufficient data'`**. Societally, if this preference pattern holds beyond our sample, it suggests brand loyalty toward Coke across genders within similar communities, relevant to **marketing strategies** and potential **public‑health messaging** around sugary beverage choice. Notably, several participants in my circle volunteered that they “usually choose Coke,” aligning with the observed proportions.
+
+## H2 — Silver vs Coke Estimates (Paired, Primary)
+
+**Hypothesis.** Mean difference (Q5 − Q1) = 0 (two‑sided).
+
+**Method.** **Paired t‑test** on within‑participant differences (Coke − Silver); **Wilcoxon** as sensitivity. Normality was visually assessed via histograms and QQ plots.
+
+```{r H2-results}
+df <- df %>% mutate(diff_q5_q1 = q5_coke - q1_silver)
+tt2 <- t.test(df$q5_coke, df$q1_silver, paired = TRUE)
+wx2 <- tryCatch(wilcox.test(df$q5_coke, df$q1_silver, paired = TRUE, conf.int = TRUE), error=function(e) NULL)
+
+h2_tab <- tibble(
+  metric = c("Mean (Q5 − Q1)","Paired t p","95% CI (L)","95% CI (U)","Wilcoxon p"),
+  value  = c(mean(df$diff_q5_q1, na.rm=TRUE), tt2$p.value,
+             tt2$conf.int[1], tt2$conf.int[2],
+             if (!is.null(wx2)) wx2$p.value else NA_real_)
+)
+datatable(h2_tab, options = list(dom='t'), rownames = FALSE)
+```
+
+
+```{r fig2_hist, fig.cap="Figure 2. Histogram of within-person differences (Coke − Silver)."}
+ggplot(df, aes(x=diff_q5_q1)) +
+  geom_histogram(bins=20) +
+  labs(x="Difference in grams (Coke − Silver)", y="Count")
+```
+<div class="figure-note">Bars to the right indicate higher perceived sugar for Coke. Useful to check approximate symmetry for t‑test assumptions.</div>
+
+
+```{r fig3_qq, fig.cap="Figure 3. QQ plot of (Coke − Silver) differences."}
+ggplot(df, aes(sample=diff_q5_q1)) +
+  stat_qq() + stat_qq_line() +
+  labs(x="Theoretical Quantiles", y="Sample Quantiles")
+```
+<div class="figure-note">Points close to the diagonal indicate approximate normality; large departures motivate nonparametric sensitivity (Wilcoxon).</div>
+
+
+```{r fig4_box, fig.cap="Figure 4. Boxplot of raw estimates: Silver vs Coke."}
+df %>%
+  select(q1_silver, q5_coke) %>%
+  pivot_longer(everything(), names_to="can", values_to="grams") %>%
+  ggplot(aes(x=can, y=grams)) +
+  geom_boxplot() +
+  labs(x=NULL, y="Estimated grams of sugar")
+```
+<div class="figure-note">The median line and IQR convey central tendency and variability of perceived sugar grams for each can.</div>
+
+
+**Narrative Results.** The mean within‑person difference (Coke − Silver) was **`r round(h2_tab$value[h2_tab$metric=='Mean (Q5 − Q1)'],2)` g** (95% CI **[`r round(h2_tab$value[h2_tab$metric=='95% CI (L)'],2)`, `r round(h2_tab$value[h2_tab$metric=='95% CI (U)'],2)`]**). The paired **t‑test** yielded *p* = **`r fmt_p(h2_tab$value[h2_tab$metric=='Paired t p'])`**, with Wilcoxon **`r if (!is.na(h2_tab$value[h2_tab$metric=='Wilcoxon p'])) paste('p =', fmt_p(h2_tab$value[h2_tab$metric=='Wilcoxon p'])) else 'p = NA'`** confirming the pattern. We therefore **`r decide(h2_tab$value[h2_tab$metric=='Paired t p'], 'reject H0 (branding shifts estimates)', 'fail to reject H0 (no clear shift)')`** at α = .05. If this difference generalizes, it implies **branding may systematically bias perceived sugar**, a consideration for **consumer education** and **labeling policy**. However, given convenience sampling and limited N, these inferences should be validated in larger, more controlled studies.
+
+## H3 — Relative Sweetness Sentiment (*z*) Across Groups (Secondary)
+
+**Hypothesis.** Mean *z*-scores equal across groups (two‑sided).
+
+**Method.** Standardized within‑person *z*-scores across Q1–Q5; compared groups via **Welch t** and **Mann–Whitney**.
+
+```{r H3-results}
+z_tests <- bind_rows(
+  run_2group(df, "q1_silver_z", "soda_drinker", "Non-soda", "Soda"),
+  run_2group(df, "q5_coke_z",   "soda_drinker", "Non-soda", "Soda"),
+  run_2group(df, "q1_silver_z", "gender_simple","Female", "Male"),
+  run_2group(df, "q5_coke_z",   "gender_simple","Female", "Male"),
+  run_2group(df, "q1_silver_z", "prefer",       "Diet", "Coke"),
+  run_2group(df, "q5_coke_z",   "prefer",       "Diet", "Coke")
+)
+datatable(z_tests, options = list(dom='t', scrollX = TRUE), rownames = FALSE)
+```
+
+**Narrative Results.** Group comparisons of standardized sweetness sentiment yielded mixed evidence. For example, **Non‑soda vs Soda** on Coke (*z*) produced Welch *p* = **`r fmt_p(grab_cell(z_tests,'q5_coke_z','Non-soda vs Soda','welch_p'))`** and Mann–Whitney *p* = **`r fmt_p(grab_cell(z_tests,'q5_coke_z','Non-soda vs Soda','mw_p'))`**, leading us to **`r decide(grab_cell(z_tests,'q5_coke_z','Non-soda vs Soda','welch_p'), 'reject H0', 'fail to reject H0')`**. If significant, such differences suggest **habitual soda intake may shape relative sweetness expectations**, relevant for designing **targeted nutrition education**. Comparisons by gender (**Female vs Male**) and preference type (**Diet vs Coke**) show similar decision logic; **non‑significant** results likely reflect **limited subgroup sizes** rather than true equivalence.
+
+## H4 — Coke Absolute Error Across Groups (Secondary)
+
+**Hypothesis.** Mean |Coke guess − 39| equal across groups (two‑sided).
+
+**Method.** Group comparisons using **Welch t** and **Mann–Whitney**.
+
+```{r H4-results}
+df <- df %>% mutate(coke_abserr = abs(q5_coke - 39))
+acc_tests <- bind_rows(
+  run_2group(df, "coke_abserr", "soda_drinker", "Non-soda", "Soda"),
+  run_2group(df, "coke_abserr", "gender_simple","Female", "Male"),
+  run_2group(df, "coke_abserr", "prefer",       "Diet", "Coke")
+)
+datatable(acc_tests, options = list(dom='t', scrollX = TRUE), rownames = FALSE)
+```
+
+**Narrative Results (3–5 sentences).** Absolute error in Coke estimates reflects **practical accuracy**. For **Non‑soda vs Soda**, Welch *p* = **`r fmt_p(grab_cell(acc_tests,'coke_abserr','Non-soda vs Soda','welch_p'))`** and Mann–Whitney *p* = **`r fmt_p(grab_cell(acc_tests,'coke_abserr','Non-soda vs Soda','mw_p'))`** lead us to **`r decide(grab_cell(acc_tests,'coke_abserr','Non-soda vs Soda','welch_p'), 'reject H0', 'fail to reject H0')`**. If significant, **non‑soda drinkers** may benefit from **targeted education** on typical sugar levels because their internal references are less calibrated. Patterns by **gender** and **preference** mirror this logic; **null findings** should be interpreted cautiously due to limited power.
+
+# Discussion
+
+Across hypotheses, we used standard methods from class (Pagano & Gauvreau, 2018) to evaluate preference balance, branding effects, relative sentiment, and accuracy. In our circles (workplace, academic peers), **both women and men tended to prefer Coke**, aligning with the H1 estimates and suggesting stable **brand loyalty** within similar communities. When branding effects on perceived sugar are present (H2), they imply that **labels and brand imagery** might influence estimates independent of actual content, which matters for **public‑health communication**. H3–H4 patterns indicate that **soda exposure and preference** can relate to **how people interpret sweetness** and **how accurately they estimate content**; these are actionable levers for **nutrition education**.
+
+
+# Overall Conclusion
+
+This project combined a randomized‑order image survey with standard biostatistical tools from class to examine preference balance and perceived sugar content in 12‑oz sodas. The design deliberately prioritized practicality (online administration, repeated within‑person judgments) while controlling observable sources of bias (randomized order, a neutral Silver control) and pre‑specifying an outlier rule (>100 g on any can). Although the sample was a convenience cohort drawn from my professional and academic networks, the study produced interpretable estimates with clear limits on generalizability.
+
+For **H1**, we tested whether Coke preference equals 50% within each gender. Among **Females**, the estimated proportion preferring Coke was **`r if (exists('h1_tab') && nrow(h1_tab)>0) h1_tab$prop_coke[h1_tab$gender=='Female'] else NA`** with 95% CI **[`r if (exists('h1_tab') && nrow(h1_tab)>0) round(h1_tab$ci_l[h1_tab$gender=='Female'],2) else NA`, `r if (exists('h1_tab') && nrow(h1_tab)>0) round(h1_tab$ci_u[h1_tab$gender=='Female'],2) else NA`]**, yielding *p* = **`r if (exists('h1_tab') && nrow(h1_tab)>0) fmt_p(h1_tab$p_value[h1_tab$gender=='Female']) else 'NA'`** versus .50. Among **Males**, the proportion was **`r if (exists('h1_tab') && nrow(h1_tab)>0) h1_tab$prop_coke[h1_tab$gender=='Male'] else NA`** (95% CI **[`r if (exists('h1_tab') && nrow(h1_tab)>0) round(h1_tab$ci_l[h1_tab$gender=='Male'],2) else NA`, `r if (exists('h1_tab') && nrow(h1_tab)>0) round(h1_tab$ci_u[h1_tab$gender=='Male'],2) else NA`]**), *p* = **`r if (exists('h1_tab') && nrow(h1_tab)>0) fmt_p(h1_tab$p_value[h1_tab$gender=='Male']) else 'NA'`**. Interpreting these results alongside our recruitment channels, we observed that **both women and men in my circle tended to prefer Coke**, suggesting stable brand affinity in similar social environments.
+
+For **H2**, we examined whether branding shifts estimates relative to a neutral control by analyzing the within‑person difference (Coke − Silver). The paired‑samples test produced *p* = **`r if (exists('h2_tab')) fmt_p(h2_tab$value[h2_tab$metric=='Paired t p']) else 'NA'`** with a mean difference of **`r if (exists('h2_tab')) round(h2_tab$value[h2_tab$metric=='Mean (Q5 − Q1)'],2) else NA`** g (95% CI **[`r if (exists('h2_tab')) round(h2_tab$value[h2_tab$metric=='95% CI (L)'],2) else NA`, `r if (exists('h2_tab')) round(h2_tab$value[h2_tab$metric=='95% CI (U)'],2) else NA`]**), and a Wilcoxon sensitivity of *p* = **`r if (exists('h2_tab')) fmt_p(h2_tab$value[h2_tab$metric=='Wilcoxon p']) else 'NA'`**. When significant, this pattern indicates that **branding alone can shift perceived sweetness**, a finding with implications for consumer judgment and labeling policy; when not significant, the CI still bounds any plausible shift to be modest given our data.
+
+For **H3** (standardized *z*‑scores) and **H4** (absolute error on Coke), secondary comparisons were **power‑limited** and yielded mixed evidence. As representative examples, **Non‑soda vs Soda** on Coke *z* gave Welch *p* = **`r if (exists('z_tests')) fmt_p(grab_cell(z_tests,'q5_coke_z','Non-soda vs Soda','welch_p')) else 'NA'`**; **Female vs Male** on Coke *z* gave Welch *p* = **`r if (exists('z_tests')) fmt_p(grab_cell(z_tests,'q5_coke_z','Female vs Male','welch_p')) else 'NA'`**; and **Diet vs Coke** on Coke *z* gave Welch *p* = **`r if (exists('z_tests')) fmt_p(grab_cell(z_tests,'q5_coke_z','Diet vs Coke','welch_p')) else 'NA'`**. For absolute error, **Non‑soda vs Soda** yielded Welch *p* = **`r if (exists('acc_tests')) fmt_p(grab_cell(acc_tests,'coke_abserr','Non-soda vs Soda','welch_p')) else 'NA'`**; **Female vs Male** Welch *p* = **`r if (exists('acc_tests')) fmt_p(grab_cell(acc_tests,'coke_abserr','Female vs Male','welch_p')) else 'NA'`**; **Diet vs Coke** Welch *p* = **`r if (exists('acc_tests')) fmt_p(grab_cell(acc_tests,'coke_abserr','Diet vs Coke','welch_p')) else 'NA'`**. Together, these analyses suggest **no consistent large subgroup differences** in either relative sentiment or accuracy within our sample—an informative finding for targeting education efforts (e.g., to non‑soda drinkers) while recognizing the limits of small subgroup Ns.
+
+**Reflections on design and learning.** Conducting the study underscored the value of **clear operational definitions**, **pre‑specified rules** (e.g., outliers >100 g), and **randomization** to reduce bias. It also highlighted the realities of convenience sampling and the need to interpret subgroup analyses cautiously. Importantly, **non‑significant results are not failures**; they help **bound effect sizes** and inform **power planning** for the next iteration (Pagano & Gauvreau, 2018). In our case, we quantified detectable effects (e.g., a ~`r if (!is.na(detect_delta)) round(detect_delta,1) else 'NA'`‑g shift for H2 at ~80% power) and identified where the study was underpowered to detect subtle subgroup differences.
+
+**Implications and next steps.** From a societal standpoint, evidence that branding can influence perceived sugar—even modestly—supports **transparent labeling** and **public‑health education** around beverage sugar content. Preference skews toward Coke in our networks point to **brand loyalty** as an important contextual factor when designing messaging. A larger, more structured follow‑up with **pre/post knowledge testing** (e.g., educating participants on sugar in an **8‑oz** can between sessions) would directly test whether **information changes estimation** and whether improvements **persist over time**. Such work could inform **health agencies** seeking scalable interventions to curb excess sugar intake while maintaining consumer autonomy.
+
+
+# References
+
+Pagano, M., & Gauvreau, K. (2018). *Principles of biostatistics*. Duxbury Press.
