@@ -69,6 +69,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="Midterm_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="Midterm_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="Midterm_files/libs/bootstrap/bootstrap-9facd9cce4e76957794a226f9ed503ad.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="Midterm_files/libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="Midterm_files/libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="Midterm_files/libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+<script src="Midterm_files/libs/datatables-binding-0.33/datatables.js"></script>
+<script src="Midterm_files/libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="Midterm_files/libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="Midterm_files/libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
+<script src="Midterm_files/libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+<link href="Midterm_files/libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
+<script src="Midterm_files/libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -382,6 +392,129 @@ F = 5.2693, num df = 2.00, denom df = 48.48, p-value = 0.008497</code></pre>
 </div>
 </div>
 </div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run pairwise t-tests with Holm correction (Welch's method)</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>pairwise_results <span class="ot">&lt;-</span> <span class="fu">pairwise.t.test</span>(diet_data<span class="sc">$</span>weight_loss,</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                                     diet_data<span class="sc">$</span>diet.type,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">p.adjust.method =</span> <span class="st">"holm"</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">pool.sd =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load base R-compatible tools</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DT)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Run pairwise t-tests with Holm correction (Welch's method)</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>pairwise_results <span class="ot">&lt;-</span> <span class="fu">pairwise.t.test</span>(diet_data<span class="sc">$</span>weight_loss,</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>                                     diet_data<span class="sc">$</span>diet.type,</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">p.adjust.method =</span> <span class="st">"holm"</span>,</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">pool.sd =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to a data frame for display</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>pval_matrix <span class="ot">&lt;-</span> pairwise_results<span class="sc">$</span>p.value</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>pval_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">as.table</span>(pval_matrix))</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(pval_df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Group 1"</span>, <span class="st">"Group 2"</span>, <span class="st">"Holm-adjusted p-value"</span>)</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove rows with missing values (e.g., B vs B)</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>pval_df <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(pval_df)</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Display DT table (just the body)</span></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a><span class="fu">datatable</span>(pval_df,</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>          <span class="at">rownames =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>          <span class="at">options =</span> <span class="fu">list</span>(<span class="at">dom =</span> <span class="st">'t'</span>,  <span class="co"># show only table body</span></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>                         <span class="at">pageLength =</span> <span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="datatables html-widget html-fill-item" id="htmlwidget-5affa159776b9be26d2c" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-5affa159776b9be26d2c">{"x":{"filter":"none","vertical":false,"data":[["B","C","C"],["A","A","B"],[0.962241730434801,0.01934991623641207,0.01934991623641207]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Group 1<\/th>\n      <th>Group 2<\/th>\n      <th>Holm-adjusted p-value<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","pageLength":5,"columnDefs":[{"className":"dt-right","targets":2},{"name":"Group 1","targets":0},{"name":"Group 2","targets":1},{"name":"Holm-adjusted p-value","targets":2}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="q5" class="level3">
+<h3 class="anchored" data-anchor-id="q5">Q5</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sensitivity calculation</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>sensitivity <span class="ot">&lt;-</span> <span class="dv">87</span> <span class="sc">/</span> <span class="dv">108</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>sensitivity</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8055556</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Specificity calculation</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>specificity <span class="ot">&lt;-</span> <span class="dv">55</span> <span class="sc">/</span> <span class="dv">64</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>specificity</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.859375</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Positive Predictive Value</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>ppv <span class="ot">&lt;-</span> <span class="dv">87</span> <span class="sc">/</span> <span class="dv">96</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>ppv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.90625</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Negative Predictive Value</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>npv <span class="ot">&lt;-</span> <span class="dv">55</span> <span class="sc">/</span> <span class="dv">76</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>npv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7236842</code></pre>
+</div>
+</div>
+<p><span class="math display">\[
+P(X = 1) = \binom{4}{1} \cdot (0.194)^1 \cdot (1 - 0.194)^3
+\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sensitivity</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>sensitivity <span class="ot">&lt;-</span> <span class="dv">87</span> <span class="sc">/</span> <span class="dv">108</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>p_neg <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> sensitivity</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Binomial: exactly 1 of 4 malaria cases test negative</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>prob_1_neg_out_of_4 <span class="ot">&lt;-</span> <span class="fu">dbinom</span>(<span class="dv">1</span>, <span class="at">size =</span> <span class="dv">4</span>, <span class="at">prob =</span> p_neg)</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>prob_1_neg_out_of_4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.4065763</code></pre>
+</div>
+</div>
+<p>We are looking for the probability that <strong>2 or more false positives</strong> occur out of 5 people who <strong>do not have malaria</strong>.</p>
+<p>This is a <strong>binomial probability</strong> problem with:</p>
+<ul>
+<li><span class="math display">\[n = 5\]</span> (number of individuals tested)<br>
+</li>
+<li>“Success” = a <strong>false positive</strong> test result</li>
+</ul>
+<p>From <strong>Part B</strong>, we calculated the test specificity as:</p>
+<p><span class="math display">\[
+\text{Specificity} = 0.859
+\]</span></p>
+<p>So the probability of a false positive is:</p>
+<p><span class="math display">\[
+P(\text{false positive}) = 1 - \text{Specificity} = 1 - 0.859 = 0.141
+\]</span></p>
+<hr>
+</section>
+<section id="computation" class="level3">
+<h3 class="anchored" data-anchor-id="computation">Computation</h3>
+<p>We want the probability of <strong>at least 2 false positives</strong>:</p>
+<p><span class="math display">\[
+P(X \geq 2) = 1 - P(X &lt; 2) = 1 - P(X = 0) - P(X = 1)
+\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define probability of false positive</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>p_fp <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.859</span>  <span class="co"># = 0.141</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute probability of at least 2 false positives in 5 tests</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>p_at_least_2 <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pbinom</span>(<span class="dv">1</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">prob =</span> p_fp)</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>p_at_least_2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1484515</code></pre>
+</div>
+</div>
+<hr>
+<p>The result is approximately <strong>0.148</strong>, meaning there is a <strong>14.8% chance</strong> that at least 2 out of 5 people without malaria would receive a false positive result.</p>
 </section>
 
 </main>

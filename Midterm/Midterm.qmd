@@ -217,3 +217,126 @@ ggplot(mean_table, aes(x = `Diet Type`, y = `Mean Weight Loss (kg)`, fill = `Die
   ylim(0, max(mean_table$`Mean Weight Loss (kg)`) + 1)
 ```
 
+
+```{r}
+# Run pairwise t-tests with Holm correction (Welch's method)
+pairwise_results <- pairwise.t.test(diet_data$weight_loss,
+                                     diet_data$diet.type,
+                                     p.adjust.method = "holm",
+                                     pool.sd = FALSE)
+```
+
+
+```{r}
+# Load base R-compatible tools
+library(DT)
+
+
+
+# Run pairwise t-tests with Holm correction (Welch's method)
+pairwise_results <- pairwise.t.test(diet_data$weight_loss,
+                                     diet_data$diet.type,
+                                     p.adjust.method = "holm",
+                                     pool.sd = FALSE)
+
+# Convert to a data frame for display
+pval_matrix <- pairwise_results$p.value
+pval_df <- as.data.frame(as.table(pval_matrix))
+colnames(pval_df) <- c("Group 1", "Group 2", "Holm-adjusted p-value")
+
+# Remove rows with missing values (e.g., B vs B)
+pval_df <- na.omit(pval_df)
+
+# Display DT table (just the body)
+datatable(pval_df,
+          rownames = FALSE,
+          options = list(dom = 't',  # show only table body
+                         pageLength = 5))
+
+```
+
+### Q5
+
+
+```{r}
+# Sensitivity calculation
+sensitivity <- 87 / 108
+sensitivity
+```
+
+```{r}
+# Specificity calculation
+specificity <- 55 / 64
+specificity
+```
+
+```{r}
+# Positive Predictive Value
+ppv <- 87 / 96
+ppv
+```
+
+```{r}
+# Negative Predictive Value
+npv <- 55 / 76
+npv
+```
+
+
+$$
+P(X = 1) = \binom{4}{1} \cdot (0.194)^1 \cdot (1 - 0.194)^3
+$$
+```{r}
+# Sensitivity
+sensitivity <- 87 / 108
+p_neg <- 1 - sensitivity
+
+# Binomial: exactly 1 of 4 malaria cases test negative
+prob_1_neg_out_of_4 <- dbinom(1, size = 4, prob = p_neg)
+prob_1_neg_out_of_4
+```
+
+
+We are looking for the probability that **2 or more false positives** occur out of 5 people who **do not have malaria**.
+
+This is a **binomial probability** problem with:
+
+- $$n = 5$$ (number of individuals tested)  
+- "Success" = a **false positive** test result
+
+From **Part B**, we calculated the test specificity as:
+
+$$
+\text{Specificity} = 0.859
+$$
+
+So the probability of a false positive is:
+
+$$
+P(\text{false positive}) = 1 - \text{Specificity} = 1 - 0.859 = 0.141
+$$
+
+---
+
+### Computation
+
+We want the probability of **at least 2 false positives**:
+
+$$
+P(X \geq 2) = 1 - P(X < 2) = 1 - P(X = 0) - P(X = 1)
+$$
+
+```{r}
+# Define probability of false positive
+p_fp <- 1 - 0.859  # = 0.141
+
+# Compute probability of at least 2 false positives in 5 tests
+p_at_least_2 <- 1 - pbinom(1, size = 5, prob = p_fp)
+p_at_least_2
+```
+
+---
+
+The result is approximately **0.148**, meaning there is a **14.8% chance** that at least 2 out of 5 people without malaria would receive a false positive result.
+
+
